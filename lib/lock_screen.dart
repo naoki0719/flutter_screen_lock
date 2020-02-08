@@ -29,8 +29,34 @@ class _LockScreenState extends State<LockScreen> {
 
   List<String> enteredValues = List<String>();
 
+  Future<void> _enteredStreamListener() async {
+    enteredStream.stream.listen((value) {
+      enteredValues.add(value);
+      enteredLengthStream.add(enteredValues.length);
+
+      // the same number of digits was entered.
+      if (enteredValues.length == widget.digits) {
+        StringBuffer buffer = StringBuffer();
+        enteredValues.forEach((value) {
+          buffer.write(value);
+        });
+        _verifyCorrectString(buffer.toString());
+      }
+    });
+  }
+
+  void _verifyCorrectString(String enteredValue) {
+    if (enteredValue == widget.correctString) {
+      // todo: add result to authenticated stream
+    } else {
+      // todo: failed process
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _enteredStreamListener();
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -40,30 +66,6 @@ class _LockScreenState extends State<LockScreen> {
               dots: widget.digits,
               config: widget.dotSecretConfig,
               enteredLengthStream: enteredLengthStream.stream,
-            ),
-            Container(
-              child: StreamBuilder(
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    // 入力値を保存する
-                    inputData.add(snapshot.data);
-                    inputLengthStream.add(inputData.length);
-                    if (inputData.length == widget.digits) {
-                      StringBuffer buffer = StringBuffer();
-                      inputData.forEach((s) {
-                        buffer.write(s);
-                      });
-                      inputData.clear();
-                      return Text(buffer.toString());
-                    }
-                    return Text(snapshot.data);
-                  }
-                  return Container();
-                },
-                stream: inputStream.stream,
-              ),
-              alignment: Alignment.center,
-              color: Colors.amber,
             ),
             Padding(
               padding: EdgeInsets.symmetric(
