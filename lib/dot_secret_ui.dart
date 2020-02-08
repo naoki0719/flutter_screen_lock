@@ -34,17 +34,22 @@ class DotSecretUI extends StatelessWidget {
     return Container(
       padding: config.padding,
       child: StreamBuilder<int>(
-          stream: inputLengthStream,
-          builder: (context, snapshot) {
-            print(snapshot.data);
+        stream: inputLengthStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List<Widget>.generate(
                 config.dots,
-                (index) => _buildCircle(index + 1 == snapshot.data),
+                // index less than the input digit is true
+                (index) => _buildCircle(index < snapshot.data),
               ),
             );
-          }),
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 
