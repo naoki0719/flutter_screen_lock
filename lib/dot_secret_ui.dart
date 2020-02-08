@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class DotSecretConfig {
-  final int dots;
   final double dotSize;
   final EdgeInsetsGeometry padding;
   final Color enabledColor;
@@ -11,7 +10,6 @@ class DotSecretConfig {
   final Color dotBorderColor;
 
   const DotSecretConfig({
-    this.dots = 4,
     this.dotSize = 13.0,
     this.dotBorderColor = Colors.black54,
     this.padding = const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
@@ -23,9 +21,11 @@ class DotSecretConfig {
 class DotSecretUI extends StatelessWidget {
   final DotSecretConfig config;
   final Stream<int> inputLengthStream;
+  final int dots;
 
   const DotSecretUI({
     @required this.inputLengthStream,
+    @required this.dots,
     this.config = const DotSecretConfig(),
   });
 
@@ -40,7 +40,7 @@ class DotSecretUI extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List<Widget>.generate(
-                config.dots,
+                dots,
                 // index less than the input digit is true
                 (index) => _buildCircle(index < snapshot.data),
               ),

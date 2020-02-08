@@ -6,13 +6,15 @@ import 'dot_secret_ui.dart';
 import 'circle_input_button.dart';
 
 class LockScreen extends StatefulWidget {
+  final String correctString;
   final String title;
-  final int inputDigits;
+  final int digits;
   final DotSecretConfig dotSecretConfig;
 
   LockScreen({
+    this.correctString = '',
     this.title = 'Please enter passcode.',
-    this.inputDigits = 4,
+    this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
   });
 
@@ -36,6 +38,7 @@ class _LockScreenState extends State<LockScreen> {
           children: <Widget>[
             _buildTitle(),
             DotSecretUI(
+              dots: widget.digits,
               config: widget.dotSecretConfig,
               inputLengthStream: inputLengthStream.stream,
             ),
@@ -46,7 +49,7 @@ class _LockScreenState extends State<LockScreen> {
                     // 入力値を保存する
                     inputData.add(snapshot.data);
                     inputLengthStream.add(inputData.length);
-                    if (inputData.length == widget.inputDigits) {
+                    if (inputData.length == widget.digits) {
                       StringBuffer buffer = StringBuffer();
                       inputData.forEach((s) {
                         buffer.write(s);
