@@ -1,0 +1,23 @@
+name: example
+description: flutter screen lock example.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_screen_lock:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: 1.9.4
+
+flutter:
+  uses-material-design: true
