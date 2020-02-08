@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CircleInputButton extends StatelessWidget {
   final String text;
-  final Sink<String> inputSink;
+  final Sink<String> enteredSink;
 
   CircleInputButton({
     @required this.text,
-    @required this.inputSink,
+    @required this.enteredSink,
   });
 
   @override
@@ -27,7 +27,7 @@ class CircleInputButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          inputSink.add(text);
+          enteredSink.add(text);
         },
         shape: CircleBorder(
           side: BorderSide(

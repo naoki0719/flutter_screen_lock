@@ -20,11 +20,11 @@ class DotSecretConfig {
 
 class DotSecretUI extends StatelessWidget {
   final DotSecretConfig config;
-  final Stream<int> inputLengthStream;
+  final Stream<int> enteredLengthStream;
   final int dots;
 
   const DotSecretUI({
-    @required this.inputLengthStream,
+    @required this.enteredLengthStream,
     @required this.dots,
     this.config = const DotSecretConfig(),
   });
@@ -34,7 +34,7 @@ class DotSecretUI extends StatelessWidget {
     return Container(
       padding: config.padding,
       child: StreamBuilder<int>(
-        stream: inputLengthStream,
+        stream: enteredLengthStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Row(

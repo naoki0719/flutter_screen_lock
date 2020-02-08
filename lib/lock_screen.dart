@@ -24,11 +24,10 @@ class LockScreen extends StatefulWidget {
 
 class _LockScreenState extends State<LockScreen> {
   // receive from circle input button
-  final StreamController<String> inputStream = StreamController<String>();
-  final StreamController<int> inputLengthStream = StreamController<int>();
+  final StreamController<String> enteredStream = StreamController<String>();
+  final StreamController<int> enteredLengthStream = StreamController<int>();
 
-  // input data
-  List<String> inputData = List<String>();
+  List<String> enteredValues = List<String>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _LockScreenState extends State<LockScreen> {
             DotSecretUI(
               dots: widget.digits,
               config: widget.dotSecretConfig,
-              inputLengthStream: inputLengthStream.stream,
+              enteredLengthStream: enteredLengthStream.stream,
             ),
             Container(
               child: StreamBuilder(
@@ -117,7 +116,7 @@ class _LockScreenState extends State<LockScreen> {
   CircleInputButton _buildNumberTextButton(
       BuildContext context, String number) {
     return CircleInputButton(
-      inputSink: inputStream.sink,
+      enteredSink: enteredStream.sink,
       text: number,
     );
   }
@@ -132,8 +131,8 @@ class _LockScreenState extends State<LockScreen> {
 
   @override
   void dispose() {
-    inputStream.close();
-    inputLengthStream.close();
+    enteredStream.close();
+    enteredLengthStream.close();
     super.dispose();
   }
 }
