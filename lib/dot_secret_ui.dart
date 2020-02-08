@@ -46,7 +46,14 @@ class DotSecretUI extends StatelessWidget {
               ),
             );
           } else {
-            return Container();
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List<Widget>.generate(
+                dots,
+                // index less than the input digit is true
+                (index) => _buildCircle(false),
+              ),
+            );
           }
         },
       ),
