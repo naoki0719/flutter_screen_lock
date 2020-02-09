@@ -29,7 +29,11 @@ class _LockScreenState extends State<LockScreen> {
 
   List<String> enteredValues = List<String>();
 
-  Future<void> _enteredStreamListener() async {
+  _enteredStreamListener() {
+    if (enteredStream.hasListener) {
+      return;
+    }
+
     enteredStream.stream.listen((value) {
       enteredValues.add(value);
       enteredLengthStream.add(enteredValues.length);
