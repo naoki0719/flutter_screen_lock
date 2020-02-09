@@ -31,11 +31,30 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return LockScreen(
-        // dotSecretUI: DotSecretUI(
-        //   dotSize: 18,
-        //   padding: EdgeInsets.all(30.0),
-        // ),
-        );
+    return Scaffold(
+      body: Container(
+        child: Center(
+          child: RaisedButton(
+            child: Text('Open'),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return LockScreen(
+                      correctString: '1234',
+                      onCompleted: (context, enteredValue) {
+                        print('OK' + enteredValue);
+                        Navigator.of(context).maybePop();
+                      },
+                    );
+                  },
+                  fullscreenDialog: true,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
