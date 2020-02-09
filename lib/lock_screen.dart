@@ -10,12 +10,14 @@ class LockScreen extends StatefulWidget {
   final String title;
   final int digits;
   final DotSecretConfig dotSecretConfig;
+  final void Function(BuildContext, String) onCompleted;
 
   LockScreen({
     this.correctString = '',
     this.title = 'Please enter passcode.',
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
+    this.onCompleted,
   });
 
   @override
@@ -51,7 +53,12 @@ class _LockScreenState extends State<LockScreen> {
 
   void _verifyCorrectString(String enteredValue) {
     if (enteredValue == widget.correctString) {
-      // todo: add result to authenticated stream
+      if (widget.onCompleted != null) {
+        // call user function
+        widget.onCompleted(context, enteredValue);
+      } else {
+        Navigator.of(context).maybePop();
+      }
     } else {
       // todo: failed process
     }
