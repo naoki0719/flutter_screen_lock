@@ -83,6 +83,8 @@ class _LockScreenState extends State<LockScreen> {
   final StreamController<String> enteredStream = StreamController<String>();
   final StreamController<void> removedStreamController =
       StreamController<void>();
+  final StreamController<int> enteredLengthStream =
+      StreamController<int>.broadcast();
   final StreamController<bool> authenticatedStream = StreamController<bool>();
 
   List<String> enteredValues = List<String>();
@@ -203,10 +205,11 @@ class _LockScreenState extends State<LockScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        widget.leftSideInput ?? _buildBothSidesButton(context),
+                          _buildBothSidesButton(
+                              context, _leftSideInputButton()),
                         _buildNumberTextButton(context, '0'),
-                        widget.rightSideInput ??
-                            _buildNumberTextButton(context, ''),
+                          _buildBothSidesButton(
+                              context, _rightSideInputButton()),
                       ],
                     ),
                   ),
@@ -235,23 +238,12 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _buildBothSidesButton(BuildContext context) {
+  Widget _buildBothSidesButton(BuildContext context, Widget button) {
     final buttonSize = MediaQuery.of(context).size.width * 0.215;
     return Container(
       width: buttonSize,
       height: buttonSize,
-      child: RaisedButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {},
-        child: Icon(Icons.fingerprint),
-        shape: CircleBorder(
-          side: BorderSide(
-            color: Colors.black,
-            width: 1.0,
-            style: BorderStyle.solid,
-          ),
-        ),
-      ),
+      child: button,
     );
   }
 
@@ -263,6 +255,45 @@ class _LockScreenState extends State<LockScreen> {
         style: TextStyle(fontSize: 20.0),
       ),
     );
+  }
+
+  Widget _leftSideInputButton() {
+    if (widget.leftSideInput != null) return widget.leftSideInput;
+
+    return null;
+  }
+
+  Widget _rightSideInputButton() {
+    if (widget.rightSideInput != null) return widget.rightSideInput;
+
+    return StreamBuilder<int>(
+        stream: enteredLengthStream.stream,
+        builder: (context, snapshot) {
+          return FlatButton(
+            child: Text(
+              snapshot.hasData && snapshot.data > 0 ? 'Delete' : 'Cancel',
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.04,
+              ),
+              softWrap: false,
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              if (snapshot.hasData && snapshot.data > 0) {
+                removedStreamController.sink.add(null);
+              } else {
+                Navigator.of(context).maybePop();
+              }
+            },
+            shape: CircleBorder(
+              side: BorderSide(
+                color: Colors.transparent,
+                style: BorderStyle.solid,
+              ),
+            ),
+            color: Colors.transparent,
+          );
+        });
   }
 
   @override
