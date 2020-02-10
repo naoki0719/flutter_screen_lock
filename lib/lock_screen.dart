@@ -81,10 +81,22 @@ class LockScreen extends StatefulWidget {
 class _LockScreenState extends State<LockScreen> {
   // receive from circle input button
   final StreamController<String> enteredStream = StreamController<String>();
-  final StreamController<int> enteredLengthStream = StreamController<int>();
+  final StreamController<void> removedStreamController =
+      StreamController<void>();
   final StreamController<bool> authenticatedStream = StreamController<bool>();
 
   List<String> enteredValues = List<String>();
+
+  _removedStreamListener() {
+    if (removedStreamController.hasListener) {
+      return;
+    }
+
+    removedStreamController.stream.listen((_) {
+      enteredValues.removeLast();
+      enteredLengthStream.add(enteredValues.length);
+    });
+  }
 
   _enteredStreamListener() {
     if (enteredStream.hasListener) {
@@ -129,6 +141,7 @@ class _LockScreenState extends State<LockScreen> {
   @override
   Widget build(BuildContext context) {
     _enteredStreamListener();
+    _removedStreamListener();
     double _rowMarginSize = MediaQuery.of(context).size.width * 0.025;
     double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
@@ -257,6 +270,7 @@ class _LockScreenState extends State<LockScreen> {
     enteredStream.close();
     enteredLengthStream.close();
     authenticatedStream.close();
+    removedStreamController.close();
     super.dispose();
   }
 }
