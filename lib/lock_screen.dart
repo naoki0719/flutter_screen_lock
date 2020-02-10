@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dot_secret_ui.dart';
@@ -133,7 +133,10 @@ class _LockScreenState extends State<LockScreen> {
     double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.7),
       body: SafeArea(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
         child: Column(
           children: <Widget>[
             _buildTitle(),
@@ -199,6 +202,7 @@ class _LockScreenState extends State<LockScreen> {
             )
           ],
         ),
+      ),
       ),
     );
   }
