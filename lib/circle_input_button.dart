@@ -12,36 +12,26 @@ class CircleInputButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle textStyle = TextStyle(
-      fontSize: MediaQuery.of(context).size.width / 10,
+      fontSize: MediaQuery.of(context).size.width * 0.095,
     );
 
-    return Container(
-      child: RaisedButton(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: MediaQuery.of(context).size.width / 18,
-          ),
-          child: Text(
-            text,
-            style: textStyle,
-          ),
-        ),
-        onPressed: () {
-          enteredSink.add(text);
-        },
-        shape: CircleBorder(
-          side: BorderSide(
-            color: Colors.black,
-            width: 1.0,
-            style: BorderStyle.solid,
-          ),
-        ),
-        color: Colors.transparent,
-        elevation: 0,
+    return RaisedButton(
+      child: Text(
+        text,
+        style: textStyle,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.width / 45,
+      onPressed: () {
+        enteredSink.add(text);
+      },
+      shape: CircleBorder(
+        side: BorderSide(
+          color: Colors.black,
+          width: 1.0,
+          style: BorderStyle.solid,
+        ),
       ),
+      color: Colors.transparent,
+      elevation: 0,
     );
   }
 }

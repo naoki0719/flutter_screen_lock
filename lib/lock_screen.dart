@@ -8,15 +8,19 @@ import 'circle_input_button.dart';
 class LockScreen extends StatefulWidget {
   final String correctString;
   final String title;
+  final Widget rightSideInput;
+  final Widget leftSideInput;
   final int digits;
   final DotSecretConfig dotSecretConfig;
   final void Function(BuildContext, String) onCompleted;
 
   LockScreen({
-    this.correctString = '',
+    this.correctString,
     this.title = 'Please enter passcode.',
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
+    this.rightSideInput,
+    this.leftSideInput,
     this.onCompleted,
   });
 
@@ -28,6 +32,7 @@ class _LockScreenState extends State<LockScreen> {
   // receive from circle input button
   final StreamController<String> enteredStream = StreamController<String>();
   final StreamController<int> enteredLengthStream = StreamController<int>();
+  final StreamController<bool> authenticatedStream = StreamController<bool>();
 
   List<String> enteredValues = List<String>();
 
@@ -53,6 +58,10 @@ class _LockScreenState extends State<LockScreen> {
 
   void _verifyCorrectString(String enteredValue) {
     if (enteredValue == widget.correctString) {
+      // authenticatedStream.add(true);
+      enteredValues.clear();
+      enteredLengthStream.add(enteredValues.length);
+
       if (widget.onCompleted != null) {
         // call user function
         widget.onCompleted(context, enteredValue);
@@ -61,12 +70,17 @@ class _LockScreenState extends State<LockScreen> {
       }
     } else {
       // todo: failed process
+      // authenticatedStream.add(false);
+      enteredValues.clear();
+      enteredLengthStream.add(enteredValues.length);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     _enteredStreamListener();
+    double _rowMarginSize = MediaQuery.of(context).size.width * 0.025;
+    double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
     return Scaffold(
       body: SafeArea(
@@ -80,42 +94,55 @@ class _LockScreenState extends State<LockScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 12,
+                horizontal: _columnMarginSize,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _buildNumberTextButton(context, '1'),
-                      _buildNumberTextButton(context, '2'),
-                      _buildNumberTextButton(context, '3'),
-                    ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _buildNumberTextButton(context, '1'),
+                        _buildNumberTextButton(context, '2'),
+                        _buildNumberTextButton(context, '3'),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _buildNumberTextButton(context, '4'),
-                      _buildNumberTextButton(context, '5'),
-                      _buildNumberTextButton(context, '6'),
-                    ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _buildNumberTextButton(context, '4'),
+                        _buildNumberTextButton(context, '5'),
+                        _buildNumberTextButton(context, '6'),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _buildNumberTextButton(context, '7'),
-                      _buildNumberTextButton(context, '8'),
-                      _buildNumberTextButton(context, '9'),
-                    ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _buildNumberTextButton(context, '7'),
+                        _buildNumberTextButton(context, '8'),
+                        _buildNumberTextButton(context, '9'),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _buildNumberTextButton(context, ''),
-                      _buildNumberTextButton(context, '0'),
-                      _buildNumberTextButton(context, ''),
-                    ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        widget.leftSideInput ?? _buildBothSidesButton(context),
+                        _buildNumberTextButton(context, '0'),
+                        widget.rightSideInput ??
+                            _buildNumberTextButton(context, ''),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -126,18 +153,47 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  CircleInputButton _buildNumberTextButton(
-      BuildContext context, String number) {
-    return CircleInputButton(
-      enteredSink: enteredStream.sink,
-      text: number,
+  Widget _buildNumberTextButton(
+    BuildContext context,
+    String number,
+  ) {
+    final buttonSize = MediaQuery.of(context).size.width * 0.215;
+    return Container(
+      width: buttonSize,
+      height: buttonSize,
+      child: CircleInputButton(
+        enteredSink: enteredStream.sink,
+        text: number,
+      ),
+    );
+  }
+
+  Widget _buildBothSidesButton(BuildContext context) {
+    final buttonSize = MediaQuery.of(context).size.width * 0.215;
+    return Container(
+      width: buttonSize,
+      height: buttonSize,
+      child: RaisedButton(
+        padding: EdgeInsets.all(0),
+        onPressed: () {},
+        child: Icon(Icons.fingerprint),
+        shape: CircleBorder(
+          side: BorderSide(
+            color: Colors.black,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildTitle() {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 20),
       child: Text(
         widget.title,
+        style: TextStyle(fontSize: 20.0),
       ),
     );
   }
@@ -146,6 +202,7 @@ class _LockScreenState extends State<LockScreen> {
   void dispose() {
     enteredStream.close();
     enteredLengthStream.close();
+    authenticatedStream.close();
     super.dispose();
   }
 }
