@@ -25,12 +25,12 @@ class CircleInputButton extends StatelessWidget {
       },
       shape: CircleBorder(
         side: BorderSide(
-          color: Colors.black,
-          width: 1.0,
+          color: Colors.transparent,
+          width: 0,
           style: BorderStyle.solid,
         ),
       ),
-      color: Colors.transparent,
+      color: Colors.grey.shade600.withOpacity(0.4),
       elevation: 0,
     );
   }
