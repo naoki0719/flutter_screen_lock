@@ -34,7 +34,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Container(
         child: Center(
-          child: RaisedButton(
+          child: Column(
+            children: <Widget>[
+              RaisedButton(
+                child: Text('Open showLockScreen'),
+                onPressed: () {
+                  showLockScreen(
+                    context: context,
+                    correctString: '1234',
+                  );
+                },
+              ),
             child: Text('Open'),
             onPressed: () {
               Navigator.of(context).push(
