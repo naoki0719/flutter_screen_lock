@@ -12,6 +12,7 @@ Future showLockScreen({
   Widget leftSideInput,
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
+  bool canCancel = true,
   void Function(BuildContext, String) onCompleted,
 }) {
   return Navigator.of(context).push(
@@ -29,6 +30,7 @@ Future showLockScreen({
           digits: digits,
           dotSecretConfig: dotSecretConfig,
           onCompleted: onCompleted,
+          canCancel: canCancel,
         );
       },
       transitionsBuilder: (
@@ -62,6 +64,7 @@ class LockScreen extends StatefulWidget {
   final Widget leftSideInput;
   final int digits;
   final DotSecretConfig dotSecretConfig;
+  final bool canCancel;
   final void Function(BuildContext, String) onCompleted;
 
   LockScreen({
@@ -71,6 +74,7 @@ class LockScreen extends StatefulWidget {
     this.dotSecretConfig = const DotSecretConfig(),
     this.rightSideInput,
     this.leftSideInput,
+    this.canCancel = true,
     this.onCompleted,
   });
 
@@ -269,9 +273,18 @@ class _LockScreenState extends State<LockScreen> {
     return StreamBuilder<int>(
         stream: enteredLengthStream.stream,
         builder: (context, snapshot) {
+          String buttonText;
+          if (snapshot.hasData && snapshot.data > 0) {
+            buttonText = 'Delete';
+          } else if (widget.canCancel) {
+            buttonText = 'Cancel';
+          } else {
+            return Container();
+          }
+
           return FlatButton(
             child: Text(
-              snapshot.hasData && snapshot.data > 0 ? 'Delete' : 'Cancel',
+              buttonText,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width * 0.04,
               ),
@@ -282,7 +295,9 @@ class _LockScreenState extends State<LockScreen> {
               if (snapshot.hasData && snapshot.data > 0) {
                 removedStreamController.sink.add(null);
               } else {
+                if (widget.canCancel) {
                 Navigator.of(context).maybePop();
+              }
               }
             },
             shape: CircleBorder(
