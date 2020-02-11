@@ -11,11 +11,12 @@ Future showLockScreen({
   String title = 'Please enter passcode.',
   String cancelText = 'Cancel',
   String deleteText = 'Delete',
-  Widget leftSideButton,
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   bool canCancel = true,
   void Function(BuildContext, String) onCompleted,
+  Widget customButton,
+  void Function(BuildContext) onCustomButtonPressed,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -28,13 +29,14 @@ Future showLockScreen({
         return LockScreen(
           correctString: correctString,
           title: title,
-          leftSideButton: leftSideButton,
           digits: digits,
           dotSecretConfig: dotSecretConfig,
           onCompleted: onCompleted,
           canCancel: canCancel,
           cancelText: cancelText,
           deleteText: deleteText,
+          customButton: customButton,
+          onCustomButtonPressed: onCustomButtonPressed,
         );
       },
       transitionsBuilder: (
@@ -65,13 +67,14 @@ class LockScreen extends StatefulWidget {
   final String correctString;
   final String title;
   final Widget rightSideButton;
-  final Widget leftSideButton;
   final int digits;
   final DotSecretConfig dotSecretConfig;
   final bool canCancel;
   final String cancelText;
   final String deleteText;
   final void Function(BuildContext, String) onCompleted;
+  final Widget customButton;
+  final void Function(BuildContext) onCustomButtonPressed;
 
   LockScreen({
     this.correctString,
@@ -79,11 +82,12 @@ class LockScreen extends StatefulWidget {
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
     this.rightSideButton,
-    this.leftSideButton,
     this.canCancel = true,
     this.cancelText,
     this.deleteText,
     this.onCompleted,
+    this.customButton,
+    this.onCustomButtonPressed,
   });
 
   @override
@@ -222,7 +226,7 @@ class _LockScreenState extends State<LockScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildBothSidesButton(context, _leftSideButton()),
+                          _buildBothSidesButton(context, _customButton()),
                           _buildNumberTextButton(context, '0'),
                           _buildBothSidesButton(context, _rightSideButton()),
                         ],
@@ -272,10 +276,25 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _leftSideButton() {
-    if (widget.leftSideButton != null) return widget.leftSideButton;
+  Widget _customButton() {
+    if (widget.customButton != null) {
+      return FlatButton(
+        padding: EdgeInsets.all(0.0),
+        child: widget.customButton,
+        onPressed: () {
+          widget.onCustomButtonPressed(context);
+        },
+        shape: CircleBorder(
+          side: BorderSide(
+            color: Colors.transparent,
+            style: BorderStyle.solid,
+          ),
+        ),
+        color: Colors.transparent,
+      );
+    }
 
-    return null;
+    return Container();
   }
 
   Widget _rightSideButton() {
