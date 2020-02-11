@@ -41,13 +41,13 @@ Future showLockScreen({
       ) {
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0.0, 0.01),
+            begin: const Offset(0.0, 2.4),
             end: Offset.zero,
           ).animate(animation),
           child: SlideTransition(
             position: Tween<Offset>(
               begin: Offset.zero,
-              end: const Offset(0.0, 0.01),
+              end: const Offset(0.0, 2.4),
             ).animate(secondaryAnimation),
             child: child,
           ),
