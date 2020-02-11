@@ -126,21 +126,21 @@ class _LockScreenState extends State<LockScreen> {
 
   void _verifyCorrectString(String enteredValue) {
     Future.delayed(Duration(milliseconds: 150), () {
-    if (enteredValue == widget.correctString) {
-      // authenticatedStream.add(true);
-      enteredValues.clear();
-      enteredLengthStream.add(enteredValues.length);
+      if (enteredValue == widget.correctString) {
+        // authenticatedStream.add(true);
+        enteredValues.clear();
+        enteredLengthStream.add(enteredValues.length);
 
-      if (widget.onCompleted != null) {
-        // call user function
-        widget.onCompleted(context, enteredValue);
+        if (widget.onCompleted != null) {
+          // call user function
+          widget.onCompleted(context, enteredValue);
+        } else {
+          Navigator.of(context).maybePop();
+        }
       } else {
-        Navigator.of(context).maybePop();
+        enteredValues.clear();
+        enteredLengthStream.add(enteredValues.length);
       }
-    } else {
-      enteredValues.clear();
-      enteredLengthStream.add(enteredValues.length);
-    }
     });
   }
 
@@ -156,73 +156,73 @@ class _LockScreenState extends State<LockScreen> {
       body: SafeArea(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
-        child: Column(
-          children: <Widget>[
-            _buildTitle(),
-            DotSecretUI(
-              dots: widget.digits,
-              config: widget.dotSecretConfig,
-              enteredLengthStream: enteredLengthStream.stream,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: _columnMarginSize,
+          child: Column(
+            children: <Widget>[
+              _buildTitle(),
+              DotSecretUI(
+                dots: widget.digits,
+                config: widget.dotSecretConfig,
+                enteredLengthStream: enteredLengthStream.stream,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        _buildNumberTextButton(context, '1'),
-                        _buildNumberTextButton(context, '2'),
-                        _buildNumberTextButton(context, '3'),
-                      ],
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _columnMarginSize,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _buildNumberTextButton(context, '1'),
+                          _buildNumberTextButton(context, '2'),
+                          _buildNumberTextButton(context, '3'),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        _buildNumberTextButton(context, '4'),
-                        _buildNumberTextButton(context, '5'),
-                        _buildNumberTextButton(context, '6'),
-                      ],
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _buildNumberTextButton(context, '4'),
+                          _buildNumberTextButton(context, '5'),
+                          _buildNumberTextButton(context, '6'),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        _buildNumberTextButton(context, '7'),
-                        _buildNumberTextButton(context, '8'),
-                        _buildNumberTextButton(context, '9'),
-                      ],
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _buildNumberTextButton(context, '7'),
+                          _buildNumberTextButton(context, '8'),
+                          _buildNumberTextButton(context, '9'),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
                           _buildBothSidesButton(
                               context, _leftSideInputButton()),
-                        _buildNumberTextButton(context, '0'),
+                          _buildNumberTextButton(context, '0'),
                           _buildBothSidesButton(
                               context, _rightSideInputButton()),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -296,8 +296,8 @@ class _LockScreenState extends State<LockScreen> {
                 removedStreamController.sink.add(null);
               } else {
                 if (widget.canCancel) {
-                Navigator.of(context).maybePop();
-              }
+                  Navigator.of(context).maybePop();
+                }
               }
             },
             shape: CircleBorder(
