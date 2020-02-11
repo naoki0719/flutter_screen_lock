@@ -9,6 +9,8 @@ Future showLockScreen({
   @required BuildContext context,
   String correctString,
   String title = 'Please enter passcode.',
+  String cancelText = 'Cancel',
+  String deleteText = 'Delete',
   Widget leftSideButton,
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
@@ -31,6 +33,8 @@ Future showLockScreen({
           dotSecretConfig: dotSecretConfig,
           onCompleted: onCompleted,
           canCancel: canCancel,
+          cancelText: cancelText,
+          deleteText: deleteText,
         );
       },
       transitionsBuilder: (
@@ -65,6 +69,8 @@ class LockScreen extends StatefulWidget {
   final int digits;
   final DotSecretConfig dotSecretConfig;
   final bool canCancel;
+  final String cancelText;
+  final String deleteText;
   final void Function(BuildContext, String) onCompleted;
 
   LockScreen({
@@ -75,6 +81,8 @@ class LockScreen extends StatefulWidget {
     this.rightSideButton,
     this.leftSideButton,
     this.canCancel = true,
+    this.cancelText,
+    this.deleteText,
     this.onCompleted,
   });
 
@@ -157,10 +165,10 @@ class _LockScreenState extends State<LockScreen> {
     double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.7),
+      backgroundColor: Colors.white.withOpacity(0.5),
       body: SafeArea(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+          filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
           child: Column(
             children: <Widget>[
               _buildTitle(),
@@ -278,9 +286,9 @@ class _LockScreenState extends State<LockScreen> {
         builder: (context, snapshot) {
           String buttonText;
           if (snapshot.hasData && snapshot.data > 0) {
-            buttonText = 'Delete';
+            buttonText = widget.deleteText;
           } else if (widget.canCancel) {
-            buttonText = 'Cancel';
+            buttonText = widget.cancelText;
           } else {
             return Container();
           }
