@@ -89,7 +89,8 @@ class _LockScreenState extends State<LockScreen> {
       StreamController<void>();
   final StreamController<int> enteredLengthStream =
       StreamController<int>.broadcast();
-  final StreamController<bool> authenticatedStream = StreamController<bool>();
+  final StreamController<bool> validateStreamController =
+      StreamController<bool>();
 
   List<String> enteredValues = List<String>();
 
@@ -110,6 +111,7 @@ class _LockScreenState extends State<LockScreen> {
     }
 
     enteredStream.stream.listen((value) {
+      // add list entered value
       enteredValues.add(value);
       enteredLengthStream.add(enteredValues.length);
 
@@ -127,7 +129,8 @@ class _LockScreenState extends State<LockScreen> {
   void _verifyCorrectString(String enteredValue) {
     Future.delayed(Duration(milliseconds: 150), () {
       if (enteredValue == widget.correctString) {
-        // authenticatedStream.add(true);
+        // send valid status to DotSecretUI
+        validateStreamController.add(true);
         enteredValues.clear();
         enteredLengthStream.add(enteredValues.length);
 
@@ -138,6 +141,8 @@ class _LockScreenState extends State<LockScreen> {
           Navigator.of(context).maybePop();
         }
       } else {
+        // send invalid status to DotSecretUI
+        validateStreamController.add(false);
         enteredValues.clear();
         enteredLengthStream.add(enteredValues.length);
       }
@@ -160,6 +165,7 @@ class _LockScreenState extends State<LockScreen> {
             children: <Widget>[
               _buildTitle(),
               DotSecretUI(
+                validateStream: validateStreamController.stream,
                 dots: widget.digits,
                 config: widget.dotSecretConfig,
                 enteredLengthStream: enteredLengthStream.stream,
@@ -315,7 +321,7 @@ class _LockScreenState extends State<LockScreen> {
   void dispose() {
     enteredStream.close();
     enteredLengthStream.close();
-    authenticatedStream.close();
+    validateStreamController.close();
     removedStreamController.close();
     super.dispose();
   }

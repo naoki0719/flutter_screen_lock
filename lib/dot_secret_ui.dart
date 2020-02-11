@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class DotSecretConfig {
@@ -18,57 +17,106 @@ class DotSecretConfig {
   });
 }
 
-class DotSecretUI extends StatelessWidget {
+class DotSecretUI extends StatefulWidget {
   final DotSecretConfig config;
   final Stream<int> enteredLengthStream;
+  final Stream<bool> validateStream;
   final int dots;
 
   const DotSecretUI({
     @required this.enteredLengthStream,
     @required this.dots,
+    @required this.validateStream,
     this.config = const DotSecretConfig(),
   });
 
   @override
+  _DotSecretUIState createState() => _DotSecretUIState();
+}
+
+class _DotSecretUIState extends State<DotSecretUI>
+    with SingleTickerProviderStateMixin {
+  Animation<Offset> _animation;
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // validated stream
+    widget.validateStream.listen((valid) {
+      if (!valid) {
+        // shake animation when invalid
+        _animationController.forward();
+      }
+    });
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 80));
+
+    _animation = _animationController
+        .drive(CurveTween(curve: Curves.elasticIn))
+        .drive(Tween<Offset>(begin: Offset.zero, end: const Offset(0.025, 0)))
+          ..addListener(() {
+            setState(() {});
+          })
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _animationController.reverse();
+            }
+          });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: config.padding,
-      child: StreamBuilder<int>(
-        stream: enteredLengthStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List<Widget>.generate(
-                dots,
-                // index less than the input digit is true
-                (index) => _buildCircle(index < snapshot.data),
-              ),
-            );
-          } else {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List<Widget>.generate(
-                dots,
-                // index less than the input digit is true
-                (index) => _buildCircle(false),
-              ),
-            );
-          }
-        },
+    return SlideTransition(
+      position: _animation,
+      child: Container(
+        padding: widget.config.padding,
+        child: StreamBuilder<int>(
+          stream: widget.enteredLengthStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List<Widget>.generate(
+                  widget.dots,
+                  // index less than the input digit is true
+                  (index) => _buildCircle(index < snapshot.data),
+                ),
+              );
+            } else {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List<Widget>.generate(
+                  widget.dots,
+                  // index less than the input digit is true
+                  (index) => _buildCircle(false),
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
 
   Widget _buildCircle(bool enabled) {
     return Container(
-      width: config.dotSize,
-      height: config.dotSize,
+      width: widget.config.dotSize,
+      height: widget.config.dotSize,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: enabled ? config.enabledColor : config.disabledColor,
-        border: Border.all(width: 1, color: config.dotBorderColor),
+        color:
+            enabled ? widget.config.enabledColor : widget.config.disabledColor,
+        border: Border.all(width: 1, color: widget.config.dotBorderColor),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }
