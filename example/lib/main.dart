@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_screen_lock/lock_screen.dart';
+import 'package:local_auth/local_auth.dart';
 
 void main() {
   enableFlutterDriverExtension();
@@ -63,21 +64,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => showLockScreen(
                   context: context,
                   correctString: '1234',
-                  leftSideButton: FlatButton(
-                    shape: CircleBorder(
-                      side: BorderSide(
-                        color: Colors.transparent,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    child: Icon(
-                      Icons.fingerprint,
-                    ),
-                    onPressed: () {
-                      // call local_auth
-                      print('Please call local_auth');
-                    },
+                  customButton: Icon(
+                    Icons.fingerprint,
                   ),
+                  onCustomButtonPressed: (context) async {
+                    LocalAuthentication localAuth = LocalAuthentication();
+                    bool didAuthenticate =
+                        await localAuth.authenticateWithBiometrics(
+                            localizedReason:
+                                'Please authenticate to show account balance');
+                    if (didAuthenticate) {
+                      Navigator.of(context).maybePop();
+                    }
+                  },
                 ),
               ),
               RaisedButton(
