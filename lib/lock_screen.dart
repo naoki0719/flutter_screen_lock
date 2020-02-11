@@ -125,6 +125,7 @@ class _LockScreenState extends State<LockScreen> {
   }
 
   void _verifyCorrectString(String enteredValue) {
+    Future.delayed(Duration(milliseconds: 150), () {
     if (enteredValue == widget.correctString) {
       // authenticatedStream.add(true);
       enteredValues.clear();
@@ -137,11 +138,10 @@ class _LockScreenState extends State<LockScreen> {
         Navigator.of(context).maybePop();
       }
     } else {
-      // todo: failed process
-      // authenticatedStream.add(false);
       enteredValues.clear();
       enteredLengthStream.add(enteredValues.length);
     }
+    });
   }
 
   @override
