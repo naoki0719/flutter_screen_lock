@@ -169,7 +169,6 @@ class _LockScreenState extends State<LockScreen> {
                   horizontal: _columnMarginSize,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
