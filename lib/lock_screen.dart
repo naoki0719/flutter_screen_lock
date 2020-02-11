@@ -282,10 +282,11 @@ class _LockScreenState extends State<LockScreen> {
           }
 
           return FlatButton(
+            padding: EdgeInsets.all(0),
             child: Text(
               buttonText,
               style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.04,
+                fontSize: MediaQuery.of(context).size.width * 0.055,
               ),
               softWrap: false,
               textAlign: TextAlign.center,
