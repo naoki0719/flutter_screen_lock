@@ -9,7 +9,7 @@ Future showLockScreen({
   @required BuildContext context,
   String correctString,
   String title = 'Please enter passcode.',
-  Widget leftSideInput,
+  Widget leftSideButton,
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   bool canCancel = true,
@@ -26,7 +26,7 @@ Future showLockScreen({
         return LockScreen(
           correctString: correctString,
           title: title,
-          leftSideInput: leftSideInput,
+          leftSideButton: leftSideButton,
           digits: digits,
           dotSecretConfig: dotSecretConfig,
           onCompleted: onCompleted,
@@ -60,8 +60,8 @@ Future showLockScreen({
 class LockScreen extends StatefulWidget {
   final String correctString;
   final String title;
-  final Widget rightSideInput;
-  final Widget leftSideInput;
+  final Widget rightSideButton;
+  final Widget leftSideButton;
   final int digits;
   final DotSecretConfig dotSecretConfig;
   final bool canCancel;
@@ -72,8 +72,8 @@ class LockScreen extends StatefulWidget {
     this.title = 'Please enter passcode.',
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
-    this.rightSideInput,
-    this.leftSideInput,
+    this.rightSideButton,
+    this.leftSideButton,
     this.canCancel = true,
     this.onCompleted,
   });
@@ -214,11 +214,9 @@ class _LockScreenState extends State<LockScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildBothSidesButton(
-                              context, _leftSideInputButton()),
+                          _buildBothSidesButton(context, _leftSideButton()),
                           _buildNumberTextButton(context, '0'),
-                          _buildBothSidesButton(
-                              context, _rightSideInputButton()),
+                          _buildBothSidesButton(context, _rightSideButton()),
                         ],
                       ),
                     ),
@@ -266,14 +264,14 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _leftSideInputButton() {
-    if (widget.leftSideInput != null) return widget.leftSideInput;
+  Widget _leftSideButton() {
+    if (widget.leftSideButton != null) return widget.leftSideButton;
 
     return null;
   }
 
-  Widget _rightSideInputButton() {
-    if (widget.rightSideInput != null) return widget.rightSideInput;
+  Widget _rightSideButton() {
+    if (widget.rightSideButton != null) return widget.rightSideButton;
 
     return StreamBuilder<int>(
         stream: enteredLengthStream.stream,
