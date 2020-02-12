@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'dot_secret_ui.dart';
 import 'circle_input_button.dart';
 
@@ -105,6 +106,16 @@ class _LockScreenState extends State<LockScreen> {
       StreamController<bool>();
 
   List<String> enteredValues = List<String>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 
   _removedStreamListener() {
     if (removedStreamController.hasListener) {
@@ -348,6 +359,15 @@ class _LockScreenState extends State<LockScreen> {
     enteredLengthStream.close();
     validateStreamController.close();
     removedStreamController.close();
+
+    // restore orientation.
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+
     super.dispose();
   }
 }
