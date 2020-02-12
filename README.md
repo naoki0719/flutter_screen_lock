@@ -1,16 +1,25 @@
-# flutter_screen_lock
+# Flutter Screen Lock
 
-A new Flutter project.
+This Flutter plugin provides an feature for screen lock.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Any number of digits can be specified
+- You can change `Cancel` and`Delete`
+- The UI expands and contracts according to the size of the device
+- You can disable cancellation
+- You can use a custom button to call biometrics etc
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+You can easily lock the screen with the following code.  
+To unlock, enter correctString.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```dart
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+
+showLockScreen(
+  context: context,
+  correctString: '1234',
+);
+```
