@@ -5,7 +5,7 @@ This Flutter plugin provides an feature for screen lock.
 ## Features
 
 - Any number of digits can be specified
-- You can change `Cancel` and`Delete`
+- You can change `Cancel` and `Delete` text
 - The UI expands and contracts according to the size of the device
 - You can disable cancellation
 - You can use a custom button to call biometrics etc
