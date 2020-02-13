@@ -17,6 +17,7 @@ Future showLockScreen({
   bool canCancel = true,
   void Function(BuildContext, String) onCompleted,
   bool canBiometric = false,
+  bool showBiometricFirst = false,
   void Function(BuildContext) biometricFunction,
 }) {
   return Navigator.of(context).push(
@@ -37,6 +38,7 @@ Future showLockScreen({
           cancelText: cancelText,
           deleteText: deleteText,
           canBiometric: canBiometric,
+          showBiometricFirst: showBiometricFirst,
           biometricFunction: biometricFunction,
         );
       },
@@ -75,6 +77,7 @@ class LockScreen extends StatefulWidget {
   final String deleteText;
   final void Function(BuildContext, String) onCompleted;
   final bool canBiometric;
+  final bool showBiometricFirst;
   final void Function(BuildContext) biometricFunction;
 
   LockScreen({
@@ -88,6 +91,7 @@ class LockScreen extends StatefulWidget {
     this.deleteText,
     this.onCompleted,
     this.canBiometric = false,
+    this.showBiometricFirst = false,
     this.biometricFunction,
   });
 
@@ -115,6 +119,13 @@ class _LockScreenState extends State<LockScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    if (widget.showBiometricFirst && widget.biometricFunction != null) {
+      Future.delayed(
+        Duration(milliseconds: 300),
+        () => widget.biometricFunction(context),
+      );
+    }
   }
 
   _removedStreamListener() {
