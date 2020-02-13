@@ -16,8 +16,8 @@ Future showLockScreen({
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   bool canCancel = true,
   void Function(BuildContext, String) onCompleted,
-  Widget customButton,
-  void Function(BuildContext) onCustomButtonPressed,
+  bool canBiometric = false,
+  void Function(BuildContext) biometricFunction,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -36,8 +36,8 @@ Future showLockScreen({
           canCancel: canCancel,
           cancelText: cancelText,
           deleteText: deleteText,
-          customButton: customButton,
-          onCustomButtonPressed: onCustomButtonPressed,
+          canBiometric: canBiometric,
+          biometricFunction: biometricFunction,
         );
       },
       transitionsBuilder: (
@@ -74,8 +74,8 @@ class LockScreen extends StatefulWidget {
   final String cancelText;
   final String deleteText;
   final void Function(BuildContext, String) onCompleted;
-  final Widget customButton;
-  final void Function(BuildContext) onCustomButtonPressed;
+  final bool canBiometric;
+  final void Function(BuildContext) biometricFunction;
 
   LockScreen({
     this.correctString,
@@ -87,8 +87,8 @@ class LockScreen extends StatefulWidget {
     this.cancelText,
     this.deleteText,
     this.onCompleted,
-    this.customButton,
-    this.onCustomButtonPressed,
+    this.canBiometric = false,
+    this.biometricFunction,
   });
 
   @override
@@ -237,7 +237,7 @@ class _LockScreenState extends State<LockScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildBothSidesButton(context, _customButton()),
+                          _buildBothSidesButton(context, _biometricButton()),
                           _buildNumberTextButton(context, '0'),
                           _buildBothSidesButton(context, _rightSideButton()),
                         ],
@@ -287,25 +287,26 @@ class _LockScreenState extends State<LockScreen> {
     );
   }
 
-  Widget _customButton() {
-    if (widget.customButton != null) {
-      return FlatButton(
-        padding: EdgeInsets.all(0.0),
-        child: widget.customButton,
-        onPressed: () {
-          widget.onCustomButtonPressed(context);
-        },
-        shape: CircleBorder(
-          side: BorderSide(
-            color: Colors.transparent,
-            style: BorderStyle.solid,
-          ),
-        ),
-        color: Colors.transparent,
-      );
-    }
+  Widget _biometricButton() {
+    if (!widget.canBiometric) return Container();
 
-    return Container();
+    return FlatButton(
+      padding: EdgeInsets.all(0.0),
+      child: Icon(Icons.fingerprint),
+      onPressed: () {
+        if (widget.biometricFunction == null)
+          throw new Exception('specify biometricFunction.');
+
+        widget.biometricFunction(context);
+      },
+      shape: CircleBorder(
+        side: BorderSide(
+          color: Colors.transparent,
+          style: BorderStyle.solid,
+        ),
+      ),
+      color: Colors.transparent,
+    );
   }
 
   Widget _rightSideButton() {
