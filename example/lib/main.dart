@@ -64,10 +64,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => showLockScreen(
                   context: context,
                   correctString: '1234',
-                  customButton: Icon(
-                    Icons.fingerprint,
-                  ),
-                  onCustomButtonPressed: (context) async {
+                  canBiometric: true,
+                  biometricFunction: (context) async {
+                    LocalAuthentication localAuth = LocalAuthentication();
+                    bool didAuthenticate =
+                        await localAuth.authenticateWithBiometrics(
+                            localizedReason:
+                                'Please authenticate to show account balance');
+                    if (didAuthenticate) {
+                      Navigator.of(context).maybePop();
+                    }
+                  },
+                ),
+              ),
+              RaisedButton(
+                child: Text('Open biometric first'),
+                onPressed: () => showLockScreen(
+                  context: context,
+                  correctString: '1234',
+                  canBiometric: true,
+                  showBiometricFirst: true,
+                  biometricFunction: (context) async {
                     LocalAuthentication localAuth = LocalAuthentication();
                     bool didAuthenticate =
                         await localAuth.authenticateWithBiometrics(
