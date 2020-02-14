@@ -109,6 +109,9 @@ class _LockScreenState extends State<LockScreen> {
   final StreamController<bool> validateStreamController =
       StreamController<bool>();
 
+  // control for Android back button
+  bool _needClose = false;
+
   List<String> enteredValues = List<String>();
 
   @override
@@ -172,6 +175,7 @@ class _LockScreenState extends State<LockScreen> {
           // call user function
           widget.onCompleted(context, enteredValue);
         } else {
+          _needClose = true;
           Navigator.of(context).maybePop();
         }
       } else {
@@ -190,74 +194,83 @@ class _LockScreenState extends State<LockScreen> {
     double _rowMarginSize = MediaQuery.of(context).size.width * 0.025;
     double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
-    return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.5),
-      body: SafeArea(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-          child: Column(
-            children: <Widget>[
-              _buildTitle(),
-              DotSecretUI(
-                validateStream: validateStreamController.stream,
-                dots: widget.digits,
-                config: widget.dotSecretConfig,
-                enteredLengthStream: enteredLengthStream.stream,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _columnMarginSize,
+    return WillPopScope(
+      onWillPop: () async {
+        if (_needClose || widget.canCancel) {
+          return true;
+        }
+
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white.withOpacity(0.5),
+        body: SafeArea(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
+            child: Column(
+              children: <Widget>[
+                _buildTitle(),
+                DotSecretUI(
+                  validateStream: validateStreamController.stream,
+                  dots: widget.digits,
+                  config: widget.dotSecretConfig,
+                  enteredLengthStream: enteredLengthStream.stream,
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _buildNumberTextButton(context, '1'),
-                          _buildNumberTextButton(context, '2'),
-                          _buildNumberTextButton(context, '3'),
-                        ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _columnMarginSize,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _buildNumberTextButton(context, '1'),
+                            _buildNumberTextButton(context, '2'),
+                            _buildNumberTextButton(context, '3'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _buildNumberTextButton(context, '4'),
-                          _buildNumberTextButton(context, '5'),
-                          _buildNumberTextButton(context, '6'),
-                        ],
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _buildNumberTextButton(context, '4'),
+                            _buildNumberTextButton(context, '5'),
+                            _buildNumberTextButton(context, '6'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _buildNumberTextButton(context, '7'),
-                          _buildNumberTextButton(context, '8'),
-                          _buildNumberTextButton(context, '9'),
-                        ],
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _buildNumberTextButton(context, '7'),
+                            _buildNumberTextButton(context, '8'),
+                            _buildNumberTextButton(context, '9'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _buildBothSidesButton(context, _biometricButton()),
-                          _buildNumberTextButton(context, '0'),
-                          _buildBothSidesButton(context, _rightSideButton()),
-                        ],
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: _rowMarginSize),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            _buildBothSidesButton(context, _biometricButton()),
+                            _buildNumberTextButton(context, '0'),
+                            _buildBothSidesButton(context, _rightSideButton()),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -350,6 +363,7 @@ class _LockScreenState extends State<LockScreen> {
                 removedStreamController.sink.add(null);
               } else {
                 if (widget.canCancel) {
+                  _needClose = true;
                   Navigator.of(context).maybePop();
                 }
               }
