@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0+1]
+
+- Fix readme
+
 ## [1.0.0] - 2020-02-16
 
 - First release
