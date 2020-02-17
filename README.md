@@ -5,7 +5,7 @@ Enter your passcode to unlock the screen.
 You can also use biometric authentication as an option.
 
 <p align="center">
-  <img src="https://github.com/naoki0719/flutter_screen_lock/blob/master/resources/flutter_screen_lock.gif" />
+  <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock.gif" />
 </p>
 
 ## Features
