@@ -1,6 +1,8 @@
 name: flutter_screen_lock
 description: flutter screen lock.
-version: 1.0.0+1
+author: Naoki Chiba<c.nao.xx@gmail.com>
+homepage: https://github.com/naoki0719/flutter_screen_lock
+version: 1.0.0
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
