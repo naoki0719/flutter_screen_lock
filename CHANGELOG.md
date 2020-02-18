@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.0+1]
+## [1.0.0+2] - 2020-02-18
+
+- Change example readme
+
+## [1.0.0+1] - 2020-02-17
 
 - Fix readme
 
