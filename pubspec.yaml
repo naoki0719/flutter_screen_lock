@@ -1,8 +1,8 @@
 name: flutter_screen_lock
-description: flutter screen lock.
+description: Provides the ability to lock the screen on ios and android. Biometric authentication can be used in addition to passcode.
 author: Naoki Chiba<c.nao.xx@gmail.com>
 homepage: https://github.com/naoki0719/flutter_screen_lock
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -14,5 +14,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pedantic: ^1.8.0+1
 flutter:
   uses-material-design: true

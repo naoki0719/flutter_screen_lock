@@ -11,7 +11,7 @@ class CircleInputButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = TextStyle(
+    final textStyle = TextStyle(
       fontSize: MediaQuery.of(context).size.width * 0.095,
     );
 

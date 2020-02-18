@@ -112,7 +112,7 @@ class _LockScreenState extends State<LockScreen> {
   // control for Android back button
   bool _needClose = false;
 
-  List<String> enteredValues = List<String>();
+  List<String> enteredValues = <String>[];
 
   @override
   void initState() {
@@ -131,7 +131,7 @@ class _LockScreenState extends State<LockScreen> {
     }
   }
 
-  _removedStreamListener() {
+  void _removedStreamListener() {
     if (removedStreamController.hasListener) {
       return;
     }
@@ -142,7 +142,7 @@ class _LockScreenState extends State<LockScreen> {
     });
   }
 
-  _enteredStreamListener() {
+  void _enteredStreamListener() {
     if (enteredStream.hasListener) {
       return;
     }
@@ -154,7 +154,7 @@ class _LockScreenState extends State<LockScreen> {
 
       // the same number of digits was entered.
       if (enteredValues.length == widget.digits) {
-        StringBuffer buffer = StringBuffer();
+        var buffer = StringBuffer();
         enteredValues.forEach((value) {
           buffer.write(value);
         });
@@ -191,8 +191,8 @@ class _LockScreenState extends State<LockScreen> {
   Widget build(BuildContext context) {
     _enteredStreamListener();
     _removedStreamListener();
-    double _rowMarginSize = MediaQuery.of(context).size.width * 0.025;
-    double _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
+    var _rowMarginSize = MediaQuery.of(context).size.width * 0.025;
+    var _columnMarginSize = MediaQuery.of(context).size.width * 0.065;
 
     return WillPopScope(
       onWillPop: () async {
@@ -318,8 +318,9 @@ class _LockScreenState extends State<LockScreen> {
       padding: EdgeInsets.all(0.0),
       child: Icon(Icons.fingerprint),
       onPressed: () {
-        if (widget.biometricFunction == null)
-          throw new Exception('specify biometricFunction.');
+        if (widget.biometricFunction == null) {
+          throw Exception('specify biometricFunction.');
+        }
 
         widget.biometricFunction(context);
       },
