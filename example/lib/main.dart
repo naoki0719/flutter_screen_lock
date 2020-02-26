@@ -66,13 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   correctString: '1234',
                   canBiometric: true,
                   biometricFunction: (context) async {
-                    LocalAuthentication localAuth = LocalAuthentication();
-                    bool didAuthenticate =
+                    var localAuth = LocalAuthentication();
+                    var didAuthenticate =
                         await localAuth.authenticateWithBiometrics(
                             localizedReason:
                                 'Please authenticate to show account balance');
                     if (didAuthenticate) {
-                      Navigator.of(context).maybePop();
+                      await Navigator.of(context).maybePop();
                     }
                   },
                 ),
@@ -85,13 +85,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   canBiometric: true,
                   showBiometricFirst: true,
                   biometricFunction: (context) async {
-                    LocalAuthentication localAuth = LocalAuthentication();
-                    bool didAuthenticate =
+                    var localAuth = LocalAuthentication();
+                    var didAuthenticate =
                         await localAuth.authenticateWithBiometrics(
                             localizedReason:
                                 'Please authenticate to show account balance');
                     if (didAuthenticate) {
-                      Navigator.of(context).maybePop();
+                      await Navigator.of(context).maybePop();
                     }
                   },
                 ),
