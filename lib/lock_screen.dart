@@ -6,6 +6,59 @@ import 'package:flutter/services.dart';
 import 'dot_secret_ui.dart';
 import 'circle_input_button.dart';
 
+Future showConfirmPasscode({
+  @required BuildContext context,
+  String title = 'Please enter passcode.',
+  String confirmTitle = 'Please enter confirm passcode.',
+  String cancelText = 'Cancel',
+  String deleteText = 'Delete',
+  int digits = 4,
+  DotSecretConfig dotSecretConfig = const DotSecretConfig(),
+  void Function(BuildContext, String) onCompleted,
+}) {
+  return Navigator.of(context).push(
+    PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secodaryAnimation,
+      ) {
+        return LockScreen(
+          title: title,
+          confirmTitle: confirmTitle,
+          confirmMode: true,
+          digits: digits,
+          dotSecretConfig: dotSecretConfig,
+          onCompleted: onCompleted,
+          cancelText: cancelText,
+          deleteText: deleteText,
+        );
+      },
+      transitionsBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+      ) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0.0, 2.4),
+            end: Offset.zero,
+          ).animate(animation),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(0.0, 2.4),
+            ).animate(secondaryAnimation),
+            child: child,
+          ),
+        );
+      },
+    ),
+  );
+}
+
 Future showLockScreen({
   @required BuildContext context,
   String correctString,
@@ -69,6 +122,8 @@ Future showLockScreen({
 class LockScreen extends StatefulWidget {
   final String correctString;
   final String title;
+  final String confirmTitle;
+  final bool confirmMode;
   final Widget rightSideButton;
   final int digits;
   final DotSecretConfig dotSecretConfig;
@@ -83,6 +138,8 @@ class LockScreen extends StatefulWidget {
   LockScreen({
     this.correctString,
     this.title = 'Please enter passcode.',
+    this.confirmTitle = 'Please enter confirm passcode.',
+    this.confirmMode = false,
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
     this.rightSideButton,
@@ -111,6 +168,12 @@ class _LockScreenState extends State<LockScreen> {
 
   // control for Android back button
   bool _needClose = false;
+
+  // confirm flag
+  bool _isConfirmation = false;
+
+  // confirm verify passcode
+  String _verifyConfirmPasscode = '';
 
   List<String> enteredValues = <String>[];
 
@@ -165,7 +228,21 @@ class _LockScreenState extends State<LockScreen> {
 
   void _verifyCorrectString(String enteredValue) {
     Future.delayed(Duration(milliseconds: 150), () {
-      if (enteredValue == widget.correctString) {
+      var _verifyPasscode = widget.correctString;
+
+      if (widget.confirmMode) {
+        if (_isConfirmation == false) {
+          _verifyConfirmPasscode = enteredValue;
+          enteredValues.clear();
+          enteredLengthStream.add(enteredValues.length);
+          _isConfirmation = true;
+          setState(() {});
+          return;
+        }
+        _verifyPasscode = _verifyConfirmPasscode;
+      }
+
+      if (enteredValue == _verifyPasscode) {
         // send valid status to DotSecretUI
         validateStreamController.add(true);
         enteredValues.clear();
@@ -305,7 +382,7 @@ class _LockScreenState extends State<LockScreen> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
       child: Text(
-        widget.title,
+        _isConfirmation ? widget.confirmTitle : widget.title,
         style: TextStyle(fontSize: 20.0),
       ),
     );
