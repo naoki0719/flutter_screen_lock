@@ -124,3 +124,20 @@ showLockScreen(
   deleteText: 'Remove',
 );
 ```
+
+### Verifycation passcode
+
+use `showConfirmPasscode` function.
+
+```dart
+showConfirmPasscode(
+  context: context,
+  confirmTitle: 'This is the second input.',
+  onCompleted: (context, verifyCode) {
+    // verifyCode is verified passcode
+    print(verifyCode);
+    // Please close yourself
+    Navigator.of(context).maybePop();
+  },
+)
+```

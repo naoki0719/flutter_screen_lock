@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0]
+
+- new feature in verification passcode
+
 ## [1.0.0+2] - 2020-02-18
 
 - Change example readme
@@ -20,3 +24,4 @@
 - You can disable cancellation
 - You can use biometrics
 - Biometrics can be displayed on first launch
+- Verification passcode
