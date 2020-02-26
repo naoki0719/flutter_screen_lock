@@ -113,6 +113,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   deleteText: 'Remove',
                 ),
               ),
+              RaisedButton(
+                child: Text('Confirm mode.'),
+                onPressed: () => showConfirmPasscode(
+                  context: context,
+                  onCompleted: (context, verifyCode) {
+                    print(verifyCode);
+                    Navigator.of(context).maybePop();
+                  },
+                ),
+              )
             ],
           ),
         ),
