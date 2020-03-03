@@ -129,6 +129,10 @@ showLockScreen(
 
 use `showConfirmPasscode` function.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_confirm.gif" />
+</p>
+
 ```dart
 showConfirmPasscode(
   context: context,

@@ -1,8 +1,12 @@
 # Changelog
 
-## [1.1.0]
+## [1.1.0+1] - 2020-03-03
 
-- new feature in verification passcode
+- Added video for confirm screen
+
+## [1.1.0] - 2020-02-28
+
+- New feature in verification passcode
 
 ## [1.0.0+2] - 2020-02-18
 
