@@ -4,9 +4,7 @@ This Flutter plugin provides an feature for screen lock.
 Enter your passcode to unlock the screen.
 You can also use biometric authentication as an option.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock.gif" />
-</p>
+<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock.gif" />
 
 ## Features
 
@@ -129,9 +127,7 @@ showLockScreen(
 
 use `showConfirmPasscode` function.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_confirm.gif" />
-</p>
+<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_confirm.gif" />
 
 ```dart
 showConfirmPasscode(
