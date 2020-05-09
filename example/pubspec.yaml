@@ -1,24 +1,18 @@
 name: example
-description: flutter screen lock example.
+description: A new Flutter project.
 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_screen_lock:
     path: ../
-  local_auth: 0.6.1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_driver:
-    sdk: flutter
-  test: 1.9.4
+  local_auth: 0.6.2
 
 flutter:
   uses-material-design: true

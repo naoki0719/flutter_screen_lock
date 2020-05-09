@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_screen_lock/lock_screen.dart';
 import 'package:local_auth/local_auth.dart';
 
 void main() {
-  enableFlutterDriverExtension();
   runApp(MyApp());
 }
 
