@@ -81,6 +81,15 @@ Future showLockScreen({
         Animation<double> animation,
         Animation<double> secodaryAnimation,
       ) {
+        var _showBiometricFirstController = StreamController<void>();
+
+        animation.addStatusListener((status) {
+          // Calling the biometric on completion of the animation.
+          if (status == AnimationStatus.completed) {
+            _showBiometricFirstController.add(null);
+          }
+        });
+
         return LockScreen(
           correctString: correctString,
           title: title,
@@ -92,6 +101,7 @@ Future showLockScreen({
           deleteText: deleteText,
           canBiometric: canBiometric,
           showBiometricFirst: showBiometricFirst,
+          showBiometricFirstController: _showBiometricFirstController,
           biometricFunction: biometricFunction,
         );
       },
@@ -134,6 +144,7 @@ class LockScreen extends StatefulWidget {
   final bool canBiometric;
   final bool showBiometricFirst;
   final void Function(BuildContext) biometricFunction;
+  final StreamController<void> showBiometricFirstController;
 
   LockScreen({
     this.correctString,
@@ -150,6 +161,7 @@ class LockScreen extends StatefulWidget {
     this.canBiometric = false,
     this.showBiometricFirst = false,
     this.biometricFunction,
+    this.showBiometricFirstController,
   });
 
   @override
@@ -187,10 +199,18 @@ class _LockScreenState extends State<LockScreen> {
     ]);
 
     if (widget.showBiometricFirst && widget.biometricFunction != null) {
-      Future.delayed(
-        Duration(milliseconds: 300),
-        () => widget.biometricFunction(context),
-      );
+      // Set the listener if there is a stream option.
+      if (widget.showBiometricFirstController != null) {
+        widget.showBiometricFirstController.stream.listen((_) {
+          widget.biometricFunction(context);
+        });
+      } else {
+        // It is executed by a certain time.
+        Future.delayed(
+          Duration(milliseconds: 350),
+          () => widget.biometricFunction(context),
+        );
+      }
     }
   }
 
@@ -463,6 +483,9 @@ class _LockScreenState extends State<LockScreen> {
     enteredLengthStream.close();
     validateStreamController.close();
     removedStreamController.close();
+    if (widget.showBiometricFirstController != null) {
+      widget.showBiometricFirstController.close();
+    }
 
     // restore orientation.
     SystemChrome.setPreferredOrientations([

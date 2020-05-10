@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2020-05-10
+
+- Fix to call showBiometricFunction when the animation is complete
+
 ## [1.1.0+1] - 2020-03-03
 
 - Added video for confirm screen
