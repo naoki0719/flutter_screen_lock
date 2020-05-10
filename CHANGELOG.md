@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.2] - 2020-05-10
+
+- Added the ability to customize buttons and backgrounds.
+
 ## [1.1.1] - 2020-05-10
 
 - Fix to call showBiometricFunction when the animation is complete

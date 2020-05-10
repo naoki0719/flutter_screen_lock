@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screen_lock/circle_input_button.dart';
 import 'package:flutter_screen_lock/lock_screen.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -121,7 +122,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.of(context).maybePop();
                   },
                 ),
-              )
+              ),
+              RaisedButton(
+                child: Text('Change styles.'),
+                onPressed: () => showLockScreen(
+                  context: context,
+                  correctString: '1234',
+                  backgroundColor: Colors.grey.shade50,
+                  backgroundColorOpacity: 1,
+                  circleInputButtonConfig: CircleInputButtonConfig(
+                    textStyle: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.white,
+                    ),
+                    backgroundColor: Colors.blue,
+                    backgroundOpacity: 0.5,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 1,
+                        color: Colors.blue,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

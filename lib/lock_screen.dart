@@ -15,6 +15,10 @@ Future showConfirmPasscode({
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   void Function(BuildContext, String) onCompleted,
+  Color backgroundColor = Colors.white,
+  double backgroundColorOpacity = 0.5,
+  CircleInputButtonConfig circleInputButtonConfig =
+      const CircleInputButtonConfig(),
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -33,6 +37,9 @@ Future showConfirmPasscode({
           onCompleted: onCompleted,
           cancelText: cancelText,
           deleteText: deleteText,
+          backgroundColor: backgroundColor,
+          backgroundColorOpacity: backgroundColorOpacity,
+          circleInputButtonConfig: circleInputButtonConfig,
         );
       },
       transitionsBuilder: (
@@ -72,6 +79,10 @@ Future showLockScreen({
   bool canBiometric = false,
   bool showBiometricFirst = false,
   void Function(BuildContext) biometricFunction,
+  Color backgroundColor = Colors.white,
+  double backgroundColorOpacity = 0.5,
+  CircleInputButtonConfig circleInputButtonConfig =
+      const CircleInputButtonConfig(),
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -103,6 +114,9 @@ Future showLockScreen({
           showBiometricFirst: showBiometricFirst,
           showBiometricFirstController: _showBiometricFirstController,
           biometricFunction: biometricFunction,
+          backgroundColor: backgroundColor,
+          backgroundColorOpacity: backgroundColorOpacity,
+          circleInputButtonConfig: circleInputButtonConfig,
         );
       },
       transitionsBuilder: (
@@ -137,6 +151,7 @@ class LockScreen extends StatefulWidget {
   final Widget rightSideButton;
   final int digits;
   final DotSecretConfig dotSecretConfig;
+  final CircleInputButtonConfig circleInputButtonConfig;
   final bool canCancel;
   final String cancelText;
   final String deleteText;
@@ -145,6 +160,8 @@ class LockScreen extends StatefulWidget {
   final bool showBiometricFirst;
   final void Function(BuildContext) biometricFunction;
   final StreamController<void> showBiometricFirstController;
+  final Color backgroundColor;
+  final double backgroundColorOpacity;
 
   LockScreen({
     this.correctString,
@@ -153,6 +170,7 @@ class LockScreen extends StatefulWidget {
     this.confirmMode = false,
     this.digits = 4,
     this.dotSecretConfig = const DotSecretConfig(),
+    this.circleInputButtonConfig = const CircleInputButtonConfig(),
     this.rightSideButton,
     this.canCancel = true,
     this.cancelText,
@@ -162,6 +180,8 @@ class LockScreen extends StatefulWidget {
     this.showBiometricFirst = false,
     this.biometricFunction,
     this.showBiometricFirstController,
+    this.backgroundColor = Colors.white,
+    this.backgroundColorOpacity = 0.5,
   });
 
   @override
@@ -300,7 +320,8 @@ class _LockScreenState extends State<LockScreen> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.5),
+        backgroundColor:
+            widget.backgroundColor.withOpacity(widget.backgroundColorOpacity),
         body: SafeArea(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
@@ -385,6 +406,7 @@ class _LockScreenState extends State<LockScreen> {
       child: CircleInputButton(
         enteredSink: enteredStream.sink,
         text: number,
+        config: widget.circleInputButtonConfig,
       ),
     );
   }
