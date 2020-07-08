@@ -14,6 +14,7 @@ You can also use biometric authentication as an option.
 - You can disable cancellation
 - You can use biometrics
 - Biometrics can be displayed on first launch
+- Unlocked callback
 
 ## Usage
 
@@ -22,12 +23,15 @@ To unlock, enter correctString.
 
 ### Simple
 
+If the passcode you entered matches, you can callback onUnlocked.
+
 ```dart
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 showLockScreen(
   context: context,
   correctString: '1234',
+  onUnlocked: () => print('Unlocked.'),
 );
 ```
 
@@ -47,10 +51,9 @@ showLockScreen(
 
 ### Use local_auth
 
-Specify `canBiometric` and `biometricFunction`.
-`biometricFunction`
+Specify `canBiometric` and `biometricAuthenticate`.
 
-Add local_auth processing to `biometricFunction`. See the following page for details.
+Add local_auth processing to `biometricAuthenticate`. See the following page for details.
 
 https://pub.dev/packages/local_auth
 
@@ -61,20 +64,22 @@ showLockScreen(
   context: context,
   correctString: '1234',
   canBiometric: true,
-  biometricFunction: (context) async {
-    LocalAuthentication localAuth = LocalAuthentication();
-    bool didAuthenticate =
+  biometricAuthenticate: (context) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate =
         await localAuth.authenticateWithBiometrics(
-            localizedReason:
-                'Please authenticate to show account balance');
+            localizedReason: 'Please authenticate');
+
     if (didAuthenticate) {
-      Navigator.of(context).maybePop();
+      return true;
     }
+
+    return false;
   },
 );
 ```
 
-### Open biometric first
+### Open biometric first & onUnlocked callback
 
 add option showBiometricFirst.
 
@@ -84,15 +89,20 @@ showLockScreen(
   correctString: '1234',
   canBiometric: true,
   showBiometricFirst: true,
-  biometricFunction: (context) async {
-    LocalAuthentication localAuth = LocalAuthentication();
-    bool didAuthenticate =
+  biometricAuthenticate: (context) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate =
         await localAuth.authenticateWithBiometrics(
-            localizedReason:
-                'Please authenticate to show account balance');
+            localizedReason: 'Please authenticate');
+
     if (didAuthenticate) {
-      Navigator.of(context).maybePop();
+      return true;
     }
+
+    return false;
+  },
+  onUnlocked: () {
+    print('Unlocked.');
   },
 );
 ```

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0] - 2020-07-08
+
+- Added unlocked callback function.
+- Deprecate biometricFunction. Instead, we have a biometricAuthenticate.
+- If you return true with biometricAuthenticate, you can set onUnlocked to Callback. Also, Navigation.pop is now automatic.
+
 ## [1.1.2] - 2020-05-10
 
 - Added the ability to customize buttons and backgrounds.
@@ -37,3 +43,4 @@
 - You can use biometrics
 - Biometrics can be displayed on first launch
 - Verification passcode
+- Unlocked callback

@@ -78,11 +78,14 @@ Future showLockScreen({
   void Function(BuildContext, String) onCompleted,
   bool canBiometric = false,
   bool showBiometricFirst = false,
-  void Function(BuildContext) biometricFunction,
+  @Deprecated('use biometricAuthenticate.')
+      void Function(BuildContext) biometricFunction,
+  Future<bool> Function(BuildContext) biometricAuthenticate,
   Color backgroundColor = Colors.white,
   double backgroundColorOpacity = 0.5,
   CircleInputButtonConfig circleInputButtonConfig =
       const CircleInputButtonConfig(),
+  void Function() onUnlocked,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -114,9 +117,11 @@ Future showLockScreen({
           showBiometricFirst: showBiometricFirst,
           showBiometricFirstController: _showBiometricFirstController,
           biometricFunction: biometricFunction,
+          biometricAuthenticate: biometricAuthenticate,
           backgroundColor: backgroundColor,
           backgroundColorOpacity: backgroundColorOpacity,
           circleInputButtonConfig: circleInputButtonConfig,
+          onUnlocked: onUnlocked,
         );
       },
       transitionsBuilder: (
@@ -158,10 +163,13 @@ class LockScreen extends StatefulWidget {
   final void Function(BuildContext, String) onCompleted;
   final bool canBiometric;
   final bool showBiometricFirst;
+  @Deprecated('use biometricAuthenticate.')
   final void Function(BuildContext) biometricFunction;
+  final Future<bool> Function(BuildContext) biometricAuthenticate;
   final StreamController<void> showBiometricFirstController;
   final Color backgroundColor;
   final double backgroundColorOpacity;
+  final void Function() onUnlocked;
 
   LockScreen({
     this.correctString,
@@ -179,9 +187,11 @@ class LockScreen extends StatefulWidget {
     this.canBiometric = false,
     this.showBiometricFirst = false,
     this.biometricFunction,
+    this.biometricAuthenticate,
     this.showBiometricFirstController,
     this.backgroundColor = Colors.white,
     this.backgroundColorOpacity = 0.5,
+    this.onUnlocked,
   });
 
   @override
@@ -218,18 +228,50 @@ class _LockScreenState extends State<LockScreen> {
       DeviceOrientation.portraitDown,
     ]);
 
-    if (widget.showBiometricFirst && widget.biometricFunction != null) {
-      // Set the listener if there is a stream option.
-      if (widget.showBiometricFirstController != null) {
-        widget.showBiometricFirstController.stream.listen((_) {
-          widget.biometricFunction(context);
-        });
-      } else {
-        // It is executed by a certain time.
-        Future.delayed(
-          Duration(milliseconds: 350),
-          () => widget.biometricFunction(context),
-        );
+    if (widget.showBiometricFirst) {
+      // Maintain compatibility.
+      if (widget.biometricFunction != null) {
+        // Set the listener if there is a stream option.
+        if (widget.showBiometricFirstController != null) {
+          widget.showBiometricFirstController.stream.listen((_) {
+            widget.biometricFunction(context);
+          });
+        } else {
+          // It is executed by a certain time.
+          Future.delayed(
+            Duration(milliseconds: 350),
+            () {
+              widget.biometricFunction(context);
+            },
+          );
+        }
+      }
+
+      if (widget.biometricAuthenticate != null) {
+        // Set the listener if there is a stream option.
+        if (widget.showBiometricFirstController != null) {
+          widget.showBiometricFirstController.stream.listen((_) {
+            widget.biometricAuthenticate(context).then((unlocked) {
+              if (unlocked) {
+                widget.onUnlocked();
+                Navigator.of(context).pop();
+              }
+            });
+          });
+        } else {
+          // It is executed by a certain time.
+          Future.delayed(
+            Duration(milliseconds: 350),
+            () {
+              widget.biometricAuthenticate(context).then((unlocked) {
+                if (unlocked) {
+                  widget.onUnlocked();
+                  Navigator.of(context).pop();
+                }
+              });
+            },
+          );
+        }
       }
     }
   }
@@ -295,6 +337,8 @@ class _LockScreenState extends State<LockScreen> {
           _needClose = true;
           Navigator.of(context).maybePop();
         }
+
+        widget.onUnlocked();
       } else {
         // send invalid status to DotSecretUI
         validateStreamController.add(false);
@@ -437,11 +481,25 @@ class _LockScreenState extends State<LockScreen> {
       padding: EdgeInsets.all(0.0),
       child: Icon(Icons.fingerprint),
       onPressed: () {
-        if (widget.biometricFunction == null) {
-          throw Exception('specify biometricFunction.');
-        }
+        // Maintain compatibility
+        if (widget.biometricFunction == null &&
+            widget.biometricAuthenticate == null) {
+          throw Exception(
+              'specify biometricFunction or biometricAuthenticate.');
+        } else {
+          if (widget.biometricFunction != null) {
+            widget.biometricFunction(context);
+          }
 
-        widget.biometricFunction(context);
+          if (widget.biometricAuthenticate != null) {
+            widget.biometricAuthenticate(context).then((unlocked) {
+              if (unlocked) {
+                widget.onUnlocked();
+                Navigator.of(context).pop();
+              }
+            });
+          }
+        }
       },
       shape: CircleBorder(
         side: BorderSide(

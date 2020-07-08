@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     // you must close the screen yourself
                     Navigator.of(context).maybePop();
                   },
+                  onUnlocked: () => print('Unlocked.'),
                 ),
               ),
               RaisedButton(
@@ -65,15 +66,33 @@ class _MyHomePageState extends State<MyHomePage> {
                   context: context,
                   correctString: '1234',
                   canBiometric: true,
-                  biometricFunction: (context) async {
-                    var localAuth = LocalAuthentication();
-                    var didAuthenticate =
+                  // biometricFunction: (context) async {
+                  //   final localAuth = LocalAuthentication();
+                  //   final didAuthenticate =
+                  //       await localAuth.authenticateWithBiometrics(
+                  //           localizedReason: 'Please authenticate');
+
+                  //   if (didAuthenticate) {
+                  //     Navigator.of(context).pop();
+                  //     return true;
+                  //   }
+
+                  //   return false;
+                  // },
+                  biometricAuthenticate: (context) async {
+                    final localAuth = LocalAuthentication();
+                    final didAuthenticate =
                         await localAuth.authenticateWithBiometrics(
-                            localizedReason:
-                                'Please authenticate to show account balance');
+                            localizedReason: 'Please authenticate');
+
                     if (didAuthenticate) {
-                      await Navigator.of(context).maybePop();
+                      return true;
                     }
+
+                    return false;
+                  },
+                  onUnlocked: () {
+                    print('Unlocked.');
                   },
                 ),
               ),
@@ -84,16 +103,29 @@ class _MyHomePageState extends State<MyHomePage> {
                   correctString: '1234',
                   canBiometric: true,
                   showBiometricFirst: true,
-                  biometricFunction: (context) async {
-                    var localAuth = LocalAuthentication();
-                    var didAuthenticate =
+                  // biometricFunction: (context) async {
+                  //   final localAuth = LocalAuthentication();
+                  //   final didAuthenticate =
+                  //       await localAuth.authenticateWithBiometrics(
+                  //           localizedReason: 'Please authenticate');
+
+                  //   if (didAuthenticate) {
+                  //     Navigator.of(context).pop();
+                  //   }
+                  // },
+                  biometricAuthenticate: (_) async {
+                    final localAuth = LocalAuthentication();
+                    final didAuthenticate =
                         await localAuth.authenticateWithBiometrics(
-                            localizedReason:
-                                'Please authenticate to show account balance');
+                            localizedReason: 'Please authenticate');
+
                     if (didAuthenticate) {
-                      await Navigator.of(context).maybePop();
+                      return true;
                     }
+
+                    return false;
                   },
+                  onUnlocked: () => print('Unlocked.'),
                 ),
               ),
               RaisedButton(
