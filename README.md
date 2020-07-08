@@ -64,6 +64,9 @@ showLockScreen(
   context: context,
   correctString: '1234',
   canBiometric: true,
+  // biometricButton is default Icon(Icons.fingerprint)
+  // When you want to change the icon with `BiometricType.face`, etc.
+  biometricButton: Icon(Icons.face),
   biometricAuthenticate: (context) async {
     final localAuth = LocalAuthentication();
     final didAuthenticate =

@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2020-07-08
+
+- Added custom biometric button.
+
 ## [1.2.0] - 2020-07-08
 
 - Added unlocked callback function.

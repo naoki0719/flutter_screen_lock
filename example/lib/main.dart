@@ -32,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // showAboutDialog(context: null);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -66,19 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   context: context,
                   correctString: '1234',
                   canBiometric: true,
-                  // biometricFunction: (context) async {
-                  //   final localAuth = LocalAuthentication();
-                  //   final didAuthenticate =
-                  //       await localAuth.authenticateWithBiometrics(
-                  //           localizedReason: 'Please authenticate');
-
-                  //   if (didAuthenticate) {
-                  //     Navigator.of(context).pop();
-                  //     return true;
-                  //   }
-
-                  //   return false;
-                  // },
+                  // biometricButton is default Icon(Icons.fingerprint)
+                  // When you want to change the icon with `BiometricType.face`, etc.
+                  biometricButton: Icon(Icons.face),
                   biometricAuthenticate: (context) async {
                     final localAuth = LocalAuthentication();
                     final didAuthenticate =

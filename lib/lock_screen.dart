@@ -76,6 +76,7 @@ Future showLockScreen({
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   bool canCancel = true,
   void Function(BuildContext, String) onCompleted,
+  Widget biometricButton = const Icon(Icons.fingerprint),
   bool canBiometric = false,
   bool showBiometricFirst = false,
   @Deprecated('use biometricAuthenticate.')
@@ -113,6 +114,7 @@ Future showLockScreen({
           canCancel: canCancel,
           cancelText: cancelText,
           deleteText: deleteText,
+          biometricButton: biometricButton,
           canBiometric: canBiometric,
           showBiometricFirst: showBiometricFirst,
           showBiometricFirstController: _showBiometricFirstController,
@@ -160,6 +162,7 @@ class LockScreen extends StatefulWidget {
   final bool canCancel;
   final String cancelText;
   final String deleteText;
+  final Widget biometricButton;
   final void Function(BuildContext, String) onCompleted;
   final bool canBiometric;
   final bool showBiometricFirst;
@@ -183,6 +186,7 @@ class LockScreen extends StatefulWidget {
     this.canCancel = true,
     this.cancelText,
     this.deleteText,
+    this.biometricButton = const Icon(Icons.fingerprint),
     this.onCompleted,
     this.canBiometric = false,
     this.showBiometricFirst = false,
@@ -479,7 +483,7 @@ class _LockScreenState extends State<LockScreen> {
 
     return FlatButton(
       padding: EdgeInsets.all(0.0),
-      child: Icon(Icons.fingerprint),
+      child: widget.biometricButton,
       onPressed: () {
         // Maintain compatibility
         if (widget.biometricFunction == null &&
