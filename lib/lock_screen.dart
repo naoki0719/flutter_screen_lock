@@ -257,7 +257,10 @@ class _LockScreenState extends State<LockScreen> {
           widget.showBiometricFirstController.stream.listen((_) {
             widget.biometricAuthenticate(context).then((unlocked) {
               if (unlocked) {
-                widget.onUnlocked();
+                if (widget.onUnlocked != null) {
+                  widget.onUnlocked();
+                }
+
                 Navigator.of(context).pop();
               }
             });
