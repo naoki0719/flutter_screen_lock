@@ -1,8 +1,12 @@
 # Changelog
 
+## [1.2.3] - 2020-07-29
+
+- Fix a missing exception in onUnlocked.
+
 ## [1.2.2] - 2020-07-28
 
-- Fix exception for onUnlocked
+- Fix exception for onUnlocked.
 
 ## [1.2.1] - 2020-07-08
 
