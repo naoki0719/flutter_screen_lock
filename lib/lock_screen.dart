@@ -291,7 +291,10 @@ class _LockScreenState extends State<LockScreen> {
     }
 
     removedStreamController.stream.listen((_) {
-      enteredValues.removeLast();
+      if (enteredValues.isNotEmpty) {
+        enteredValues.removeLast();
+      }
+
       enteredLengthStream.add(enteredValues.length);
     });
   }

@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.4] - 2020-07-29
+
+- Fixed an exception when deleting input.
+
 ## [1.2.3] - 2020-07-29
 
 - Fix a missing exception in onUnlocked.
