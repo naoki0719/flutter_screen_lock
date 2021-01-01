@@ -291,7 +291,10 @@ class _LockScreenState extends State<LockScreen> {
     }
 
     removedStreamController.stream.listen((_) {
-      enteredValues.removeLast();
+      if (enteredValues.isNotEmpty) {
+        enteredValues.removeLast();
+      }
+
       enteredLengthStream.add(enteredValues.length);
     });
   }
@@ -381,6 +384,7 @@ class _LockScreenState extends State<LockScreen> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _buildTitle(),
                 DotSecretUI(

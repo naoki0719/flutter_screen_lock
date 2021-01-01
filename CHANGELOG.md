@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.5] - 2021-01-02
+
+- Fixed to center the screen content.
+
+## [1.2.4] - 2020-07-29
+
+- Fixed an exception when deleting input.
+
 ## [1.2.3] - 2020-07-29
 
 - Fix a missing exception in onUnlocked.
