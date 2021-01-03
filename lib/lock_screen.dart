@@ -257,11 +257,11 @@ class _LockScreenState extends State<LockScreen> {
           widget.showBiometricFirstController.stream.listen((_) {
             widget.biometricAuthenticate(context).then((unlocked) {
               if (unlocked) {
+                Navigator.of(context).pop();
+
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
-
-                Navigator.of(context).pop();
               }
             });
           });
@@ -272,10 +272,11 @@ class _LockScreenState extends State<LockScreen> {
             () {
               widget.biometricAuthenticate(context).then((unlocked) {
                 if (unlocked) {
+                  Navigator.pop(context);
+
                   if (widget.onUnlocked != null) {
                     widget.onUnlocked();
                   }
-                  Navigator.of(context).pop();
                 }
               });
             },
@@ -347,7 +348,7 @@ class _LockScreenState extends State<LockScreen> {
           widget.onCompleted(context, enteredValue);
         } else {
           _needClose = true;
-          Navigator.of(context).maybePop();
+          Navigator.pop(context);
         }
 
         if (widget.onUnlocked != null) {
@@ -509,11 +510,11 @@ class _LockScreenState extends State<LockScreen> {
           if (widget.biometricAuthenticate != null) {
             widget.biometricAuthenticate(context).then((unlocked) {
               if (unlocked) {
+                Navigator.pop(context);
+
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
-
-                Navigator.of(context).pop();
               }
             });
           }
