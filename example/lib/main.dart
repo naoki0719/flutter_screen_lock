@@ -1,3 +1,4 @@
+import 'package:example/second_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/circle_input_button.dart';
 import 'package:flutter_screen_lock/lock_screen.dart';
@@ -115,6 +116,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     return false;
                   },
                   onUnlocked: () => print('Unlocked.'),
+                ),
+              ),
+              RaisedButton(
+                child: Text('Go to another page after unlocked biometrics'),
+                onPressed: () => showLockScreen(
+                  context: context,
+                  correctString: '1234',
+                  canBiometric: true,
+                  showBiometricFirst: true,
+                  biometricAuthenticate: (_) async {
+                    final localAuth = LocalAuthentication();
+                    final didAuthenticate =
+                        await localAuth.authenticateWithBiometrics(
+                            localizedReason: 'Please authenticate');
+
+                    if (didAuthenticate) {
+                      return true;
+                    }
+
+                    return false;
+                  },
+                  onUnlocked: () async => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SecondPage(),
+                    ),
+                  ),
                 ),
               ),
               RaisedButton(
