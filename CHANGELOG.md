@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.6] - 2021-01-03
+
+- Fixed to pop after biometric authentication and then call the unlocked function.
+
 ## [1.2.5] - 2021-01-02
 
 - Fixed to center the screen content.
