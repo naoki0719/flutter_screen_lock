@@ -16,6 +16,10 @@ You can also use biometric authentication as an option.
 - Biometrics can be displayed on first launch
 - Unlocked callback
 
+## Pending
+
+- Change the text color of Cancel, Delete, and Biometric
+
 ## Usage
 
 You can easily lock the screen with the following code.  
@@ -190,3 +194,11 @@ showLockScreen(
 ### How to prevent the background from being transparent
 
 Set the `backgroundColorOpacity` option to 1
+
+## Apps I use
+
+TimeKey
+
+[iOS](https://apps.apple.com/us/app/timekey-authenticator/id1506129753)
+
+[Android](https://play.google.com/store/apps/details?id=net.incrementleaf.TimeKey)
