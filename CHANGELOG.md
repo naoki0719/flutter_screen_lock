@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.0-nullsafety] - 2021-02-17
+
+- Supports null safety
+
 ## [1.2.6] - 2021-01-03
 
 - Fixed to pop after biometric authentication and then call the unlocked function.
