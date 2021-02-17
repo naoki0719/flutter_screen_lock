@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Open Lock Screen'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onUnlocked: () => print('Unlocked.'),
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('6 Digits'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   correctString: '123456',
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Use local_auth'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Open biometric first'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onUnlocked: () => print('Unlocked.'),
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Go to another page after unlocked biometrics'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Can\'t cancel'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   canCancel: false,
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Customize text'),
                 onPressed: () => showLockScreen(
                   context: context,
@@ -162,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   deleteText: 'Remove',
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Confirm mode.'),
                 onPressed: () => showConfirmPasscode(
                   context: context,
@@ -172,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Change styles.'),
                 onPressed: () => showLockScreen(
                   context: context,

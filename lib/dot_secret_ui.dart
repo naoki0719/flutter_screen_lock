@@ -24,9 +24,9 @@ class DotSecretUI extends StatefulWidget {
   final int dots;
 
   const DotSecretUI({
-    @required this.enteredLengthStream,
-    @required this.dots,
-    @required this.validateStream,
+    required this.enteredLengthStream,
+    required this.dots,
+    required this.validateStream,
     this.config = const DotSecretConfig(),
   });
 
@@ -36,8 +36,8 @@ class DotSecretUI extends StatefulWidget {
 
 class _DotSecretUIState extends State<DotSecretUI>
     with SingleTickerProviderStateMixin {
-  Animation<Offset> _animation;
-  AnimationController _animationController;
+  Animation<Offset>? _animation;
+  AnimationController? _animationController;
 
   @override
   void initState() {
@@ -47,14 +47,14 @@ class _DotSecretUIState extends State<DotSecretUI>
     widget.validateStream.listen((valid) {
       if (!valid) {
         // shake animation when invalid
-        _animationController.forward();
+        _animationController!.forward();
       }
     });
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 80));
 
-    _animation = _animationController
+    _animation = _animationController!
         .drive(CurveTween(curve: Curves.elasticIn))
         .drive(Tween<Offset>(begin: Offset.zero, end: const Offset(0.025, 0)))
           ..addListener(() {
@@ -62,7 +62,7 @@ class _DotSecretUIState extends State<DotSecretUI>
           })
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              _animationController.reverse();
+              _animationController!.reverse();
             }
           });
   }
@@ -70,7 +70,7 @@ class _DotSecretUIState extends State<DotSecretUI>
   @override
   Widget build(BuildContext context) {
     return SlideTransition(
-      position: _animation,
+      position: _animation!,
       child: Container(
         padding: widget.config.padding,
         child: StreamBuilder<int>(
@@ -82,7 +82,7 @@ class _DotSecretUIState extends State<DotSecretUI>
                 children: List<Widget>.generate(
                   widget.dots,
                   // index less than the input digit is true
-                  (index) => _buildCircle(index < snapshot.data),
+                  (index) => _buildCircle(index < snapshot.data!),
                 ),
               );
             } else {
@@ -116,7 +116,7 @@ class _DotSecretUIState extends State<DotSecretUI>
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 }

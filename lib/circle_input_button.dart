@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class CircleInputButtonConfig {
   // final double fontSize;
   /// default `MediaQuery.of(context).size.width * 0.095`
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final Color backgroundColor;
   final double backgroundOpacity;
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   const CircleInputButtonConfig({
     this.textStyle,
@@ -23,8 +23,8 @@ class CircleInputButton extends StatelessWidget {
   final Sink<String> enteredSink;
 
   CircleInputButton({
-    @required this.text,
-    @required this.enteredSink,
+    required this.text,
+    required this.enteredSink,
     this.config = const CircleInputButtonConfig(),
   });
 
@@ -33,9 +33,10 @@ class CircleInputButton extends StatelessWidget {
     final textStyle = config.textStyle ??
         TextStyle(
           fontSize: MediaQuery.of(context).size.width * 0.095,
+          color: Colors.black87,
         );
 
-    return RaisedButton(
+    return OutlinedButton(
       child: Text(
         text,
         style: textStyle,
@@ -43,16 +44,12 @@ class CircleInputButton extends StatelessWidget {
       onPressed: () {
         enteredSink.add(text);
       },
-      shape: config.shape ??
-          CircleBorder(
-            side: BorderSide(
-              color: Colors.transparent,
-              width: 0,
-              style: BorderStyle.solid,
-            ),
-          ),
-      color: config.backgroundColor.withOpacity(config.backgroundOpacity),
-      elevation: 0,
+      style: OutlinedButton.styleFrom(
+        backgroundColor:
+            config.backgroundColor.withOpacity(config.backgroundOpacity),
+        shape: CircleBorder(),
+        side: BorderSide.none,
+      ),
     );
   }
 }

@@ -7,14 +7,14 @@ import 'dot_secret_ui.dart';
 import 'circle_input_button.dart';
 
 Future showConfirmPasscode({
-  @required BuildContext context,
+  required BuildContext context,
   String title = 'Please enter passcode.',
   String confirmTitle = 'Please enter confirm passcode.',
   String cancelText = 'Cancel',
   String deleteText = 'Delete',
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
-  void Function(BuildContext, String) onCompleted,
+  void Function(BuildContext, String)? onCompleted,
   Color backgroundColor = Colors.white,
   double backgroundColorOpacity = 0.5,
   CircleInputButtonConfig circleInputButtonConfig =
@@ -67,26 +67,24 @@ Future showConfirmPasscode({
 }
 
 Future showLockScreen({
-  @required BuildContext context,
-  String correctString,
+  required BuildContext context,
+  String correctString = '',
   String title = 'Please enter passcode.',
   String cancelText = 'Cancel',
   String deleteText = 'Delete',
   int digits = 4,
   DotSecretConfig dotSecretConfig = const DotSecretConfig(),
   bool canCancel = true,
-  void Function(BuildContext, String) onCompleted,
+  void Function(BuildContext, String)? onCompleted,
   Widget biometricButton = const Icon(Icons.fingerprint),
   bool canBiometric = false,
   bool showBiometricFirst = false,
-  @Deprecated('use biometricAuthenticate.')
-      void Function(BuildContext) biometricFunction,
-  Future<bool> Function(BuildContext) biometricAuthenticate,
+  Future<bool> Function(BuildContext)? biometricAuthenticate,
   Color backgroundColor = Colors.white,
   double backgroundColorOpacity = 0.5,
   CircleInputButtonConfig circleInputButtonConfig =
       const CircleInputButtonConfig(),
-  void Function() onUnlocked,
+  void Function()? onUnlocked,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -118,7 +116,6 @@ Future showLockScreen({
           canBiometric: canBiometric,
           showBiometricFirst: showBiometricFirst,
           showBiometricFirstController: _showBiometricFirstController,
-          biometricFunction: biometricFunction,
           biometricAuthenticate: biometricAuthenticate,
           backgroundColor: backgroundColor,
           backgroundColorOpacity: backgroundColorOpacity,
@@ -151,28 +148,26 @@ Future showLockScreen({
 }
 
 class LockScreen extends StatefulWidget {
-  final String correctString;
+  final String? correctString;
   final String title;
   final String confirmTitle;
   final bool confirmMode;
-  final Widget rightSideButton;
+  final Widget? rightSideButton;
   final int digits;
   final DotSecretConfig dotSecretConfig;
   final CircleInputButtonConfig circleInputButtonConfig;
   final bool canCancel;
-  final String cancelText;
-  final String deleteText;
+  final String? cancelText;
+  final String? deleteText;
   final Widget biometricButton;
-  final void Function(BuildContext, String) onCompleted;
+  final void Function(BuildContext, String)? onCompleted;
   final bool canBiometric;
   final bool showBiometricFirst;
-  @Deprecated('use biometricAuthenticate.')
-  final void Function(BuildContext) biometricFunction;
-  final Future<bool> Function(BuildContext) biometricAuthenticate;
-  final StreamController<void> showBiometricFirstController;
+  final Future<bool> Function(BuildContext)? biometricAuthenticate;
+  final StreamController<void>? showBiometricFirstController;
   final Color backgroundColor;
   final double backgroundColorOpacity;
-  final void Function() onUnlocked;
+  final void Function()? onUnlocked;
 
   LockScreen({
     this.correctString,
@@ -190,7 +185,6 @@ class LockScreen extends StatefulWidget {
     this.onCompleted,
     this.canBiometric = false,
     this.showBiometricFirst = false,
-    this.biometricFunction,
     this.biometricAuthenticate,
     this.showBiometricFirstController,
     this.backgroundColor = Colors.white,
@@ -233,34 +227,16 @@ class _LockScreenState extends State<LockScreen> {
     ]);
 
     if (widget.showBiometricFirst) {
-      // Maintain compatibility.
-      if (widget.biometricFunction != null) {
-        // Set the listener if there is a stream option.
-        if (widget.showBiometricFirstController != null) {
-          widget.showBiometricFirstController.stream.listen((_) {
-            widget.biometricFunction(context);
-          });
-        } else {
-          // It is executed by a certain time.
-          Future.delayed(
-            Duration(milliseconds: 350),
-            () {
-              widget.biometricFunction(context);
-            },
-          );
-        }
-      }
-
       if (widget.biometricAuthenticate != null) {
         // Set the listener if there is a stream option.
         if (widget.showBiometricFirstController != null) {
-          widget.showBiometricFirstController.stream.listen((_) {
-            widget.biometricAuthenticate(context).then((unlocked) {
+          widget.showBiometricFirstController?.stream.listen((_) {
+            widget.biometricAuthenticate!(context).then((unlocked) {
               if (unlocked) {
                 Navigator.of(context).pop();
 
                 if (widget.onUnlocked != null) {
-                  widget.onUnlocked();
+                  widget.onUnlocked!();
                 }
               }
             });
@@ -270,12 +246,12 @@ class _LockScreenState extends State<LockScreen> {
           Future.delayed(
             Duration(milliseconds: 350),
             () {
-              widget.biometricAuthenticate(context).then((unlocked) {
+              widget.biometricAuthenticate!(context).then((unlocked) {
                 if (unlocked) {
                   Navigator.pop(context);
 
                   if (widget.onUnlocked != null) {
-                    widget.onUnlocked();
+                    widget.onUnlocked!();
                   }
                 }
               });
@@ -345,14 +321,14 @@ class _LockScreenState extends State<LockScreen> {
 
         if (widget.onCompleted != null) {
           // call user function
-          widget.onCompleted(context, enteredValue);
+          widget.onCompleted!(context, enteredValue);
         } else {
           _needClose = true;
           Navigator.pop(context);
         }
 
         if (widget.onUnlocked != null) {
-          widget.onUnlocked();
+          widget.onUnlocked!();
         }
       } else {
         // send invalid status to DotSecretUI
@@ -493,60 +469,46 @@ class _LockScreenState extends State<LockScreen> {
   Widget _biometricButton() {
     if (!widget.canBiometric) return Container();
 
-    return FlatButton(
-      padding: EdgeInsets.all(0.0),
+    return OutlinedButton(
       child: widget.biometricButton,
       onPressed: () {
-        // Maintain compatibility
-        if (widget.biometricFunction == null &&
-            widget.biometricAuthenticate == null) {
-          throw Exception(
-              'specify biometricFunction or biometricAuthenticate.');
-        } else {
-          if (widget.biometricFunction != null) {
-            widget.biometricFunction(context);
-          }
+        if (widget.biometricAuthenticate != null) {
+          widget.biometricAuthenticate!(context).then((unlocked) {
+            if (unlocked) {
+              Navigator.pop(context);
 
-          if (widget.biometricAuthenticate != null) {
-            widget.biometricAuthenticate(context).then((unlocked) {
-              if (unlocked) {
-                Navigator.pop(context);
-
-                if (widget.onUnlocked != null) {
-                  widget.onUnlocked();
-                }
+              if (widget.onUnlocked != null) {
+                widget.onUnlocked!();
               }
-            });
-          }
+            }
+          });
         }
       },
-      shape: CircleBorder(
-        side: BorderSide(
-          color: Colors.transparent,
-          style: BorderStyle.solid,
-        ),
+      style: OutlinedButton.styleFrom(
+        side: BorderSide.none,
+        shape: CircleBorder(),
       ),
-      color: Colors.transparent,
     );
   }
 
   Widget _rightSideButton() {
-    if (widget.rightSideButton != null) return widget.rightSideButton;
+    if (widget.rightSideButton != null) {
+      return widget.rightSideButton!;
+    }
 
     return StreamBuilder<int>(
         stream: enteredLengthStream.stream,
         builder: (context, snapshot) {
           String buttonText;
-          if (snapshot.hasData && snapshot.data > 0) {
-            buttonText = widget.deleteText;
+          if (snapshot.hasData && snapshot.data! > 0) {
+            buttonText = widget.deleteText!;
           } else if (widget.canCancel) {
-            buttonText = widget.cancelText;
+            buttonText = widget.cancelText!;
           } else {
             return Container();
           }
 
-          return FlatButton(
-            padding: EdgeInsets.all(0),
+          return TextButton(
             child: Text(
               buttonText,
               style: TextStyle(
@@ -556,7 +518,7 @@ class _LockScreenState extends State<LockScreen> {
               textAlign: TextAlign.center,
             ),
             onPressed: () {
-              if (snapshot.hasData && snapshot.data > 0) {
+              if (snapshot.hasData && snapshot.data! > 0) {
                 removedStreamController.sink.add(null);
               } else {
                 if (widget.canCancel) {
@@ -565,13 +527,10 @@ class _LockScreenState extends State<LockScreen> {
                 }
               }
             },
-            shape: CircleBorder(
-              side: BorderSide(
-                color: Colors.transparent,
-                style: BorderStyle.solid,
-              ),
+            style: TextButton.styleFrom(
+              shape: CircleBorder(),
+              backgroundColor: Colors.transparent,
             ),
-            color: Colors.transparent,
           );
         });
   }
@@ -583,7 +542,7 @@ class _LockScreenState extends State<LockScreen> {
     validateStreamController.close();
     removedStreamController.close();
     if (widget.showBiometricFirstController != null) {
-      widget.showBiometricFirstController.close();
+      widget.showBiometricFirstController!.close();
     }
 
     // restore orientation.
