@@ -15,6 +15,7 @@ You can also use biometric authentication as an option.
 - You can use biometrics
 - Biometrics can be displayed on first launch
 - Unlocked callback
+- Limit the maximum number of retries
 
 ## Usage
 
@@ -182,6 +183,39 @@ showLockScreen(
       ),
     ),
   ),
+)
+```
+
+### Max retries (v1.2.7)
+
+```dart
+showLockScreen(
+  context: context,
+  correctString: '1234',
+  maxRetries: 0, // -1 is unlimited
+  didMaxRetries: () {
+    Navigator.pop(context);
+    showAboutDialog(
+      context: context,
+      children: [
+        Text('The maximum number of retries has been reached.'),
+      ],
+    );
+  },
+  biometricAuthenticate: (_) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate = await localAuth.authenticate(
+      localizedReason: 'Please authenticate',
+      biometricOnly: true,
+    );
+
+    if (didAuthenticate) {
+      return true;
+    }
+
+    return false;
+  },
+  canBiometric: true,
 )
 ```
 

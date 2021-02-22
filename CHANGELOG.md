@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.7+1] - 2021-02-22
+
+- Fixed the README.
+
 ## [1.2.7] - 2021-02-22
 
 - Added the ability to limit the maximum retries.
