@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.8+1] - 2021-02-22
+
+- Fixed the README.
+
+## [1.2.8] - 2021-02-22
+
+- Add the `onError` event when input fails.
+
 ## [1.2.7+1] - 2021-02-22
 
 - Fixed the README.
