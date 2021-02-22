@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.9] - 2021-02-22
+
+- `didMaxRetries` and `onError` are not handled by biometric.
+
 ## [1.2.8+1] - 2021-02-22
 
 - Fixed the README.
