@@ -286,9 +286,6 @@ class _LockScreenState extends State<LockScreen> {
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
-              } else {
-                _verifyMaxRetries();
-                _incorrect(_retries);
               }
             });
           });
@@ -304,9 +301,6 @@ class _LockScreenState extends State<LockScreen> {
                   if (widget.onUnlocked != null) {
                     widget.onUnlocked();
                   }
-                } else {
-                  _verifyMaxRetries();
-                  _incorrect(_retries);
                 }
               });
             },
@@ -564,9 +558,6 @@ class _LockScreenState extends State<LockScreen> {
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
-              } else {
-                _verifyMaxRetries();
-                _incorrect(_retries);
               }
             });
           }
