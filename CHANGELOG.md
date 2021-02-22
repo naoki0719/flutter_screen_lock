@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.7] - 2021-02-22
+
+- Added the ability to limit the maximum retries.
+
 ## [1.2.6] - 2021-01-03
 
 - Fixed to pop after biometric authentication and then call the unlocked function.

@@ -196,6 +196,36 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              RaisedButton(
+                child: Text('Max retries'),
+                onPressed: () => showLockScreen(
+                  context: context,
+                  correctString: '1234',
+                  maxRetries: 0,
+                  didMaxRetries: () {
+                    Navigator.pop(context);
+                    showAboutDialog(
+                      context: context,
+                      children: [
+                        Text('The maximum number of retries has been reached.'),
+                      ],
+                    );
+                  },
+                  biometricAuthenticate: (_) async {
+                    final localAuth = LocalAuthentication();
+                    final didAuthenticate =
+                        await localAuth.authenticateWithBiometrics(
+                            localizedReason: 'Please authenticate');
+
+                    if (didAuthenticate) {
+                      return true;
+                    }
+
+                    return false;
+                  },
+                  canBiometric: true,
+                ),
+              ),
             ],
           ),
         ),

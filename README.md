@@ -190,3 +190,11 @@ showLockScreen(
 ### How to prevent the background from being transparent
 
 Set the `backgroundColorOpacity` option to 1
+
+## Apps I use
+
+TimeKey
+
+[iOS](https://apps.apple.com/us/app/timekey-authenticator/id1506129753)
+
+[Android](https://play.google.com/store/apps/details?id=net.incrementleaf.TimeKey)
