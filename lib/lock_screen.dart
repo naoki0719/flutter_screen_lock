@@ -19,6 +19,8 @@ Future showConfirmPasscode({
   double backgroundColorOpacity = 0.5,
   CircleInputButtonConfig circleInputButtonConfig =
       const CircleInputButtonConfig(),
+  int maxRetries = 1,
+  void Function() didMaxRetries,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -40,6 +42,8 @@ Future showConfirmPasscode({
           backgroundColor: backgroundColor,
           backgroundColorOpacity: backgroundColorOpacity,
           circleInputButtonConfig: circleInputButtonConfig,
+          maxRetries: maxRetries,
+          didMaxRetries: didMaxRetries,
         );
       },
       transitionsBuilder: (
@@ -87,6 +91,8 @@ Future showLockScreen({
   CircleInputButtonConfig circleInputButtonConfig =
       const CircleInputButtonConfig(),
   void Function() onUnlocked,
+  int maxRetries = 1,
+  void Function() didMaxRetries,
 }) {
   return Navigator.of(context).push(
     PageRouteBuilder(
@@ -124,6 +130,8 @@ Future showLockScreen({
           backgroundColorOpacity: backgroundColorOpacity,
           circleInputButtonConfig: circleInputButtonConfig,
           onUnlocked: onUnlocked,
+          maxRetries: maxRetries,
+          didMaxRetries: didMaxRetries,
         );
       },
       transitionsBuilder: (
@@ -174,6 +182,10 @@ class LockScreen extends StatefulWidget {
   final double backgroundColorOpacity;
   final void Function() onUnlocked;
 
+  /// -1 is unlimited. [Default -1]
+  final int maxRetries;
+  final void Function() didMaxRetries;
+
   LockScreen({
     this.correctString,
     this.title = 'Please enter passcode.',
@@ -196,6 +208,8 @@ class LockScreen extends StatefulWidget {
     this.backgroundColor = Colors.white,
     this.backgroundColorOpacity = 0.5,
     this.onUnlocked,
+    this.maxRetries = -1,
+    this.didMaxRetries,
   });
 
   @override
@@ -222,6 +236,8 @@ class _LockScreenState extends State<LockScreen> {
   String _verifyConfirmPasscode = '';
 
   List<String> enteredValues = <String>[];
+
+  int _maxRetries = 0;
 
   @override
   void initState() {
@@ -262,6 +278,8 @@ class _LockScreenState extends State<LockScreen> {
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
+              } else {
+                _verifyMaxRetries();
               }
             });
           });
@@ -277,6 +295,8 @@ class _LockScreenState extends State<LockScreen> {
                   if (widget.onUnlocked != null) {
                     widget.onUnlocked();
                   }
+                } else {
+                  _verifyMaxRetries();
                 }
               });
             },
@@ -359,8 +379,20 @@ class _LockScreenState extends State<LockScreen> {
         validateStreamController.add(false);
         enteredValues.clear();
         enteredLengthStream.add(enteredValues.length);
+        _verifyMaxRetries();
       }
     });
+  }
+
+  /// Check if the maximum number of retries has been reached.
+  void _verifyMaxRetries() {
+    if (_maxRetries >= widget.maxRetries) {
+      if (widget.didMaxRetries != null) {
+        widget.didMaxRetries();
+      }
+    }
+
+    _maxRetries++;
   }
 
   @override
@@ -515,6 +547,8 @@ class _LockScreenState extends State<LockScreen> {
                 if (widget.onUnlocked != null) {
                   widget.onUnlocked();
                 }
+              } else {
+                _verifyMaxRetries();
               }
             });
           }
