@@ -186,13 +186,16 @@ showLockScreen(
 )
 ```
 
-### Max retries (v1.2.7)
+### Max retries / Incorrect event (v1.2.8)
 
 ```dart
 showLockScreen(
   context: context,
   correctString: '1234',
-  maxRetries: 0, // -1 is unlimited
+  maxRetries: 1, // -1 is unlimited
+  onError: (retries) {
+    print(retries);
+  },
   didMaxRetries: () {
     Navigator.pop(context);
     showAboutDialog(

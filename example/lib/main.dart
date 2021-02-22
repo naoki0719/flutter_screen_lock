@@ -197,11 +197,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               RaisedButton(
-                child: Text('Max retries'),
+                child: Text('Max retries / Incorrect event'),
                 onPressed: () => showLockScreen(
                   context: context,
                   correctString: '1234',
-                  maxRetries: 0,
+                  maxRetries: 1,
+                  onError: (retries) {
+                    print(retries);
+                  },
                   didMaxRetries: () {
                     Navigator.pop(context);
                     showAboutDialog(
