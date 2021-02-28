@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0] - 2021-02-28
+
+- Version 3.0.0 was released with improved customizability.
+- The method and function names have been unified to match the package names.
+- The properties have been reviewed and are no longer backward compatible.
+- It recognizes the size and orientation of the device and optimizes the size of the keypad.
+- ⚠We will try to maintain compatibility in this version as much as possible, but disruptive changes may be made.
+- ⚠️We have not been able to fully confirm this on Android.
+
 ## [1.2.9] - 2021-02-22
 
 - `didMaxRetries` and `onError` are not handled by biometric.

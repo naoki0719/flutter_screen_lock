@@ -6,15 +6,21 @@ You can also use biometric authentication as an option.
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock.gif" />
 
+## ⚠Attention
+
+A detailed API description will be provided later.
+Only tentatively necessary information is provided.
+
 ## Features
 
-- Any number of digits can be specified
-- You can change `Cancel` and `Delete` text
-- The UI expands and contracts according to the size of the device
+- By the length of the character count
+- You can change `Cancel` and `Delete` widget
+- Optimizes the UI for device size and orientation
 - You can disable cancellation
-- You can use biometrics
+- You can use biometrics (local_auth plugin)
 - Biometrics can be displayed on first launch
 - Unlocked callback
+- You can specify a mismatch event.
 - Limit the maximum number of retries
 
 ## Usage
@@ -24,209 +30,154 @@ To unlock, enter correctString.
 
 ### Simple
 
-If the passcode you entered matches, you can callback onUnlocked.
+If you give the same input as correctString, it will automatically close the screen.
 
 ```dart
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+import 'package:flutter_screen_lock/functions.dart';
 
-showLockScreen(
+screenLock(
   context: context,
   correctString: '1234',
-  onUnlocked: () => print('Unlocked.'),
 );
 ```
 
 ### Change digits
 
-Default 4 digits can be changed. Change the correctString accordingly.
+Provides a screen lock that cannot be canceled.
 
 ```dart
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+import 'package:flutter_screen_lock/functions.dart';
 
-showLockScreen(
-  context: context,
-  digits: 6,
-  correctString: '123456',
-);
-```
-
-### Use local_auth
-
-Specify `canBiometric` and `biometricAuthenticate`.
-
-Add local_auth processing to `biometricAuthenticate`. See the following page for details.
-
-https://pub.dev/packages/local_auth
-
-```dart
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-
-showLockScreen(
-  context: context,
-  correctString: '1234',
-  canBiometric: true,
-  // biometricButton is default Icon(Icons.fingerprint)
-  // When you want to change the icon with `BiometricType.face`, etc.
-  biometricButton: Icon(Icons.face),
-  biometricAuthenticate: (context) async {
-    final localAuth = LocalAuthentication();
-    final didAuthenticate =
-        await localAuth.authenticateWithBiometrics(
-            localizedReason: 'Please authenticate');
-
-    if (didAuthenticate) {
-      return true;
-    }
-
-    return false;
-  },
-);
-```
-
-### Open biometric first & onUnlocked callback
-
-add option showBiometricFirst.
-
-```dart
-showLockScreen(
-  context: context,
-  correctString: '1234',
-  canBiometric: true,
-  showBiometricFirst: true,
-  biometricAuthenticate: (context) async {
-    final localAuth = LocalAuthentication();
-    final didAuthenticate =
-        await localAuth.authenticateWithBiometrics(
-            localizedReason: 'Please authenticate');
-
-    if (didAuthenticate) {
-      return true;
-    }
-
-    return false;
-  },
-  onUnlocked: () {
-    print('Unlocked.');
-  },
-);
-```
-
-### Can't cancel
-
-This is the case where you want to force authentication when the app is first launched.
-
-```dart
-showLockScreen(
+screenLock(
   context: context,
   correctString: '1234',
   canCancel: false,
 );
 ```
 
-### Customize text
+### Confirmation screen
 
-You can change `Cancel` and `Delete` text.
-We recommend no more than 6 characters at this time.
+You can display the confirmation screen and get the first input with didConfirmed if the first and second inputs match.
 
 ```dart
-showLockScreen(
+import 'package:flutter_screen_lock/functions.dart';
+
+screenLock(
   context: context,
-  correctString: '1234',
-  cancelText: 'Close',
-  deleteText: 'Remove',
+  correctString: '',
+  confirmation: true,
+  didConfirmed: (matchedText) {
+    print(matchedText);
+  },
 );
 ```
 
-### Verifycation passcode (v1.1.1)
+### Use local_auth
 
-use `showConfirmPasscode` function.
+Add the local_auth package to pubspec.yml.
 
-<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_confirm.gif" />
+https://pub.dev/packages/local_auth
 
-```dart
-showConfirmPasscode(
-  context: context,
-  confirmTitle: 'This is the second input.',
-  onCompleted: (context, verifyCode) {
-    // verifyCode is verified passcode
-    print(verifyCode);
-    // Please close yourself
-    Navigator.of(context).maybePop();
-  },
-)
-```
-
-### Customize your style (v1.1.2)
-
-use `circleInputButtonConfig` option.
-
-<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/customize_styles.png" />
+It includes an example that calls biometrics as soon as screenLock is displayed in `didOpened`.
 
 ```dart
-showLockScreen(
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/material.dart';
+
+/// Method extraction to call by initial display and custom buttons.
+Future<void> localAuth(BuildContext context) async {
+  final localAuth = LocalAuthentication();
+  final didAuthenticate = await localAuth.authenticateWithBiometrics(
+      localizedReason: 'Please authenticate');
+  if (didAuthenticate) {
+    Navigator.pop(context);
+  }
+}
+
+screenLock(
   context: context,
   correctString: '1234',
-  backgroundColor: Colors.grey.shade50,
-  backgroundColorOpacity: 1,
-  circleInputButtonConfig: CircleInputButtonConfig(
-    textStyle: TextStyle(
-      fontSize: MediaQuery.of(context).size.width * 0.1,
-      color: Colors.white,
-    ),
-    backgroundColor: Colors.blue,
-    backgroundOpacity: 0.5,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(
-        width: 1,
-        color: Colors.blue,
-        style: BorderStyle.solid,
-      ),
+  customizedButtonChild: Icon(
+    Icons.fingerprint,
+  ),
+  customizedButtonTap: () async {
+    await localAuth(context);
+  },
+  didOpened: () async {
+    await localAuth(context);
+  },
+);
+```
+
+### Full customize
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_screen_lock/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
+import 'package:flutter_screen_lock/configurations/secret_config.dart';
+import 'package:flutter_screen_lock/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/screen_lock.dart';
+
+screenLock(
+  context: context,
+  title: Text('change title'),
+  confirmTitle: Text('change confirm title'),
+  correctString: '1234',
+  confirmation: true,
+  screenLockConfig: ScreenLockConfig(
+    backgroundColor: Colors.deepOrange,
+  ),
+  secretsConfig: SecretsConfig(
+    spacing: 15, // or spacingRatio
+    padding: const EdgeInsets.all(40),
+    secretConfig: SecretConfig(
+      borderColor: Colors.amber,
+      borderSize: 2.0,
+      disabledColor: Colors.black,
+      enabledColor: Colors.amber,
+      height: 15,
+      width: 15,
+      build: (context, {config, enabled}) {
+        return SizedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: enabled
+                  ? config.enabledColor
+                  : config.disabledColor,
+              border: Border.all(
+                width: config.borderSize,
+                color: config.borderColor,
+              ),
+            ),
+            padding: EdgeInsets.all(10),
+            width: config.width,
+            height: config.height,
+          ),
+          width: config.width,
+          height: config.height,
+        );
+      },
     ),
   ),
-)
+  inputButtonConfig: InputButtonConfig(
+    textStyle:
+        InputButtonConfig.getDefaultTextStyle(context).copyWith(
+      color: Colors.orange,
+      fontWeight: FontWeight.bold,
+    ),
+    buttonStyle: OutlinedButton.styleFrom(
+      shape: RoundedRectangleBorder(),
+      backgroundColor: Colors.deepOrange,
+    ),
+  ),
+  cancelButton: const Icon(Icons.close),
+  deleteButton: const Icon(Icons.delete),
+);
 ```
-
-### Max retries / Incorrect event (v1.2.8)
-
-```dart
-showLockScreen(
-  context: context,
-  correctString: '1234',
-  maxRetries: 1, // -1 is unlimited
-  onError: (retries) {
-    print(retries);
-  },
-  didMaxRetries: () {
-    Navigator.pop(context);
-    showAboutDialog(
-      context: context,
-      children: [
-        Text('The maximum number of retries has been reached.'),
-      ],
-    );
-  },
-  biometricAuthenticate: (_) async {
-    final localAuth = LocalAuthentication();
-    final didAuthenticate = await localAuth.authenticate(
-      localizedReason: 'Please authenticate',
-      biometricOnly: true,
-    );
-
-    if (didAuthenticate) {
-      return true;
-    }
-
-    return false;
-  },
-  canBiometric: true,
-)
-```
-
-## Help
-
-### How to prevent the background from being transparent
-
-Set the `backgroundColorOpacity` option to 1
 
 ## Apps I use
 

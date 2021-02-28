@@ -1,7 +1,10 @@
-import 'package:example/second_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/circle_input_button.dart';
-import 'package:flutter_screen_lock/lock_screen.dart';
+import 'package:flutter_screen_lock/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
+import 'package:flutter_screen_lock/configurations/secret_config.dart';
+import 'package:flutter_screen_lock/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 
 void main() {
@@ -31,206 +34,156 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<void> localAuth(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate = await localAuth.authenticateWithBiometrics(
+        localizedReason: 'Please authenticate');
+    if (didAuthenticate) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Open Lock Screen'),
-                onPressed: () => showLockScreen(
-                  context: context,
+      appBar: AppBar(
+        title: Text('Next Screen Lock'),
+      ),
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => showDialog(
+                context: context,
+                child: ScreenLock(
                   correctString: '1234',
-                  onCompleted: (context, result) {
-                    // if you specify this callback,
-                    // you must close the screen yourself
-                    Navigator.of(context).maybePop();
-                  },
-                  onUnlocked: () => print('Unlocked.'),
                 ),
               ),
-              RaisedButton(
-                child: Text('6 Digits'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  digits: 6,
-                  correctString: '123456',
-                ),
+              child: Text('Manualy open'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                correctString: '1234',
+                canCancel: false,
               ),
-              RaisedButton(
-                child: Text('Use local_auth'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  canBiometric: true,
-                  // biometricButton is default Icon(Icons.fingerprint)
-                  // When you want to change the icon with `BiometricType.face`, etc.
-                  biometricButton: Icon(Icons.face),
-                  biometricAuthenticate: (context) async {
-                    final localAuth = LocalAuthentication();
-                    final didAuthenticate =
-                        await localAuth.authenticateWithBiometrics(
-                            localizedReason: 'Please authenticate');
-
-                    if (didAuthenticate) {
-                      return true;
-                    }
-
-                    return false;
-                  },
-                  onUnlocked: () {
-                    print('Unlocked.');
-                  },
-                ),
+              child: Text('Not cancelable'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                correctString: '',
+                confirmation: true,
+                didConfirmed: (matchedText) {
+                  print(matchedText);
+                },
               ),
-              RaisedButton(
-                child: Text('Open biometric first'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  canBiometric: true,
-                  showBiometricFirst: true,
-                  // biometricFunction: (context) async {
-                  //   final localAuth = LocalAuthentication();
-                  //   final didAuthenticate =
-                  //       await localAuth.authenticateWithBiometrics(
-                  //           localizedReason: 'Please authenticate');
-
-                  //   if (didAuthenticate) {
-                  //     Navigator.of(context).pop();
-                  //   }
-                  // },
-                  biometricAuthenticate: (_) async {
-                    final localAuth = LocalAuthentication();
-                    final didAuthenticate =
-                        await localAuth.authenticateWithBiometrics(
-                            localizedReason: 'Please authenticate');
-
-                    if (didAuthenticate) {
-                      return true;
-                    }
-
-                    return false;
-                  },
-                  onUnlocked: () => print('Unlocked.'),
+              child: Text('Confirm mode'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                correctString: '1234',
+                customizedButtonChild: Icon(
+                  Icons.fingerprint,
                 ),
+                customizedButtonTap: () async {
+                  await localAuth(context);
+                },
+                didOpened: () async {
+                  await localAuth(context);
+                },
               ),
-              RaisedButton(
-                child: Text('Go to another page after unlocked biometrics'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  canBiometric: true,
-                  showBiometricFirst: true,
-                  biometricAuthenticate: (_) async {
-                    final localAuth = LocalAuthentication();
-                    final didAuthenticate =
-                        await localAuth.authenticateWithBiometrics(
-                            localizedReason: 'Please authenticate');
-
-                    if (didAuthenticate) {
-                      return true;
-                    }
-
-                    return false;
-                  },
-                  onUnlocked: () async => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SecondPage(),
+              child: Text(
+                'use local_auth \n(Show local_auth when opened)',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                correctString: '123456',
+                canCancel: false,
+                footer: Container(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                  ),
+                  child: OutlinedButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
                     ),
                   ),
                 ),
               ),
-              RaisedButton(
-                child: Text('Can\'t cancel'),
-                onPressed: () => showLockScreen(
+              child: Text('Using footer'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                screenLock(
                   context: context,
+                  title: Text('change title'),
+                  confirmTitle: Text('change confirm title'),
                   correctString: '1234',
-                  canCancel: false,
-                ),
-              ),
-              RaisedButton(
-                child: Text('Customize text'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  cancelText: 'Close',
-                  deleteText: 'Remove',
-                ),
-              ),
-              RaisedButton(
-                child: Text('Confirm mode.'),
-                onPressed: () => showConfirmPasscode(
-                  context: context,
-                  onCompleted: (context, verifyCode) {
-                    print(verifyCode);
-                    Navigator.of(context).maybePop();
-                  },
-                ),
-              ),
-              RaisedButton(
-                child: Text('Change styles.'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  backgroundColor: Colors.grey.shade50,
-                  backgroundColorOpacity: 1,
-                  circleInputButtonConfig: CircleInputButtonConfig(
-                    textStyle: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: Colors.blue,
-                    backgroundOpacity: 0.5,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 1,
-                        color: Colors.blue,
-                        style: BorderStyle.solid,
-                      ),
+                  confirmation: true,
+                  screenLockConfig: ScreenLockConfig(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  secretsConfig: SecretsConfig(
+                    spacing: 15, // or spacingRatio
+                    padding: const EdgeInsets.all(40),
+                    secretConfig: SecretConfig(
+                      borderColor: Colors.amber,
+                      borderSize: 2.0,
+                      disabledColor: Colors.black,
+                      enabledColor: Colors.amber,
+                      height: 15,
+                      width: 15,
+                      build: (context, {config, enabled}) {
+                        return SizedBox(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: enabled
+                                  ? config.enabledColor
+                                  : config.disabledColor,
+                              border: Border.all(
+                                width: config.borderSize,
+                                color: config.borderColor,
+                              ),
+                            ),
+                            padding: EdgeInsets.all(10),
+                            width: config.width,
+                            height: config.height,
+                          ),
+                          width: config.width,
+                          height: config.height,
+                        );
+                      },
                     ),
                   ),
-                ),
-              ),
-              RaisedButton(
-                child: Text('Max retries / Incorrect event'),
-                onPressed: () => showLockScreen(
-                  context: context,
-                  correctString: '1234',
-                  maxRetries: 1,
-                  onError: (retries) {
-                    print(retries);
-                  },
-                  didMaxRetries: () {
-                    Navigator.pop(context);
-                    showAboutDialog(
-                      context: context,
-                      children: [
-                        Text('The maximum number of retries has been reached.'),
-                      ],
-                    );
-                  },
-                  biometricAuthenticate: (_) async {
-                    final localAuth = LocalAuthentication();
-                    final didAuthenticate =
-                        await localAuth.authenticateWithBiometrics(
-                            localizedReason: 'Please authenticate');
-
-                    if (didAuthenticate) {
-                      return true;
-                    }
-
-                    return false;
-                  },
-                  canBiometric: true,
-                ),
-              ),
-            ],
-          ),
+                  inputButtonConfig: InputButtonConfig(
+                    textStyle:
+                        InputButtonConfig.getDefaultTextStyle(context).copyWith(
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    buttonStyle: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(),
+                      backgroundColor: Colors.deepOrange,
+                    ),
+                  ),
+                  cancelButton: const Icon(Icons.close),
+                  deleteButton: const Icon(Icons.delete),
+                );
+              },
+              child: Text('Customize styles'),
+            ),
+          ],
         ),
       ),
     );
