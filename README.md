@@ -4,7 +4,7 @@ This Flutter plugin provides an feature for screen lock.
 Enter your passcode to unlock the screen.
 You can also use biometric authentication as an option.
 
-<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock.gif" />
+<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_v3.gif" />
 
 ## ⚠Attention
 
@@ -178,6 +178,8 @@ screenLock(
   deleteButton: const Icon(Icons.delete),
 );
 ```
+
+<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/customize_styles_v3.png" />
 
 ## Apps I use
 
