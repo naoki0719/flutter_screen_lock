@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.0+2] - 2021-02-28
+
+- Change the size of the screenshot.
+
 ## [3.0.0+1] - 2021-02-28
 
 - Change the image path in README to avoid caching.
