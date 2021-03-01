@@ -8,10 +8,12 @@ class SecretsConfig {
 
   /// Space ratio between secret widgets.
   ///
-  /// Default [0.05]
+  /// Default `0.05`
   final double spacingRatio;
 
   /// padding of Secrets Widget.
+  ///
+  /// Default [EdgeInsets.only(top: 20, bottom: 50)]
   final EdgeInsetsGeometry padding;
 
   final SecretConfig secretConfig;
