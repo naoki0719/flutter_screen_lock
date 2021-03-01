@@ -9,8 +9,7 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 ///
 /// - `correctString`: Input correct string (Required).
 ///   If [confirmation] is `true`, it will be ignored, so set it to any string or empty.
-/// - `config`: Configurations of ScreenLock
-/// - `secretsConfig`: Configurations of Secrets
+/// - `screenLockConfig`: Configurations of [ScreenLock]
 /// - `canCancel`: `true` is show cancel button
 /// - `confirmation`: Make sure the first and second inputs are the same.
 /// - `digits`: Set the maximum number of characters to enter when [confirmation] is `true`.
