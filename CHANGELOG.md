@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.1] - 2021-03-01
+
+- Add missing parameters to screenLock.
+- Make input button strings and input values customizable.
+- Add API reference in README.md.
+
 ## [3.0.0+2] - 2021-02-28
 
 - Change the size of the screenshot.
