@@ -31,12 +31,39 @@ class InputButtonConfig extends StyledInputConfig {
   }
 
   final TextStyle textStyle;
+  final List<String> inputStrings;
+  final List<String> displayStrings;
+
   const InputButtonConfig({
     double height,
     double width,
     bool autoSize = true,
     ButtonStyle buttonStyle,
     this.textStyle,
+    this.inputStrings = const [
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9'
+    ],
+    this.displayStrings = const [
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9'
+    ],
   }) : super(
             autoSize: autoSize,
             height: height,

@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context: context,
                   title: Text('change title'),
                   confirmTitle: Text('change confirm title'),
-                  correctString: '1234',
+                  correctString: '',
                   confirmation: true,
                   screenLockConfig: ScreenLockConfig(
                     backgroundColor: Colors.deepOrange,
@@ -167,16 +167,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   inputButtonConfig: InputButtonConfig(
-                    textStyle:
-                        InputButtonConfig.getDefaultTextStyle(context).copyWith(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    buttonStyle: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(),
-                      backgroundColor: Colors.deepOrange,
-                    ),
-                  ),
+                      textStyle: InputButtonConfig.getDefaultTextStyle(context)
+                          .copyWith(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      buttonStyle: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(),
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      displayStrings: [
+                        '零',
+                        '壱',
+                        '弐',
+                        '参',
+                        '肆',
+                        '伍',
+                        '陸',
+                        '質',
+                        '捌',
+                        '玖'
+                      ]),
                   cancelButton: const Icon(Icons.close),
                   deleteButton: const Icon(Icons.delete),
                 );

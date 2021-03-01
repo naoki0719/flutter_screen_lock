@@ -70,26 +70,30 @@ class KeyPad extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(3, (index) {
         final number = (rowNumber - 1) * 3 + index + 1;
-        final text = number.toString();
+        final input = inputButtonConfig.inputStrings[number];
+        final display = inputButtonConfig.displayStrings[number];
 
         return InputButton(
           config: inputButtonConfig,
-          onPressed: () => inputState.addCharacter(text),
-          assignedText: text,
+          onPressed: () => inputState.addCharacter(input),
+          displayText: display,
         );
       }),
     );
   }
 
   Widget _generateLastRow(BuildContext context) {
+    final input = inputButtonConfig.inputStrings[0];
+    final display = inputButtonConfig.displayStrings[0];
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildLeftSideButton(),
         InputButton(
           config: inputButtonConfig,
-          onPressed: () => inputState.addCharacter('0'),
-          assignedText: '0',
+          onPressed: () => inputState.addCharacter(input),
+          displayText: display,
         ),
         _buildRightSideButton(),
       ],
@@ -98,6 +102,9 @@ class KeyPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(inputButtonConfig.displayStrings.length == 10);
+    assert(inputButtonConfig.inputStrings.length == 10);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
