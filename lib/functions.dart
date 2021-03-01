@@ -10,9 +10,12 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 /// - `correctString`: Input correct string (Required).
 ///   If [confirmation] is `true`, it will be ignored, so set it to any string or empty.
 /// - `screenLockConfig`: Configurations of [ScreenLock]
+/// - `secretsConfig`: Configurations of [Secrets]
+/// - `inputButtonConfig`: Configurations of [InputButton]
 /// - `canCancel`: `true` is show cancel button
 /// - `confirmation`: Make sure the first and second inputs are the same.
 /// - `digits`: Set the maximum number of characters to enter when [confirmation] is `true`.
+/// - `maxRetries`: `0` is unlimited. For example, if it is set to 1, didMaxRetries will be called on the first failure. Default `0`
 /// - `didUnlocked`: Called if the value matches the correctString.
 /// - `didError`: Called if the value does not match the correctString.
 /// - `didMaxRetries`: Events that have reached the maximum number of attempts
@@ -21,6 +24,10 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 /// - `customizedButtonTap`: Tapped for left side lower button
 /// - `customizedButtonChild`: Child for bottom left side button
 /// - `footer`: Add a Widget to the footer
+/// - `cancelButton`: Change the child widget for the delete button
+/// - `deleteButton`: Change the child widget for the delete button
+/// - `title`: Change the title widget
+/// - `confirmTitle`: Change the confirm title widget
 Future<T> screenLock<T>({
   @required BuildContext context,
   @required String correctString,
@@ -30,6 +37,7 @@ Future<T> screenLock<T>({
   bool canCancel = true,
   bool confirmation = false,
   int digits = 4,
+  int maxRetries = 0,
   void Function() didUnlocked,
   void Function(int retries) didError,
   void Function(int retries) didMaxRetries,
@@ -68,6 +76,7 @@ Future<T> screenLock<T>({
           canCancel: canCancel,
           confirmation: confirmation,
           digits: digits,
+          maxRetries: maxRetries,
           didUnlocked: didUnlocked,
           didError: didError,
           didMaxRetries: didMaxRetries,
