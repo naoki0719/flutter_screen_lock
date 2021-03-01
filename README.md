@@ -191,9 +191,9 @@ screenLock(
 | --------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | context               | BuildContext                      | (Required) [screenLock] only                                                                                                      |
 | correctString         | String                            | (Required) Input correct String <br> If [confirmation] is `true`, it will be ignored, so set it to any string or empty.           |
-| screenLockConfig      | ScreenLockConfig                  | Refer to the API of [ScreenLockConfig](#screen-lock-config-api) (Default: [ScreenLockConfig()])                                   |
-| secretsConfig         | SecretsConfig                     | Refer to the API of [SecretsConfig](#secrets-config-api) (Default: [SecretsConfig()])                                             |
-| inputButtonConfig     | InputButtonConfig                 | Refer to the API of [InputButtonConfig](#input-button-config-api) (Default: [InputButtonConfig()])                                |
+| screenLockConfig      | ScreenLockConfig                  | Refer to the API of [ScreenLockConfig](#screenlockconfig-api) (Default: [ScreenLockConfig()])                                     |
+| secretsConfig         | SecretsConfig                     | Refer to the API of [SecretsConfig](#secretsconfig-api) (Default: [SecretsConfig()])                                              |
+| inputButtonConfig     | InputButtonConfig                 | Refer to the API of [InputButtonConfig](#inputbuttonconfig-api) (Default: [InputButtonConfig()])                                  |
 | canCancel             | bool                              | `true` is show cancel button. (Default: `true`)                                                                                   |
 | confirmation          | bool                              | Make sure the first and second inputs are the same.                                                                               |
 | digits                | int                               | Set the maximum number of characters to enter when [confirmation] is `true`.                                                      |
@@ -225,7 +225,7 @@ screenLock(
 | spacing      | double             | Absolute space between secret widgets. <br> If specified together with spacingRatio, this will take precedence. |
 | spacingRatio | double             | Space ratio between secret widgets. (Default `0.05`)                                                            |
 | padding      | EdgeInsetsGeometry | padding of Secrets Widget. (Default [EdgeInsets.only(top: 20, bottom: 50)])                                     |
-| secretConfig | SecretConfig       | Refer to the API of [SecretConfig](#secret-config-api) (Default: [SecretConfig()])                              |
+| secretConfig | SecretConfig       | Refer to the API of [SecretConfig](#secretconfig-api) (Default: [SecretConfig()])                               |
 
 ### SecretConfig API
 

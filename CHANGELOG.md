@@ -2,6 +2,10 @@
 
 ## [3.0.1] - 2021-03-01
 
+- Fixed the README.
+
+## [3.0.1] - 2021-03-01
+
 - Add missing parameters to screenLock.
 - Make input button strings and input values customizable.
 - Add API reference in README.md.
