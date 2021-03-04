@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.1] - 2021-03-04
+
+- Prevented button size overflow by subtracting padding(horizontal: 50) from screen_lock.dart
+
 ## [4.0.0] - 2021-03-04
 
 - Update to null safety.
