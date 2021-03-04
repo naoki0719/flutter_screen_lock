@@ -58,9 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () => showDialog(
                 context: context,
-                child: ScreenLock(
-                  correctString: '1234',
-                ),
+                builder: (context) {
+                  return ScreenLock(correctString: '1234');
+                },
               ),
               child: Text('Manualy open'),
             ),
