@@ -14,7 +14,7 @@ class SecretConfig {
     BuildContext context, {
     bool enabled,
     SecretConfig config,
-  }) build;
+  })? build;
 
   const SecretConfig({
     this.width = 16,
@@ -27,12 +27,12 @@ class SecretConfig {
   });
 
   SecretConfig copyWith({
-    double width,
-    double height,
-    double borderSize,
-    Color borderColor,
-    Color enabledColor,
-    Color disabledColor,
+    double? width,
+    double? height,
+    double? borderSize,
+    Color? borderColor,
+    Color? enabledColor,
+    Color? disabledColor,
   }) {
     return SecretConfig(
       width: width ?? this.width,

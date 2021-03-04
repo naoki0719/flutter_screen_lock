@@ -3,9 +3,9 @@ import 'dart:async';
 class InputState {
   final List<String> _currentInputs = [];
 
-  StreamController<String> _inputController;
-  StreamController<bool> _verifyController;
-  StreamController<bool> _confirmedController;
+  late StreamController<String> _inputController;
+  late StreamController<bool> _verifyController;
+  late StreamController<bool> _confirmedController;
 
   /// Get latest input text stream.
   Stream<String> get currentInput => _inputController.stream;
@@ -63,16 +63,13 @@ class InputState {
   void initialize(bool confirmation) {
     _inputController = StreamController.broadcast();
     _verifyController = StreamController.broadcast();
-
-    if (confirmation) {
-      _confirmedController = StreamController.broadcast();
-    }
+    _confirmedController = StreamController.broadcast();
   }
 
   /// Close all streams.
   void dispose() {
-    _inputController?.close();
-    _verifyController?.close();
-    _confirmedController?.close();
+    _inputController.close();
+    _verifyController.close();
+    _confirmedController.close();
   }
 }

@@ -9,8 +9,8 @@ class InputButton extends StyledInputButton {
   final InputButtonConfig config;
 
   const InputButton({
-    @required this.displayText,
-    @required Function() onPressed,
+    required this.displayText,
+    required Function() onPressed,
     this.config = const InputButtonConfig(),
   }) : super(onPressed: onPressed, config: config);
 
@@ -23,8 +23,7 @@ class InputButton extends StyledInputButton {
   Widget build(BuildContext context) {
     final text = Text(
       displayText,
-      style:
-          config?.textStyle ?? InputButtonConfig.getDefaultTextStyle(context),
+      style: config.textStyle ?? InputButtonConfig.getDefaultTextStyle(context),
     );
 
     return makeKeyContainer(child: text, context: context);

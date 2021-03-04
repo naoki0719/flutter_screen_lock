@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class StyledInputConfig {
   /// Button height
-  final double height;
+  final double? height;
 
   /// Button width
-  final double width;
+  final double? width;
 
   /// Automatically adjust the size of the square to fit the orientation of the device.
   ///
@@ -13,7 +13,7 @@ class StyledInputConfig {
   final bool autoSize;
 
   /// It is recommended that you use [OutlinedButton.styleFrom()] to change it.
-  final ButtonStyle buttonStyle;
+  final ButtonStyle? buttonStyle;
 
   const StyledInputConfig({
     this.height,
@@ -30,15 +30,15 @@ class InputButtonConfig extends StyledInputConfig {
     );
   }
 
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final List<String> inputStrings;
   final List<String> displayStrings;
 
   const InputButtonConfig({
-    double height,
-    double width,
+    double? height,
+    double? width,
     bool autoSize = true,
-    ButtonStyle buttonStyle,
+    ButtonStyle? buttonStyle,
     this.textStyle,
     this.inputStrings = const [
       '0',

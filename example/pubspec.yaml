@@ -2,7 +2,7 @@ name: example
 description: A new Flutter project.
 
 publish_to: "none"
-version: 3.0.0
+version: 4.0.0
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

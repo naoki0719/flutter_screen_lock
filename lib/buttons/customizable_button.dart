@@ -8,7 +8,7 @@ class CustomizableButton extends StyledInputButton {
 
   const CustomizableButton({
     this.child = const Text(''),
-    @required void Function() onPressed,
+    required void Function() onPressed,
     InputButtonConfig config = const InputButtonConfig(),
   }) : super(onPressed: onPressed, config: config);
 

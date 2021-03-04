@@ -14,18 +14,18 @@ import 'package:flutter_screen_lock/input_state.dart';
 class KeyPad extends StatelessWidget {
   final InputState inputState;
   final bool canCancel;
-  final Widget customizedButtonChild;
-  final Future<void> Function() customizedButtonTap;
   final InputButtonConfig inputButtonConfig;
-  final Widget cancelButton;
-  final Widget deleteButton;
+  final Widget? customizedButtonChild;
+  final Future<void> Function()? customizedButtonTap;
+  final Widget? cancelButton;
+  final Widget? deleteButton;
 
   const KeyPad({
-    @required this.inputState,
-    @required this.canCancel,
-    @required this.customizedButtonChild,
-    @required this.customizedButtonTap,
+    required this.inputState,
+    required this.canCancel,
     this.inputButtonConfig = const InputButtonConfig(),
+    this.customizedButtonChild,
+    this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
   });
@@ -34,7 +34,7 @@ class KeyPad extends StatelessWidget {
     return StreamBuilder<String>(
       stream: inputState.currentInput,
       builder: (context, snapshot) {
-        if (snapshot.hasData == false || snapshot.data.isEmpty) {
+        if (snapshot.hasData == false || snapshot.data!.isEmpty) {
           if (canCancel) {
             return CancelButton(
               child: cancelButton,
@@ -60,8 +60,8 @@ class KeyPad extends StatelessWidget {
     }
 
     return CustomizableButton(
-      child: customizedButtonChild,
-      onPressed: customizedButtonTap,
+      child: customizedButtonChild!,
+      onPressed: customizedButtonTap!,
     );
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter_screen_lock/configurations/secret_config.dart';
 class SecretsConfig {
   /// Absolute space between secret widgets.
   /// If specified together with spacingRatio, this will take precedence.
-  final double spacing;
+  final double? spacing;
 
   /// Space ratio between secret widgets.
   ///

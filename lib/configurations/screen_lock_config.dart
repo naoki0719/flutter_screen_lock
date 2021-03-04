@@ -30,9 +30,9 @@ class ScreenLockConfig {
   );
 
   /// background color of ScreenLock.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
-  final ThemeData themeData;
+  final ThemeData? themeData;
 
   const ScreenLockConfig({
     this.backgroundColor,

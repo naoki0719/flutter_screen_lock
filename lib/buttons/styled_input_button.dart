@@ -8,7 +8,7 @@ abstract class StyledInputButton extends StatelessWidget {
 
   const StyledInputButton({
     this.config = const StyledInputConfig(),
-    @required this.onPressed,
+    required this.onPressed,
   });
 
   double computeHeight(Size boxSize) {
@@ -29,8 +29,8 @@ abstract class StyledInputButton extends StatelessWidget {
 
   Size defaultSize(BuildContext context) {
     return Size(
-      config?.height ?? MediaQuery.of(context).size.height * 0.6 * 0.16,
-      config?.width ?? MediaQuery.of(context).size.width * 0.22,
+      config.height ?? MediaQuery.of(context).size.height * 0.6 * 0.16,
+      config.width ?? MediaQuery.of(context).size.width * 0.22,
     );
   }
 
@@ -46,10 +46,11 @@ abstract class StyledInputButton extends StatelessWidget {
   ///
   /// Override this to customize the style.
   ButtonStyle makeDefaultStyle() {
-    return config?.buttonStyle ?? OutlinedButton.styleFrom();
+    return config.buttonStyle ?? OutlinedButton.styleFrom();
   }
 
-  Widget makeKeyContainer({BuildContext context, Widget child}) {
+  Widget makeKeyContainer(
+      {required BuildContext context, required Widget child}) {
     final boxSize = defaultSize(context);
     return Container(
       height: computeHeight(boxSize),

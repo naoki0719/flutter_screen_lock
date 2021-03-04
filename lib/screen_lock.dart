@@ -41,40 +41,40 @@ class ScreenLock extends StatefulWidget {
   /// Called if the value matches the correctString.
   ///
   /// To close the screen, call `Navigator.pop(context)`.
-  final void Function() didUnlocked;
+  final void Function()? didUnlocked;
 
   /// Called when the first and second inputs match during confirmation.
   ///
   /// To close the screen, call `Navigator.pop(context)`.
-  final void Function(String matchedText) didConfirmed;
+  final void Function(String matchedText)? didConfirmed;
 
   /// Called if the value does not match the correctString.
-  final void Function(int retries) didError;
+  final void Function(int retries)? didError;
 
   /// `0` is unlimited.
   /// For example, if it is set to 1, didMaxRetries will be called on the first failure.
   final int maxRetries;
 
   /// Events that have reached the maximum number of attempts.
-  final void Function(int retries) didMaxRetries;
+  final void Function(int retries)? didMaxRetries;
 
   /// Tapped for left side lower button.
-  final Future<void> Function() custmizedButtonTap;
+  final Future<void> Function()? custmizedButtonTap;
 
   /// Child for bottom left side button.
-  final Widget customizedButtonChild;
+  final Widget? customizedButtonChild;
 
   /// Footer widget.
-  final Widget footer;
+  final Widget? footer;
 
   /// Cancel button widget.
-  final Widget cancelButton;
+  final Widget? cancelButton;
 
   /// delete button widget.
-  final Widget deleteButton;
+  final Widget? deleteButton;
 
   ScreenLock({
-    @required this.correctString,
+    required this.correctString,
     this.title = const HeadingTitle(text: 'Please enter passcode.'),
     this.confirmTitle =
         const HeadingTitle(text: 'Please enter confirm passcode.'),
@@ -113,7 +113,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
   void unlocked() {
     if (widget.didUnlocked != null) {
-      widget.didUnlocked();
+      widget.didUnlocked!();
       return;
     }
 
@@ -122,11 +122,11 @@ class _ScreenLockState extends State<ScreenLock> {
 
   void error() {
     if (widget.didError != null) {
-      widget.didError(retries);
+      widget.didError!(retries);
     }
 
     if (widget.maxRetries >= 1 && widget.maxRetries <= retries) {
-      widget.didMaxRetries(retries);
+      widget.didMaxRetries!(retries);
     }
 
     retries++;
@@ -137,7 +137,7 @@ class _ScreenLockState extends State<ScreenLock> {
       return StreamBuilder<bool>(
         stream: inputState.confirmed,
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data) {
+          if (snapshot.hasData && snapshot.data!) {
             return widget.confirmTitle;
           }
           return widget.title;
@@ -150,7 +150,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
   ThemeData makeThemeData() {
     if (widget.screenLockConfig.themeData != null) {
-      return widget.screenLockConfig.themeData;
+      return widget.screenLockConfig.themeData!;
     }
 
     return ScreenLockConfig.defaultThemeData;
@@ -206,7 +206,7 @@ class _ScreenLockState extends State<ScreenLock> {
       if (success) {
         if (widget.confirmation) {
           if (widget.didConfirmed != null) {
-            widget.didConfirmed(firstInput);
+            widget.didConfirmed!(firstInput);
           }
         } else {
           unlocked();

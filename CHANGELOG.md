@@ -1,6 +1,10 @@
 # Changelog
 
-## [3.0.1] - 2021-03-01
+## [4.0.0] - 2021-03-04
+
+- Update to null safety.
+
+## [3.0.1+1] - 2021-03-01
 
 - Fixed the README.
 

@@ -28,9 +28,9 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 /// - `deleteButton`: Change the child widget for the delete button
 /// - `title`: Change the title widget
 /// - `confirmTitle`: Change the confirm title widget
-Future<T> screenLock<T>({
-  @required BuildContext context,
-  @required String correctString,
+Future<T>? screenLock<T>({
+  required BuildContext context,
+  required String correctString,
   ScreenLockConfig screenLockConfig = const ScreenLockConfig(),
   SecretsConfig secretsConfig = const SecretsConfig(),
   InputButtonConfig inputButtonConfig = const InputButtonConfig(),
@@ -38,21 +38,22 @@ Future<T> screenLock<T>({
   bool confirmation = false,
   int digits = 4,
   int maxRetries = 0,
-  void Function() didUnlocked,
-  void Function(int retries) didError,
-  void Function(int retries) didMaxRetries,
-  void Function() didOpened,
-  void Function(String matchedText) didConfirmed,
-  Future<void> Function() customizedButtonTap,
-  Widget customizedButtonChild,
-  Widget footer,
-  Widget cancelButton,
-  Widget deleteButton,
+  void Function()? didUnlocked,
+  void Function(int retries)? didError,
+  void Function(int retries)? didMaxRetries,
+  void Function()? didOpened,
+  void Function(String matchedText)? didConfirmed,
+  Future<void> Function()? customizedButtonTap,
+  Widget? customizedButtonChild,
+  Widget? footer,
+  Widget? cancelButton,
+  Widget? deleteButton,
   Widget title = const HeadingTitle(text: 'Please enter passcode.'),
   Widget confirmTitle =
       const HeadingTitle(text: 'Please enter confirm passcode.'),
 }) {
-  return Navigator.of(context).push(
+  Navigator.push(
+    context,
     PageRouteBuilder(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
