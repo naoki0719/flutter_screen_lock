@@ -21,12 +21,14 @@ class CancelButton extends StyledInputButton {
 
   @override
   Widget build(BuildContext context) {
-    final defaultChild = const Text(
-      'Cancel',
-      style: TextStyle(
-        fontSize: 16,
+    const defaultChild = FittedBox(
+      child: Text(
+        'Cancel',
+        style: TextStyle(
+          fontSize: 16,
+        ),
+        softWrap: false,
       ),
-      softWrap: false,
     );
     return makeKeyContainer(child: child ?? defaultChild, context: context);
   }
