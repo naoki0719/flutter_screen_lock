@@ -4,13 +4,14 @@ import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 
 /// Customizable button.
 class CustomizableButton extends StyledInputButton {
-  final Widget child;
-
   const CustomizableButton({
+    Key? key,
     this.child = const Text(''),
     required void Function() onPressed,
     InputButtonConfig config = const InputButtonConfig(),
-  }) : super(onPressed: onPressed, config: config);
+  }) : super(key: key, onPressed: onPressed, config: config);
+
+  final Widget child;
 
   @override
   ButtonStyle makeDefaultStyle() {

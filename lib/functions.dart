@@ -54,7 +54,7 @@ Future<T>? screenLock<T>({
 }) {
   Navigator.push(
     context,
-    PageRouteBuilder(
+    PageRouteBuilder<void>(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
       pageBuilder: (

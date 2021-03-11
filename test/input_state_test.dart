@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('input stream test', () {
-    var state = InputState();
+    final state = InputState();
     state.initialize(false);
 
     expectLater(
       state.currentInput,
       emitsInOrder(
-        ['1', '12', '123', '1234', '123', '12', '1', '', '1', '12', ''],
+        <String>['1', '12', '123', '1234', '123', '12', '1', '', '1', '12', ''],
       ),
     );
 
@@ -32,10 +32,10 @@ void main() {
   });
 
   test('input verify', () {
-    var state = InputState();
+    final state = InputState();
     state.initialize(false);
 
-    expectLater(state.verifyInput, emitsInOrder([true, false]));
+    expectLater(state.verifyInput, emitsInOrder(<bool>[true, false]));
 
     state.addCharacter('1');
     state.addCharacter('2');

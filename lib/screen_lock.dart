@@ -11,6 +11,31 @@ import 'package:flutter_screen_lock/layout/key_pad.dart';
 import 'package:flutter_screen_lock/layout/secrets.dart';
 
 class ScreenLock extends StatefulWidget {
+  const ScreenLock({
+    Key? key,
+    required this.correctString,
+    this.title = const HeadingTitle(text: 'Please enter passcode.'),
+    this.confirmTitle =
+        const HeadingTitle(text: 'Please enter confirm passcode.'),
+    this.screenLockConfig = const ScreenLockConfig(),
+    this.secretsConfig = const SecretsConfig(),
+    this.inputButtonConfig = const InputButtonConfig(),
+    this.canCancel = true,
+    this.confirmation = false,
+    this.digits = 4,
+    this.didUnlocked,
+    this.didConfirmed,
+    this.didError,
+    this.maxRetries = 0,
+    this.didMaxRetries,
+    this.custmizedButtonTap,
+    this.customizedButtonChild,
+    this.footer,
+    this.cancelButton,
+    this.deleteButton,
+  })  : assert(maxRetries > -1),
+        super(key: key);
+
   /// Configurations of [ScreenLock].
   final ScreenLockConfig screenLockConfig;
 
@@ -72,29 +97,6 @@ class ScreenLock extends StatefulWidget {
 
   /// delete button widget.
   final Widget? deleteButton;
-
-  ScreenLock({
-    required this.correctString,
-    this.title = const HeadingTitle(text: 'Please enter passcode.'),
-    this.confirmTitle =
-        const HeadingTitle(text: 'Please enter confirm passcode.'),
-    this.screenLockConfig = const ScreenLockConfig(),
-    this.secretsConfig = const SecretsConfig(),
-    this.inputButtonConfig = const InputButtonConfig(),
-    this.canCancel = true,
-    this.confirmation = false,
-    this.digits = 4,
-    this.didUnlocked,
-    this.didConfirmed,
-    this.didError,
-    this.maxRetries = 0,
-    this.didMaxRetries,
-    this.custmizedButtonTap,
-    this.customizedButtonChild,
-    this.footer,
-    this.cancelButton,
-    this.deleteButton,
-  }) : assert(maxRetries > -1);
 
   @override
   _ScreenLockState createState() => _ScreenLockState();
@@ -199,7 +201,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
     inputState.verifyInput.listen((success) {
       // Wait for the animation on failure.
-      Future.delayed(Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
         inputState.clear();
       });
 
@@ -234,7 +236,7 @@ class _ScreenLockState extends State<ScreenLock> {
         body: SafeArea(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +250,7 @@ class _ScreenLockState extends State<ScreenLock> {
                     verifyStream: inputState.verifyInput,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: KeyPad(
                       inputButtonConfig: widget.inputButtonConfig,
                       inputState: inputState,

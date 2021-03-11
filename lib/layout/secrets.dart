@@ -3,17 +3,18 @@ import 'package:flutter_screen_lock/configurations/secret_config.dart';
 import 'package:flutter_screen_lock/configurations/secrets_config.dart';
 
 class Secrets extends StatefulWidget {
-  final SecretsConfig config;
-  final Stream<String> inputStream;
-  final Stream<bool> verifyStream;
-  final int length;
-
   const Secrets({
+    Key? key,
     this.config = const SecretsConfig(),
     required this.inputStream,
     required this.verifyStream,
     required this.length,
-  });
+  }) : super(key: key);
+
+  final SecretsConfig config;
+  final Stream<String> inputStream;
+  final Stream<bool> verifyStream;
+  final int length;
 
   @override
   _SecretsState createState() => _SecretsState();
@@ -36,7 +37,7 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 80),
+      duration: const Duration(milliseconds: 80),
     );
 
     _animation = _animationController
@@ -105,14 +106,15 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 }
 
 class Secret extends StatelessWidget {
+  const Secret({
+    Key? key,
+    this.enabled = false,
+    this.config = const SecretConfig(),
+  }) : super(key: key);
+
   final bool enabled;
 
   final SecretConfig config;
-
-  const Secret({
-    this.enabled = false,
-    this.config = const SecretConfig(),
-  });
 
   @override
   Widget build(BuildContext context) {

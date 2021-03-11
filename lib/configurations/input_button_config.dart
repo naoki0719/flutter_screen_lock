@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class StyledInputConfig {
+  const StyledInputConfig({
+    this.height,
+    this.width,
+    this.autoSize = true,
+    this.buttonStyle,
+  });
+
   /// Button height
   final double? height;
 
@@ -14,26 +21,9 @@ class StyledInputConfig {
 
   /// It is recommended that you use [OutlinedButton.styleFrom()] to change it.
   final ButtonStyle? buttonStyle;
-
-  const StyledInputConfig({
-    this.height,
-    this.width,
-    this.autoSize = true,
-    this.buttonStyle,
-  });
 }
 
 class InputButtonConfig extends StyledInputConfig {
-  static TextStyle getDefaultTextStyle(BuildContext context) {
-    return TextStyle(
-      fontSize: MediaQuery.of(context).size.height * 0.045,
-    );
-  }
-
-  final TextStyle? textStyle;
-  final List<String> inputStrings;
-  final List<String> displayStrings;
-
   const InputButtonConfig({
     double? height,
     double? width,
@@ -65,8 +55,19 @@ class InputButtonConfig extends StyledInputConfig {
       '9'
     ],
   }) : super(
-            autoSize: autoSize,
-            height: height,
-            width: width,
-            buttonStyle: buttonStyle);
+          autoSize: autoSize,
+          height: height,
+          width: width,
+          buttonStyle: buttonStyle,
+        );
+
+  static TextStyle getDefaultTextStyle(BuildContext context) {
+    return TextStyle(
+      fontSize: MediaQuery.of(context).size.height * 0.045,
+    );
+  }
+
+  final TextStyle? textStyle;
+  final List<String> inputStrings;
+  final List<String> displayStrings;
 }

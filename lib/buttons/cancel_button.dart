@@ -3,13 +3,14 @@ import 'package:flutter_screen_lock/buttons/styled_input_button.dart';
 import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 
 class CancelButton extends StyledInputButton {
-  final Widget? child;
-
   const CancelButton({
+    Key? key,
     this.child,
     required void Function() onPressed,
     InputButtonConfig config = const InputButtonConfig(),
-  }) : super(onPressed: onPressed, config: config);
+  }) : super(key: key, onPressed: onPressed, config: config);
+
+  final Widget? child;
 
   @override
   ButtonStyle makeDefaultStyle() {
@@ -20,12 +21,14 @@ class CancelButton extends StyledInputButton {
 
   @override
   Widget build(BuildContext context) {
-    final defaultChild = const Text(
-      'Cancel',
-      style: TextStyle(
-        fontSize: 16,
+    const defaultChild = FittedBox(
+      child: Text(
+        'Cancel',
+        style: TextStyle(
+          fontSize: 16,
+        ),
+        softWrap: false,
       ),
-      softWrap: false,
     );
     return makeKeyContainer(child: child ?? defaultChild, context: context);
   }

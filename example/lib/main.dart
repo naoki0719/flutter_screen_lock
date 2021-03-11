@@ -8,10 +8,12 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,14 +22,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -36,8 +37,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<void> localAuth(BuildContext context) async {
     final localAuth = LocalAuthentication();
-    final didAuthenticate = await localAuth.authenticateWithBiometrics(
-        localizedReason: 'Please authenticate');
+    final didAuthenticate = await localAuth.authenticate(
+      localizedReason: 'Please authenticate',
+      biometricOnly: true,
+    );
     if (didAuthenticate) {
       Navigator.pop(context);
     }
@@ -47,33 +50,33 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Next Screen Lock'),
+        title: const Text('Next Screen Lock'),
       ),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () => showDialog(
+              onPressed: () => showDialog<void>(
                 context: context,
                 builder: (context) {
-                  return ScreenLock(correctString: '1234');
+                  return const ScreenLock(correctString: '1234');
                 },
               ),
-              child: Text('Manualy open'),
+              child: const Text('Manualy open'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock(
+              onPressed: () => screenLock<void>(
                 context: context,
                 correctString: '1234',
                 canCancel: false,
               ),
-              child: Text('Not cancelable'),
+              child: const Text('Not cancelable'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock(
+              onPressed: () => screenLock<void>(
                 context: context,
                 correctString: '',
                 confirmation: true,
@@ -81,13 +84,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   print(matchedText);
                 },
               ),
-              child: Text('Confirm mode'),
+              child: const Text('Confirm mode'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock(
+              onPressed: () => screenLock<void>(
                 context: context,
                 correctString: '1234',
-                customizedButtonChild: Icon(
+                customizedButtonChild: const Icon(
                   Icons.fingerprint,
                 ),
                 customizedButtonTap: () async {
@@ -97,22 +100,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   await localAuth(context);
                 },
               ),
-              child: Text(
+              child: const Text(
                 'use local_auth \n(Show local_auth when opened)',
                 textAlign: TextAlign.center,
               ),
             ),
             ElevatedButton(
-              onPressed: () => screenLock(
+              onPressed: () => screenLock<void>(
                 context: context,
                 correctString: '123456',
                 canCancel: false,
                 footer: Container(
-                  padding: EdgeInsets.only(
-                    top: 10,
-                  ),
+                  padding: const EdgeInsets.only(top: 10),
                   child: OutlinedButton(
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.transparent,
@@ -120,17 +121,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              child: Text('Using footer'),
+              child: const Text('Using footer'),
             ),
             ElevatedButton(
               onPressed: () {
-                screenLock(
+                screenLock<void>(
                   context: context,
-                  title: Text('change title'),
-                  confirmTitle: Text('change confirm title'),
+                  title: const Text('change title'),
+                  confirmTitle: const Text('change confirm title'),
                   correctString: '',
                   confirmation: true,
-                  screenLockConfig: ScreenLockConfig(
+                  screenLockConfig: const ScreenLockConfig(
                     backgroundColor: Colors.deepOrange,
                   ),
                   secretsConfig: SecretsConfig(
@@ -143,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       enabledColor: Colors.amber,
                       height: 15,
                       width: 15,
-                      build: (context, {config, enabled}) {
+                      build: (context, {required config, required enabled}) {
                         return SizedBox(
                           child: Container(
                             decoration: BoxDecoration(
@@ -156,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: config.borderColor,
                               ),
                             ),
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             width: config.width,
                             height: config.height,
                           ),
@@ -173,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                       buttonStyle: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(),
+                        shape: const RoundedRectangleBorder(),
                         backgroundColor: Colors.deepOrange,
                       ),
                       displayStrings: [
@@ -192,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   deleteButton: const Icon(Icons.delete),
                 );
               },
-              child: Text('Customize styles'),
+              child: const Text('Customize styles'),
             ),
           ],
         ),

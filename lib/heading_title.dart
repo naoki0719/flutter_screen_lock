@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HeadingTitle extends StatelessWidget {
-  final String text;
+  const HeadingTitle({Key? key, required this.text}) : super(key: key);
 
-  const HeadingTitle({required this.text});
+  final String text;
 
   @override
   Widget build(BuildContext context) {
