@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 
 /// Configuration of [Secret]
 class SecretConfig {
+  const SecretConfig({
+    this.width = 16,
+    this.height = 16,
+    this.borderSize = 1.0,
+    this.borderColor = Colors.white,
+    this.enabledColor = Colors.white,
+    this.disabledColor = Colors.transparent,
+    this.build,
+  });
+
   final double width;
   final double height;
   final double borderSize;
@@ -12,19 +22,9 @@ class SecretConfig {
   /// `build` override function
   final Widget Function(
     BuildContext context, {
-    bool enabled,
-    SecretConfig config,
+    required bool enabled,
+    required SecretConfig config,
   })? build;
-
-  const SecretConfig({
-    this.width = 16,
-    this.height = 16,
-    this.borderSize = 1.0,
-    this.borderColor = Colors.white,
-    this.enabledColor = Colors.white,
-    this.disabledColor = Colors.transparent,
-    this.build,
-  });
 
   SecretConfig copyWith({
     double? width,

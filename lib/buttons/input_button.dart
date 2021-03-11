@@ -3,21 +3,18 @@ import 'package:flutter_screen_lock/buttons/styled_input_button.dart';
 import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 
 class InputButton extends StyledInputButton {
-  final String displayText;
-
-  @override
-  final InputButtonConfig config;
-
   const InputButton({
+    Key? key,
     required this.displayText,
     required Function() onPressed,
     this.config = const InputButtonConfig(),
-  }) : super(onPressed: onPressed, config: config);
+  }) : super(key: key, onPressed: onPressed, config: config);
+
+  final String displayText;
 
   @override
-  ButtonStyle makeDefaultStyle() {
-    return super.makeDefaultStyle();
-  }
+  // ignore: overridden_fields
+  final InputButtonConfig config;
 
   @override
   Widget build(BuildContext context) {

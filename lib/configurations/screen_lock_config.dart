@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ScreenLockConfig {
+  const ScreenLockConfig({
+    this.backgroundColor,
+    this.themeData,
+  });
+
   /// ScreenLock default theme data.
   ///
   /// - Heading title is textTheme.heading1
@@ -33,9 +38,4 @@ class ScreenLockConfig {
   final Color? backgroundColor;
 
   final ThemeData? themeData;
-
-  const ScreenLockConfig({
-    this.backgroundColor,
-    this.themeData,
-  });
 }

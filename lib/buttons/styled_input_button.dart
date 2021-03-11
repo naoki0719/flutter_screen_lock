@@ -3,13 +3,14 @@ import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 
 /// [OutlinedButton] based button.
 abstract class StyledInputButton extends StatelessWidget {
-  final StyledInputConfig config;
-  final void Function() onPressed;
-
   const StyledInputButton({
+    Key? key,
     this.config = const StyledInputConfig(),
     required this.onPressed,
-  });
+  }) : super(key: key);
+
+  final StyledInputConfig config;
+  final void Function() onPressed;
 
   double computeHeight(Size boxSize) {
     if (config.autoSize) {

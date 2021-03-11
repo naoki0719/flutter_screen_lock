@@ -12,15 +12,8 @@ import 'package:flutter_screen_lock/input_state.dart';
 /// If you use GridView, you have to specify the overall width to adjust the size of the button,
 /// which makes it difficult to specify the size intuitively.
 class KeyPad extends StatelessWidget {
-  final InputState inputState;
-  final bool canCancel;
-  final InputButtonConfig inputButtonConfig;
-  final Widget? customizedButtonChild;
-  final Future<void> Function()? customizedButtonTap;
-  final Widget? cancelButton;
-  final Widget? deleteButton;
-
   const KeyPad({
+    Key? key,
     required this.inputState,
     required this.canCancel,
     this.inputButtonConfig = const InputButtonConfig(),
@@ -28,7 +21,15 @@ class KeyPad extends StatelessWidget {
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  });
+  }) : super(key: key);
+
+  final InputState inputState;
+  final bool canCancel;
+  final InputButtonConfig inputButtonConfig;
+  final Widget? customizedButtonChild;
+  final Future<void> Function()? customizedButtonTap;
+  final Widget? cancelButton;
+  final Widget? deleteButton;
 
   Widget _buildRightSideButton() {
     return StreamBuilder<String>(
