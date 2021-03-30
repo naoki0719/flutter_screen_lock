@@ -1,6 +1,10 @@
 # Changelog
 
-## [4.0.2] - 2021-03-011
+## [4.0.3] - 2021-03-30
+
+- Fixed the problem of being able to back with physical keys even if canCancel is false.
+
+## [4.0.2] - 2021-03-11
 
 - Fixed a bug that caused Cancel text to be cut off on devices with narrow widths.
 
