@@ -229,40 +229,43 @@ class _ScreenLockState extends State<ScreenLock> {
   Widget build(BuildContext context) {
     final secretLength =
         widget.confirmation ? widget.digits : widget.correctString.length;
-    return Theme(
-      data: makeThemeData(),
-      child: Scaffold(
-        backgroundColor: widget.screenLockConfig.backgroundColor,
-        body: SafeArea(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  buildHeadingText(),
-                  Secrets(
-                    config: widget.secretsConfig,
-                    length: secretLength,
-                    inputStream: inputState.currentInput,
-                    verifyStream: inputState.verifyInput,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: KeyPad(
-                      inputButtonConfig: widget.inputButtonConfig,
-                      inputState: inputState,
-                      canCancel: widget.canCancel,
-                      customizedButtonTap: widget.custmizedButtonTap,
-                      customizedButtonChild: widget.customizedButtonChild,
-                      deleteButton: widget.deleteButton,
-                      cancelButton: widget.cancelButton,
+    return WillPopScope(
+      onWillPop: () async => widget.canCancel,
+      child: Theme(
+        data: makeThemeData(),
+        child: Scaffold(
+          backgroundColor: widget.screenLockConfig.backgroundColor,
+          body: SafeArea(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildHeadingText(),
+                    Secrets(
+                      config: widget.secretsConfig,
+                      length: secretLength,
+                      inputStream: inputState.currentInput,
+                      verifyStream: inputState.verifyInput,
                     ),
-                  ),
-                  widget.footer ?? Container(),
-                ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: KeyPad(
+                        inputButtonConfig: widget.inputButtonConfig,
+                        inputState: inputState,
+                        canCancel: widget.canCancel,
+                        customizedButtonTap: widget.custmizedButtonTap,
+                        customizedButtonChild: widget.customizedButtonChild,
+                        deleteButton: widget.deleteButton,
+                        cancelButton: widget.cancelButton,
+                      ),
+                    ),
+                    widget.footer ?? Container(),
+                  ],
+                ),
               ),
             ),
           ),
