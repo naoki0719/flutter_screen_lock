@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.4+1] - 2021-04-30
+
+- Add inputController to the document
+
 ## [4.0.4] - 2021-04-30
 
 - Implemented a function to return the confirmation state to the initial input state.

@@ -72,6 +72,25 @@ screenLock(
 );
 ```
 
+### Control the confirmation state
+
+```dart
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
+
+final inputController = InputController();
+
+screenLock(
+  context: context,
+  correctString: '',
+  confirmation: true,
+  inputController: inputController,
+);
+
+// Release the confirmation state at any event.
+inputController.unsetConfirmed();
+```
+
 ### Use local_auth
 
 Add the local_auth package to pubspec.yml.
@@ -187,68 +206,69 @@ screenLock(
 
 ### screenLock / ScreenLock API
 
-| Property              | Type                              | Description                                                                                                                       |
-| --------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| context               | BuildContext                      | (Required) [screenLock] only                                                                                                      |
-| correctString         | String                            | (Required) Input correct String <br> If [confirmation] is `true`, it will be ignored, so set it to any string or empty.           |
-| screenLockConfig      | ScreenLockConfig                  | Refer to the API of [ScreenLockConfig](#screenlockconfig-api) (Default: [ScreenLockConfig()])                                     |
-| secretsConfig         | SecretsConfig                     | Refer to the API of [SecretsConfig](#secretsconfig-api) (Default: [SecretsConfig()])                                              |
-| inputButtonConfig     | InputButtonConfig                 | Refer to the API of [InputButtonConfig](#inputbuttonconfig-api) (Default: [InputButtonConfig()])                                  |
-| canCancel             | bool                              | `true` is show cancel button. (Default: `true`)                                                                                   |
-| confirmation          | bool                              | Make sure the first and second inputs are the same.                                                                               |
-| digits                | int                               | Set the maximum number of characters to enter when [confirmation] is `true`.                                                      |
-| maxRetries            | int                               | `0` is unlimited. <br>For example, if it is set to 1, didMaxRetries will be called on the first failure. <br> (Default `0`)       |
-| didUnlocked           | void Function()                   | Called if the value matches the correctString.                                                                                    |
-| didError              | void Function(int retries)        | Called if the value does not match the correctString.                                                                             |
-| didMaxRetries         | void Function(int retries)        | Events that have reached the maximum number of attempts.                                                                          |
-| didOpened             | void Function()                   | For example, when you want to perform biometric authentication. [screenLock] only                                                 |
-| didConfirmed          | void Function(String matchedText) | Called when the first and second inputs match during confirmation. <br>It is possible to receive the matched text as an argument. |
-| customizedButtonTap   | Future\<void\> Function()         | Tapped for left side lower button.                                                                                                |
-| customizedButtonChild | Widget                            | Child for bottom left side button.                                                                                                |
-| footer                | Widget                            | Add a Widget to the footer.                                                                                                       |
-| cancelButton          | Widget                            | Change the child widget for the cancel button.                                                                                    |
-| deleteButton          | Widget                            | Change the child widget for the delete button.                                                                                    |
-| title                 | Widget                            | Change the title widget. Default `HeadingTitle(text: 'Please enter passcode.')`                                                   |
-| confirmTitle          | Widget                            | Change the confirm title widget. Default `HeadingTitle(text: 'Please enter confirm passcode.')`)                                  |
+| Property              | Type                              | Default                                              | Description                                                                                                                       |
+| --------------------- | --------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| context               | BuildContext                      |                                                      | (Required) [screenLock] only                                                                                                      |
+| correctString         | String                            |                                                      | (Required) Input correct String <br> If [confirmation] is `true`, it will be ignored, so set it to any string or empty.           |
+| screenLockConfig      | ScreenLockConfig                  | ScreenLockConfig()                                   | Refer to the API of [ScreenLockConfig](#screenlockconfig-api)                                                                     |
+| secretsConfig         | SecretsConfig                     | SecretsConfig()                                      | Refer to the API of [SecretsConfig](#secretsconfig-api)                                                                           |
+| inputButtonConfig     | InputButtonConfig                 | InputButtonConfig()                                  | Refer to the API of [InputButtonConfig](#inputbuttonconfig-api)                                                                   |
+| canCancel             | bool                              | true                                                 | `true` is show cancel button. (Default: `true`)                                                                                   |
+| confirmation          | bool                              |                                                      | Make sure the first and second inputs are the same.                                                                               |
+| digits                | int                               |                                                      | Set the maximum number of characters to enter when [confirmation] is `true`.                                                      |
+| maxRetries            | int                               | 0                                                    | `0` is unlimited. <br>For example, if it is set to 1, didMaxRetries will be called on the first failure.                          |
+| didUnlocked           | void Function()                   |                                                      | Called if the value matches the correctString.                                                                                    |
+| didError              | void Function(int retries)        |                                                      | Called if the value does not match the correctString.                                                                             |
+| didMaxRetries         | void Function(int retries)        |                                                      | Events that have reached the maximum number of attempts.                                                                          |
+| didOpened             | void Function()                   |                                                      | For example, when you want to perform biometric authentication. [screenLock] only                                                 |
+| didConfirmed          | void Function(String matchedText) |                                                      | Called when the first and second inputs match during confirmation. <br>It is possible to receive the matched text as an argument. |
+| customizedButtonTap   | Future\<void\> Function()         |                                                      | Tapped for left side lower button.                                                                                                |
+| customizedButtonChild | Widget                            |                                                      | Child for bottom left side button.                                                                                                |
+| footer                | Widget                            |                                                      | Add a Widget to the footer.                                                                                                       |
+| cancelButton          | Widget                            |                                                      | Change the child widget for the cancel button.                                                                                    |
+| deleteButton          | Widget                            |                                                      | Change the child widget for the delete button.                                                                                    |
+| title                 | Widget                            | HeadingTitle(text: 'Please enter passcode.')         | Change the title widget.                                                                                                          |
+| confirmTitle          | Widget                            | HeadingTitle(text: 'Please enter confirm passcode.') | Change the confirm title widget.                                                                                                  |
+| inputController       | InputController                   |                                                      | Control the confirmation state change on the outside.                                                                             |
 
 ### ScreenLockConfig API
 
-| Property        | Type      | Description                                                                      |
-| --------------- | --------- | -------------------------------------------------------------------------------- |
-| backgroundColor | Color     | Specifies the background color of the screen. By default, themeData will be set. |
-| themeData       | ThemeData | (Default [ScreenLockConfig.defaultThemeData])                                    |
+| Property        | Type      | Default                           | Description                                                                      |
+| --------------- | --------- | --------------------------------- | -------------------------------------------------------------------------------- |
+| backgroundColor | Color     |                                   | Specifies the background color of the screen. By default, themeData will be set. |
+| themeData       | ThemeData | ScreenLockConfig.defaultThemeData |                                                                                  |
 
 ### SecretsConfig API
 
-| Property     | Type               | Description                                                                                                     |
-| ------------ | ------------------ | --------------------------------------------------------------------------------------------------------------- |
-| spacing      | double             | Absolute space between secret widgets. <br> If specified together with spacingRatio, this will take precedence. |
-| spacingRatio | double             | Space ratio between secret widgets. (Default `0.05`)                                                            |
-| padding      | EdgeInsetsGeometry | padding of Secrets Widget. (Default [EdgeInsets.only(top: 20, bottom: 50)])                                     |
-| secretConfig | SecretConfig       | Refer to the API of [SecretConfig](#secretconfig-api) (Default: [SecretConfig()])                               |
+| Property     | Type               | Default                              | Description                                                                                                     |
+| ------------ | ------------------ | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| spacing      | double             |                                      | Absolute space between secret widgets. <br> If specified together with spacingRatio, this will take precedence. |
+| spacingRatio | double             | 0.05                                 | Space ratio between secret widgets.                                                                             |
+| padding      | EdgeInsetsGeometry | EdgeInsets.only(top: 20, bottom: 50) | padding of Secrets Widget.                                                                                      |
+| secretConfig | SecretConfig       | SecretConfig()                       | Refer to the API of [SecretConfig](#secretconfig-api)                                                           |
 
 ### SecretConfig API
 
-| Property      | Type   | Description                                                   |
-| ------------- | ------ | ------------------------------------------------------------- |
-| width         | double | Widget width. (Default `16`)                                  |
-| height        | double | Widget height. (Default `16`)                                 |
-| borderSize    | double | border size. (Default [EdgeInsets.only(top: 20, bottom: 50)]) |
-| borderColor   | Color  | border color. (Default Color(0xFFFFFFFF))                     |
-| enabledColor  | Color  | Fill color when input is active. (Default Color(0xFFFFFFFF))  |
-| disabledColor | Color  | Fill color for unentered. (Default Color(0xFFFFFFFF))         |
+| Property      | Type   | Default           | Description                      |
+| ------------- | ------ | ----------------- | -------------------------------- |
+| width         | double | 16                | Widget width.                    |
+| height        | double | 16                | Widget height.                   |
+| borderSize    | double | 1.0               | border size.                     |
+| borderColor   | Color  | Color(0xFFFFFFFF) | border color.                    |
+| enabledColor  | Color  | Color(0xFFFFFFFF) | Fill color when input is active. |
+| disabledColor | Color  | Color(0xFFFFFFFF) | Fill color for unentered.        |
 
 ### InputButtonConfig API
 
-| Property       | Type           | Description                                                                                        |
-| -------------- | -------------- | -------------------------------------------------------------------------------------------------- |
-| height         | double         | Button height. (Default `MediaQuery.of(context).size.height * 0.6 * 0.16`)                         |
-| width          | double         | Button width. (Default `MediaQuery.of(context).size.width * 0.22`)                                 |
-| autoSize       | bool           | Automatically adjust the size of the square to fit the orientation of the device. (Default `true`) |
-| inputStrings   | List\<String\> | A string to be matched against correctString. (Default ['0','1','2','3','4','5','6','7','8','9'])  |
-| displayStrings | List\<String\> | The string to be displayed on the screen. (Default ['0','1','2','3','4','5','6','7','8','9'])      |
-| style          | ButtonStyle    | It is recommended that you use [OutlinedButton.styleFrom()] to change it.                          |
-| textStyle      | TextStyle      | Changes the text style of the button.                                                              |
+| Property       | Type           | Default                                           | Description                                                                       |
+| -------------- | -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------- |
+| height         | double         | `MediaQuery.of(context).size.height * 0.6 * 0.16` | Button height.                                                                    |
+| width          | double         | `MediaQuery.of(context).size.width * 0.22`        | Button width.                                                                     |
+| autoSize       | bool           | true                                              | Automatically adjust the size of the square to fit the orientation of the device. |
+| inputStrings   | List\<String\> | ['0','1','2','3','4','5','6','7','8','9']         | A string to be matched against correctString.                                     |
+| displayStrings | List\<String\> | ['0','1','2','3','4','5','6','7','8','9']         | The string to be displayed on the screen.                                         |
+| style          | ButtonStyle    |                                                   | It is recommended that you use [OutlinedButton.styleFrom()] to change it.         |
+| textStyle      | TextStyle      |                                                   | Changes the text style of the button.                                             |
 
 ## Apps I use
 
