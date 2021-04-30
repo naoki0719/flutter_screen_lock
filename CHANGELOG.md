@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.4] - 2021-04-30
+
+- Implemented a function to return the confirmation state to the initial input state.
+
 ## [4.0.3] - 2021-03-30
 
 - Fixed the problem of being able to back with physical keys even if canCancel is false.
