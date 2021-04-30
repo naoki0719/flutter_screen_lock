@@ -4,6 +4,7 @@ import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
 import 'package:flutter_screen_lock/configurations/secret_config.dart';
 import 'package:flutter_screen_lock/configurations/secrets_config.dart';
 import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
 import 'package:flutter_screen_lock/screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -76,14 +77,26 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Not cancelable'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
-                context: context,
-                correctString: '',
-                confirmation: true,
-                didConfirmed: (matchedText) {
-                  print(matchedText);
-                },
-              ),
+              onPressed: () {
+                // Define it to control the confirmation state with its own events.
+                final inputController = InputController();
+                screenLock<void>(
+                  context: context,
+                  correctString: '',
+                  confirmation: true,
+                  inputController: inputController,
+                  didConfirmed: (matchedText) {
+                    print(matchedText);
+                  },
+                  footer: TextButton(
+                    onPressed: () {
+                      // Release the confirmation state and return to the initial input state.
+                      inputController.unsetConfirmed();
+                    },
+                    child: const Text('Return enter mode.'),
+                  ),
+                );
+              },
               child: const Text('Confirm mode'),
             ),
             ElevatedButton(

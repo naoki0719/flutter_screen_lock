@@ -1,10 +1,10 @@
-import 'package:flutter_screen_lock/input_state.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('input stream test', () {
-    final state = InputState();
-    state.initialize(false);
+    final state = InputController();
+    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
 
     expectLater(
       state.currentInput,
@@ -32,16 +32,26 @@ void main() {
   });
 
   test('input verify', () {
-    final state = InputState();
-    state.initialize(false);
+    final state = InputController();
+    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
 
-    expectLater(state.verifyInput, emitsInOrder(<bool>[true, false]));
+    expectLater(state.verifyInput, emitsInOrder(<bool>[true]));
 
     state.addCharacter('1');
     state.addCharacter('2');
     state.addCharacter('3');
     state.addCharacter('4');
-    state.verify('1234');
-    state.verify('12345');
+  });
+
+  test('input verify as failed', () {
+    final state = InputController();
+    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
+
+    expectLater(state.verifyInput, emitsInOrder(<bool>[false]));
+
+    state.addCharacter('1');
+    state.addCharacter('2');
+    state.addCharacter('3');
+    state.addCharacter('5');
   });
 }

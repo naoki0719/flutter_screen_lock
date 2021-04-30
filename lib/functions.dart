@@ -3,6 +3,7 @@ import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
 import 'package:flutter_screen_lock/configurations/secrets_config.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
 import 'package:flutter_screen_lock/screen_lock.dart';
 
 /// Animated ScreenLock
@@ -28,6 +29,7 @@ import 'package:flutter_screen_lock/screen_lock.dart';
 /// - `deleteButton`: Change the child widget for the delete button
 /// - `title`: Change the title widget
 /// - `confirmTitle`: Change the confirm title widget
+/// - `inputController`: Control inputs externally
 Future<T>? screenLock<T>({
   required BuildContext context,
   required String correctString,
@@ -51,6 +53,7 @@ Future<T>? screenLock<T>({
   Widget title = const HeadingTitle(text: 'Please enter passcode.'),
   Widget confirmTitle =
       const HeadingTitle(text: 'Please enter confirm passcode.'),
+  InputController? inputController,
 }) {
   Navigator.push(
     context,
@@ -89,6 +92,7 @@ Future<T>? screenLock<T>({
           cancelButton: cancelButton,
           title: title,
           confirmTitle: confirmTitle,
+          inputController: inputController,
         );
       },
       transitionsBuilder: (
