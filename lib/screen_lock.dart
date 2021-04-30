@@ -3,10 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/configurations/input_button_config.dart';
 import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
-
 import 'package:flutter_screen_lock/configurations/secrets_config.dart';
 import 'package:flutter_screen_lock/heading_title.dart';
-import 'package:flutter_screen_lock/input_state.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
 import 'package:flutter_screen_lock/layout/key_pad.dart';
 import 'package:flutter_screen_lock/layout/secrets.dart';
 
@@ -33,6 +32,7 @@ class ScreenLock extends StatefulWidget {
     this.footer,
     this.cancelButton,
     this.deleteButton,
+    this.inputController,
   })  : assert(maxRetries > -1),
         super(key: key);
 
@@ -98,12 +98,15 @@ class ScreenLock extends StatefulWidget {
   /// delete button widget.
   final Widget? deleteButton;
 
+  /// Control inputs externally.
+  final InputController? inputController;
+
   @override
   _ScreenLockState createState() => _ScreenLockState();
 }
 
 class _ScreenLockState extends State<ScreenLock> {
-  final inputState = InputState();
+  late InputController inputController;
 
   /// Logging retries.
   int retries = 1;
@@ -137,7 +140,7 @@ class _ScreenLockState extends State<ScreenLock> {
   Widget buildHeadingText() {
     if (widget.confirmation) {
       return StreamBuilder<bool>(
-        stream: inputState.confirmed,
+        stream: inputController.confirmed,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data!) {
             return widget.confirmTitle;
@@ -158,57 +161,26 @@ class _ScreenLockState extends State<ScreenLock> {
     return ScreenLockConfig.defaultThemeData;
   }
 
-  /// Verifying correctString.
-  void inputListener() {
-    inputState.currentInput.listen((text) {
-      if (widget.correctString.length > text.length) {
-        return;
-      }
-
-      inputState.verify(widget.correctString);
-    });
-  }
-
-  /// Verifying first input string.
-  void confirmInputListener() {
-    inputState.currentInput.listen((text) {
-      if (widget.digits > text.length) {
-        return;
-      }
-
-      if (!firstInputCompleted) {
-        firstInput = text;
-        firstInputCompleted = true;
-        inputState.clear();
-        inputState.setConfirmed();
-      } else {
-        inputState.verify(firstInput);
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
+    inputController = widget.inputController ?? InputController();
+    inputController.initialize(
+      correctString: widget.correctString,
+      digits: widget.digits,
+      isConfirmed: widget.confirmation,
+    );
 
-    inputState.initialize(widget.confirmation);
-
-    if (widget.confirmation) {
-      confirmInputListener();
-    } else {
-      inputListener();
-    }
-
-    inputState.verifyInput.listen((success) {
+    inputController.verifyInput.listen((success) {
       // Wait for the animation on failure.
       Future.delayed(const Duration(milliseconds: 300), () {
-        inputState.clear();
+        inputController.clear();
       });
 
       if (success) {
         if (widget.confirmation) {
           if (widget.didConfirmed != null) {
-            widget.didConfirmed!(firstInput);
+            widget.didConfirmed!(inputController.confirmedInput);
           }
         } else {
           unlocked();
@@ -221,7 +193,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
   @override
   void dispose() {
-    inputState.dispose();
+    inputController.dispose();
     super.dispose();
   }
 
@@ -248,14 +220,14 @@ class _ScreenLockState extends State<ScreenLock> {
                     Secrets(
                       config: widget.secretsConfig,
                       length: secretLength,
-                      inputStream: inputState.currentInput,
-                      verifyStream: inputState.verifyInput,
+                      inputStream: inputController.currentInput,
+                      verifyStream: inputController.verifyInput,
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: KeyPad(
                         inputButtonConfig: widget.inputButtonConfig,
-                        inputState: inputState,
+                        inputState: inputController,
                         canCancel: widget.canCancel,
                         customizedButtonTap: widget.custmizedButtonTap,
                         customizedButtonChild: widget.customizedButtonChild,

@@ -5,7 +5,7 @@ import 'package:flutter_screen_lock/buttons/delete_button.dart';
 import 'package:flutter_screen_lock/buttons/hidden_button.dart';
 import 'package:flutter_screen_lock/buttons/input_button.dart';
 import 'package:flutter_screen_lock/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/input_state.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
 
 /// In order to arrange the buttons neatly by their size,
 /// I dared to adjust them without using GridView or Wrap.
@@ -23,7 +23,7 @@ class KeyPad extends StatelessWidget {
     this.cancelButton,
   }) : super(key: key);
 
-  final InputState inputState;
+  final InputController inputState;
   final bool canCancel;
   final InputButtonConfig inputButtonConfig;
   final Widget? customizedButtonChild;
