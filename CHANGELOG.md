@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.0.4+2] - 2021-09-17
+
+- Run flutter format
+- Changed to flutter_lints
+
 ## [4.0.4+1] - 2021-04-30
 
 - Add inputController to the document
