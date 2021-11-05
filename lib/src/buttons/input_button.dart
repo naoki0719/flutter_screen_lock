@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/buttons/styled_input_button.dart';
-import 'package:flutter_screen_lock/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/buttons/styled_input_button.dart';
+import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
 
 class InputButton extends StyledInputButton {
   const InputButton({

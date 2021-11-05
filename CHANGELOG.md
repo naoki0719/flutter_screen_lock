@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.0] - 2021-11-05
+
+- I put them together in a library to simplify importing.
+
 ## [4.0.4+4] - 2021-11-05
 
 - Fixed examples with lengths other than 4.
