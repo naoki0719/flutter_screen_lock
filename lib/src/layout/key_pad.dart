@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/buttons/cancel_button.dart';
-import 'package:flutter_screen_lock/buttons/customizable_button.dart';
-import 'package:flutter_screen_lock/buttons/delete_button.dart';
-import 'package:flutter_screen_lock/buttons/hidden_button.dart';
-import 'package:flutter_screen_lock/buttons/input_button.dart';
-import 'package:flutter_screen_lock/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/input_controller.dart';
+import 'package:flutter_screen_lock/src/buttons/cancel_button.dart';
+import 'package:flutter_screen_lock/src/buttons/customizable_button.dart';
+import 'package:flutter_screen_lock/src/buttons/delete_button.dart';
+import 'package:flutter_screen_lock/src/buttons/hidden_button.dart';
+import 'package:flutter_screen_lock/src/buttons/input_button.dart';
+import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/input_controller.dart';
 
 /// In order to arrange the buttons neatly by their size,
 /// I dared to adjust them without using GridView or Wrap.

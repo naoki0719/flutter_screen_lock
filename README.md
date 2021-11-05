@@ -6,10 +6,13 @@ You can also use biometric authentication as an option.
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_v3.gif" />
 
-## ⚠Attention
+## 4.x to 5 migration
 
-A detailed API description will be provided later.
-Only tentatively necessary information is provided.
+Change to the next import only.
+
+```dart
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+```
 
 ## Features
 
@@ -33,7 +36,7 @@ To unlock, enter correctString.
 If you give the same input as correctString, it will automatically close the screen.
 
 ```dart
-import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 screenLock(
   context: context,
@@ -46,7 +49,7 @@ screenLock(
 Provides a screen lock that cannot be canceled.
 
 ```dart
-import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 screenLock(
   context: context,
@@ -60,7 +63,7 @@ screenLock(
 You can display the confirmation screen and get the first input with didConfirmed if the first and second inputs match.
 
 ```dart
-import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 screenLock(
   context: context,
@@ -75,8 +78,7 @@ screenLock(
 ### Control the confirmation state
 
 ```dart
-import 'package:flutter_screen_lock/functions.dart';
-import 'package:flutter_screen_lock/input_controller.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 final inputController = InputController();
 
@@ -100,7 +102,7 @@ https://pub.dev/packages/local_auth
 It includes an example that calls biometrics as soon as screenLock is displayed in `didOpened`.
 
 ```dart
-import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -133,12 +135,7 @@ screenLock(
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
-import 'package:flutter_screen_lock/configurations/secret_config.dart';
-import 'package:flutter_screen_lock/configurations/secrets_config.dart';
-import 'package:flutter_screen_lock/functions.dart';
-import 'package:flutter_screen_lock/screen_lock.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 screenLock(
   context: context,

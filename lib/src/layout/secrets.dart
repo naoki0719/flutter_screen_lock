@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/configurations/secret_config.dart';
-import 'package:flutter_screen_lock/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/src/configurations/secret_config.dart';
+import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
 
 class Secrets extends StatefulWidget {
   const Secrets({

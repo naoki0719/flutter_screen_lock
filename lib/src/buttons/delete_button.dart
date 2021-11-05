@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/buttons/styled_input_button.dart';
-import 'package:flutter_screen_lock/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/buttons/styled_input_button.dart';
+import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
 
-/// Customizable button.
-class CustomizableButton extends StyledInputButton {
-  const CustomizableButton({
+class DeleteButton extends StyledInputButton {
+  const DeleteButton({
     Key? key,
-    this.child = const Text(''),
+    this.child,
     required void Function() onPressed,
     InputButtonConfig config = const InputButtonConfig(),
   }) : super(key: key, onPressed: onPressed, config: config);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   ButtonStyle makeDefaultStyle() {
@@ -22,6 +21,7 @@ class CustomizableButton extends StyledInputButton {
 
   @override
   Widget build(BuildContext context) {
-    return makeKeyContainer(child: child, context: context);
+    return makeKeyContainer(
+        child: child ?? const Icon(Icons.backspace), context: context);
   }
 }

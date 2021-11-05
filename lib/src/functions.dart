@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
-import 'package:flutter_screen_lock/configurations/secrets_config.dart';
-import 'package:flutter_screen_lock/heading_title.dart';
-import 'package:flutter_screen_lock/input_controller.dart';
-import 'package:flutter_screen_lock/screen_lock.dart';
+import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/configurations/screen_lock_config.dart';
+import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/src/heading_title.dart';
+import 'package:flutter_screen_lock/src/input_controller.dart';
+import 'package:flutter_screen_lock/src/screen_lock.dart';
 
 /// Animated ScreenLock
 ///
