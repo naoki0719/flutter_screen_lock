@@ -10,7 +10,6 @@
 ## [4.0.4+3] - 2021-11-04
 
 - Added an example of transitioning to the next page by unlocking.
-
 ## [4.0.4+2] - 2021-09-17
 
 - Run flutter format
