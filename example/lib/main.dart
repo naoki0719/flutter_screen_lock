@@ -117,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => screenLock<void>(
                 context: context,
                 correctString: '123456',
+                digits: '123456'.length,
                 canCancel: false,
                 footer: Container(
                   padding: const EdgeInsets.only(top: 10),
