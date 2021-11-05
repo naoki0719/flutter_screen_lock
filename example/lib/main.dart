@@ -86,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   confirmation: true,
                   inputController: inputController,
                   didConfirmed: (matchedText) {
+                    // ignore: avoid_print
                     print(matchedText);
                   },
                   footer: TextButton(
@@ -208,8 +209,37 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Customize styles'),
             ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '1234',
+                didUnlocked: () {
+                  Navigator.pop(context);
+                  NextPage.show(context);
+                },
+              ),
+              child: const Text('Next page with unlock'),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class NextPage extends StatelessWidget {
+  const NextPage({Key? key}) : super(key: key);
+
+  static show(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const NextPage()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Next Page'),
       ),
     );
   }
