@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.1] - 2021-11-16
+
+- There was a spelling mistake, so I corrected it to "customizedButtonTap" (#31).
+
 ## [5.0.0] - 2021-11-05
 
 - I put them together in a library to simplify importing.

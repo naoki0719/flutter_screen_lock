@@ -229,7 +229,7 @@ class _ScreenLockState extends State<ScreenLock> {
                         inputButtonConfig: widget.inputButtonConfig,
                         inputState: inputController,
                         canCancel: widget.canCancel,
-                        customizedButtonTap: widget.custmizedButtonTap,
+                        customizedButtonTap: widget.customizedButtonTap,
                         customizedButtonChild: widget.customizedButtonChild,
                         deleteButton: widget.deleteButton,
                         cancelButton: widget.cancelButton,
