@@ -27,7 +27,7 @@ class ScreenLock extends StatefulWidget {
     this.didError,
     this.maxRetries = 0,
     this.didMaxRetries,
-    this.custmizedButtonTap,
+    this.customizedButtonTap,
     this.customizedButtonChild,
     this.footer,
     this.cancelButton,
@@ -84,7 +84,7 @@ class ScreenLock extends StatefulWidget {
   final void Function(int retries)? didMaxRetries;
 
   /// Tapped for left side lower button.
-  final Future<void> Function()? custmizedButtonTap;
+  final Future<void> Function()? customizedButtonTap;
 
   /// Child for bottom left side button.
   final Widget? customizedButtonChild;
