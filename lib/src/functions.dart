@@ -85,7 +85,7 @@ Future<T>? screenLock<T>({
           didError: didError,
           didMaxRetries: didMaxRetries,
           didConfirmed: didConfirmed,
-          custmizedButtonTap: customizedButtonTap,
+          customizedButtonTap: customizedButtonTap,
           customizedButtonChild: customizedButtonChild,
           footer: footer,
           deleteButton: deleteButton,
