@@ -215,6 +215,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: const Text('Next page with unlock'),
             ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '1234',
+                withBlur: false,
+                screenLockConfig: ScreenLockConfig(
+                  /// If you don't want it to be transparent, override the config
+                  backgroundColor: Colors.black,
+                ),
+              ),
+              child: const Text('Not blur'),
+            ),
           ],
         ),
       ),

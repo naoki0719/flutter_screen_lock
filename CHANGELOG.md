@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.0.2] - 2021-11-23
+
+- Added an option to specify whether to blur the background.  
+  You can optionally disable blur to deter performance degradation on some devices. (#34)
+
 ## [5.0.1] - 2021-11-16
 
 - There was a spelling mistake, so I corrected it to "customizedButtonTap" (#31).
