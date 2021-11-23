@@ -30,6 +30,7 @@ import 'package:flutter_screen_lock/src/screen_lock.dart';
 /// - `title`: Change the title widget
 /// - `confirmTitle`: Change the confirm title widget
 /// - `inputController`: Control inputs externally
+/// - `withBlur`: Blur the background
 Future<T>? screenLock<T>({
   required BuildContext context,
   required String correctString,
@@ -54,6 +55,7 @@ Future<T>? screenLock<T>({
   Widget confirmTitle =
       const HeadingTitle(text: 'Please enter confirm passcode.'),
   InputController? inputController,
+  bool withBlur = true,
 }) {
   Navigator.push(
     context,
@@ -93,6 +95,7 @@ Future<T>? screenLock<T>({
           title: title,
           confirmTitle: confirmTitle,
           inputController: inputController,
+          withBlur: withBlur,
         );
       },
       transitionsBuilder: (

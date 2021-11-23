@@ -227,6 +227,7 @@ screenLock(
 | title                 | Widget                            | HeadingTitle(text: 'Please enter passcode.')         | Change the title widget.                                                                                                          |
 | confirmTitle          | Widget                            | HeadingTitle(text: 'Please enter confirm passcode.') | Change the confirm title widget.                                                                                                  |
 | inputController       | InputController                   |                                                      | Control the confirmation state change on the outside.                                                                             |
+| withBlur       | bool                   |                                                      | Blur the background                                                                             |
 
 ### ScreenLockConfig API
 

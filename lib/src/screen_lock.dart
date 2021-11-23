@@ -33,6 +33,7 @@ class ScreenLock extends StatefulWidget {
     this.cancelButton,
     this.deleteButton,
     this.inputController,
+    this.withBlur = true,
   })  : assert(maxRetries > -1),
         super(key: key);
 
@@ -100,6 +101,9 @@ class ScreenLock extends StatefulWidget {
 
   /// Control inputs externally.
   final InputController? inputController;
+
+  /// Blur the background
+  final bool withBlur;
 
   @override
   _ScreenLockState createState() => _ScreenLockState();
@@ -201,6 +205,46 @@ class _ScreenLockState extends State<ScreenLock> {
   Widget build(BuildContext context) {
     final secretLength =
         widget.confirmation ? widget.digits : widget.correctString.length;
+
+    Widget renderContent() {
+      return SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            buildHeadingText(),
+            Secrets(
+              config: widget.secretsConfig,
+              length: secretLength,
+              inputStream: inputController.currentInput,
+              verifyStream: inputController.verifyInput,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: KeyPad(
+                inputButtonConfig: widget.inputButtonConfig,
+                inputState: inputController,
+                canCancel: widget.canCancel,
+                customizedButtonTap: widget.customizedButtonTap,
+                customizedButtonChild: widget.customizedButtonChild,
+                deleteButton: widget.deleteButton,
+                cancelButton: widget.cancelButton,
+              ),
+            ),
+            widget.footer ?? Container(),
+          ],
+        ),
+      );
+    }
+
+    Widget renderContentWithBlur() {
+      return BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
+        child: renderContent(),
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async => widget.canCancel,
       child: Theme(
@@ -208,38 +252,7 @@ class _ScreenLockState extends State<ScreenLock> {
         child: Scaffold(
           backgroundColor: widget.screenLockConfig.backgroundColor,
           body: SafeArea(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    buildHeadingText(),
-                    Secrets(
-                      config: widget.secretsConfig,
-                      length: secretLength,
-                      inputStream: inputController.currentInput,
-                      verifyStream: inputController.verifyInput,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: KeyPad(
-                        inputButtonConfig: widget.inputButtonConfig,
-                        inputState: inputController,
-                        canCancel: widget.canCancel,
-                        customizedButtonTap: widget.customizedButtonTap,
-                        customizedButtonChild: widget.customizedButtonChild,
-                        deleteButton: widget.deleteButton,
-                        cancelButton: widget.cancelButton,
-                      ),
-                    ),
-                    widget.footer ?? Container(),
-                  ],
-                ),
-              ),
-            ),
+            child: widget.withBlur ? renderContentWithBlur() : renderContent(),
           ),
         ),
       ),
