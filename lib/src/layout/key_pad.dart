@@ -68,7 +68,7 @@ class KeyPad extends StatelessWidget {
 
   Widget _generateRow(BuildContext context, int rowNumber) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: List.generate(3, (index) {
         final number = (rowNumber - 1) * 3 + index + 1;
         final input = inputButtonConfig.inputStrings[number];
