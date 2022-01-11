@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.3] - 2022-01-11
+
+- Fixed a bug that prevented proper display when using large size buttons. (#37)
+
 ## [5.0.2] - 2021-11-23
 
 - Added an option to specify whether to blur the background.  

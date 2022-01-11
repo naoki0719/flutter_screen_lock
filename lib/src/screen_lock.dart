@@ -221,7 +221,7 @@ class _ScreenLockState extends State<ScreenLock> {
               verifyStream: inputController.verifyInput,
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              alignment: Alignment.center,
               child: KeyPad(
                 inputButtonConfig: widget.inputButtonConfig,
                 inputState: inputController,
