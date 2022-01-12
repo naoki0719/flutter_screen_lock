@@ -17,6 +17,8 @@ import 'package:flutter_screen_lock/src/screen_lock.dart';
 /// - `confirmation`: Make sure the first and second inputs are the same.
 /// - `digits`: Set the maximum number of characters to enter when [confirmation] is `true`.
 /// - `maxRetries`: `0` is unlimited. For example, if it is set to 1, didMaxRetries will be called on the first failure. Default `0`
+/// - `retryDelay`: Delay until we can retry. Duration.zero is no delay.
+/// - `delayChild`: Specify the widget during input invalidation by retry delay.
 /// - `didUnlocked`: Called if the value matches the correctString.
 /// - `didError`: Called if the value does not match the correctString.
 /// - `didMaxRetries`: Events that have reached the maximum number of attempts
@@ -41,6 +43,8 @@ Future<T>? screenLock<T>({
   bool confirmation = false,
   int digits = 4,
   int maxRetries = 0,
+  Duration retryDelay = Duration.zero,
+  Widget? delayChild,
   void Function()? didUnlocked,
   void Function(int retries)? didError,
   void Function(int retries)? didMaxRetries,
@@ -83,6 +87,8 @@ Future<T>? screenLock<T>({
           confirmation: confirmation,
           digits: digits,
           maxRetries: maxRetries,
+          retryDelay: retryDelay,
+          delayChild: delayChild,
           didUnlocked: didUnlocked,
           didError: didError,
           didMaxRetries: didMaxRetries,

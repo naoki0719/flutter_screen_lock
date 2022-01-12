@@ -40,7 +40,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.3"
+    version: "5.0.4"
   intl:
     dependency: transitive
     description:

@@ -227,6 +227,21 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: const Text('Not blur'),
             ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '1234',
+                maxRetries: 2,
+                retryDelay: Duration(seconds: 3),
+                delayChild: Center(
+                  child: Text(
+                    'Cannot be entered temporarily because it failed the specified number of times.',
+                    softWrap: true,
+                  ),
+                ),
+              ),
+              child: const Text('Delay next retry'),
+            ),
           ],
         ),
       ),
