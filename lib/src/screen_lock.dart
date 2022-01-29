@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
 import 'package:flutter_screen_lock/src/configurations/screen_lock_config.dart';
 import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/src/delay_screen.dart';
 import 'package:flutter_screen_lock/src/heading_title.dart';
 import 'package:flutter_screen_lock/src/input_controller.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
@@ -26,6 +28,8 @@ class ScreenLock extends StatefulWidget {
     this.didConfirmed,
     this.didError,
     this.maxRetries = 0,
+    this.retryDelay = Duration.zero,
+    this.delayChild,
     this.didMaxRetries,
     this.customizedButtonTap,
     this.customizedButtonChild,
@@ -81,6 +85,14 @@ class ScreenLock extends StatefulWidget {
   /// For example, if it is set to 1, didMaxRetries will be called on the first failure.
   final int maxRetries;
 
+  /// Delay until we can retry.
+  ///
+  /// Duration.zero is no delay.
+  final Duration retryDelay;
+
+  /// Specify the widget during input invalidation by retry delay.
+  final Widget? delayChild;
+
   /// Events that have reached the maximum number of attempts.
   final void Function(int retries)? didMaxRetries;
 
@@ -129,13 +141,40 @@ class _ScreenLockState extends State<ScreenLock> {
     Navigator.pop(context);
   }
 
+  void inputDelay() {
+    if (widget.retryDelay.compareTo(Duration.zero) == 0) {
+      return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DelayScreen(
+          child: widget.delayChild,
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+
+    Timer.periodic(widget.retryDelay, (timer) {
+      Navigator.pop(context);
+      timer.cancel();
+    });
+  }
+
   void error() {
     if (widget.didError != null) {
       widget.didError!(retries);
     }
 
     if (widget.maxRetries >= 1 && widget.maxRetries <= retries) {
-      widget.didMaxRetries!(retries);
+      if (widget.didMaxRetries != null) {
+        widget.didMaxRetries!(retries);
+      }
+
+      // reset retries
+      retries = 0;
+
+      inputDelay();
     }
 
     retries++;

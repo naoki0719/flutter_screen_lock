@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.4] - 2022-01-12
+
+- Disable input after exceeding number of attempts. (#36)
+
 ## [5.0.3] - 2022-01-11
 
 - Fixed a bug that prevented proper display when using large size buttons. (#37)
