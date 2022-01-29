@@ -214,6 +214,8 @@ screenLock(
 | confirmation          | bool                              |                                                      | Make sure the first and second inputs are the same.                                                                               |
 | digits                | int                               |                                                      | Set the maximum number of characters to enter when [confirmation] is `true`.                                                      |
 | maxRetries            | int                               | 0                                                    | `0` is unlimited. <br>For example, if it is set to 1, didMaxRetries will be called on the first failure.                          |
+| retryDelay            | Duration                          | 0                                                    | Delay until we can retry. Duration.zero is no delay.                                                                              |
+| delayChild            | Widget                            |                                                      | Specify the widget during input invalidation by retry delay.                                                                      |
 | didUnlocked           | void Function()                   |                                                      | Called if the value matches the correctString.                                                                                    |
 | didError              | void Function(int retries)        |                                                      | Called if the value does not match the correctString.                                                                             |
 | didMaxRetries         | void Function(int retries)        |                                                      | Events that have reached the maximum number of attempts.                                                                          |
@@ -227,7 +229,7 @@ screenLock(
 | title                 | Widget                            | HeadingTitle(text: 'Please enter passcode.')         | Change the title widget.                                                                                                          |
 | confirmTitle          | Widget                            | HeadingTitle(text: 'Please enter confirm passcode.') | Change the confirm title widget.                                                                                                  |
 | inputController       | InputController                   |                                                      | Control the confirmation state change on the outside.                                                                             |
-| withBlur       | bool                   |                                                      | Blur the background                                                                             |
+| withBlur              | bool                              |                                                      | Blur the background                                                                                                               |
 
 ### ScreenLockConfig API
 
