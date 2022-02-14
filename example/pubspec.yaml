@@ -13,6 +13,7 @@ dependencies:
   flutter_screen_lock:
     path: ../
   local_auth: 1.1.0
+  platform: ^3.1.0
 
 flutter:
   uses-material-design: true

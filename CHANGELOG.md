@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.0.5] - 2022-02-14
+
+- Optimized Android example for Flutter 2.10 and above.
+- Changed the return value of the screenLock function.
+
 ## [5.0.4] - 2022-01-12
 
 - Disable input after exceeding number of attempts. (#36)

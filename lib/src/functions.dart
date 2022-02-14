@@ -33,7 +33,7 @@ import 'package:flutter_screen_lock/src/screen_lock.dart';
 /// - `confirmTitle`: Change the confirm title widget
 /// - `inputController`: Control inputs externally
 /// - `withBlur`: Blur the background
-Future<T>? screenLock<T>({
+void screenLock<T>({
   required BuildContext context,
   required String correctString,
   ScreenLockConfig screenLockConfig = const ScreenLockConfig(),
