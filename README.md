@@ -260,15 +260,16 @@ screenLock(
 
 ### InputButtonConfig API
 
-| Property       | Type           | Default                                           | Description                                                                       |
-| -------------- | -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------- |
-| height         | double         | `MediaQuery.of(context).size.height * 0.6 * 0.16` | Button height.                                                                    |
-| width          | double         | `MediaQuery.of(context).size.width * 0.22`        | Button width.                                                                     |
-| autoSize       | bool           | true                                              | Automatically adjust the size of the square to fit the orientation of the device. |
-| inputStrings   | List\<String\> | ['0','1','2','3','4','5','6','7','8','9']         | A string to be matched against correctString.                                     |
-| displayStrings | List\<String\> | ['0','1','2','3','4','5','6','7','8','9']         | The string to be displayed on the screen.                                         |
-| style          | ButtonStyle    |                                                   | It is recommended that you use [OutlinedButton.styleFrom()] to change it.         |
-| textStyle      | TextStyle      |                                                   | Changes the text style of the button.                                             |
+| Property           | Type           | Default                                           | Description                                                                       |
+| ------------------ | -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------- |
+| height             | double         | `MediaQuery.of(context).size.height * 0.6 * 0.16` | Button height.                                                                    |
+| width              | double         | `MediaQuery.of(context).size.width * 0.22`        | Button width.                                                                     |
+| autoSize           | bool           | true                                              | Automatically adjust the size of the square to fit the orientation of the device. |
+| inputStrings       | List\<String\> | `['0','1','2','3','4','5','6','7','8','9']`       | A string to be matched against correctString.                                     |
+| displayStrings     | List\<String\> | `['0','1','2','3','4','5','6','7','8','9']`       | The string to be displayed on the screen.                                         |
+| style              | ButtonStyle    |                                                   | It is recommended that you use [OutlinedButton.styleFrom()] to change it.         |
+| textStyle          | TextStyle      |                                                   | Changes the text style of the button.                                             |
+| clearOnLongPressed | bool           | false                                             | Clear input chars on long pressed.                                                |
 
 ## Apps I use
 

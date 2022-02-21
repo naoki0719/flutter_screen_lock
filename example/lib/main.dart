@@ -49,9 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SizedBox(
         width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Wrap(
+          spacing: 10,
+          alignment: WrapAlignment.center,
           children: [
             ElevatedButton(
               onPressed: () => showDialog<void>(
@@ -220,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 context: context,
                 correctString: '1234',
                 withBlur: false,
-                screenLockConfig: ScreenLockConfig(
+                screenLockConfig: const ScreenLockConfig(
                   /// If you don't want it to be transparent, override the config
                   backgroundColor: Colors.black,
                 ),
@@ -232,8 +232,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 context: context,
                 correctString: '1234',
                 maxRetries: 2,
-                retryDelay: Duration(seconds: 3),
-                delayChild: Center(
+                retryDelay: const Duration(seconds: 3),
+                delayChild: const Center(
                   child: Text(
                     'Cannot be entered temporarily because it failed the specified number of times.',
                     softWrap: true,
@@ -241,6 +241,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               child: const Text('Delay next retry'),
+            ),
+            ElevatedButton(
+              onPressed: () => showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return const ScreenLock(
+                    correctString: '1234',
+                    inputButtonConfig: InputButtonConfig(
+                      clearOnLongPressed: true,
+                    ),
+                  );
+                },
+              ),
+              child: const Text('Delete long pressed to clear input'),
             ),
           ],
         ),

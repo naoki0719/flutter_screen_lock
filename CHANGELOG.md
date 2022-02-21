@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.6] - 2022-02-21
+
+- Clear input chars on long pressed (#42)
+
 ## [5.0.5] - 2022-02-14
 
 - Optimized Android example for Flutter 2.10 and above.
