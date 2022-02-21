@@ -7,8 +7,9 @@ class DeleteButton extends StyledInputButton {
     Key? key,
     this.child,
     required void Function() onPressed,
+    void Function()? onLongPress,
     InputButtonConfig config = const InputButtonConfig(),
-  }) : super(key: key, onPressed: onPressed, config: config);
+  }) : super(key: key, onPressed: onPressed, config: config, onLongPress: onLongPress);
 
   final Widget? child;
 
@@ -22,6 +23,8 @@ class DeleteButton extends StyledInputButton {
   @override
   Widget build(BuildContext context) {
     return makeKeyContainer(
-        child: child ?? const Icon(Icons.backspace), context: context);
+      child: child ?? const Icon(Icons.backspace),
+      context: context,
+    );
   }
 }

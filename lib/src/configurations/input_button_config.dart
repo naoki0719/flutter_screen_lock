@@ -40,7 +40,7 @@ class InputButtonConfig extends StyledInputConfig {
       '6',
       '7',
       '8',
-      '9'
+      '9',
     ],
     this.displayStrings = const [
       '0',
@@ -52,8 +52,9 @@ class InputButtonConfig extends StyledInputConfig {
       '6',
       '7',
       '8',
-      '9'
+      '9',
     ],
+    this.clearOnLongPressed = false,
   }) : super(
           autoSize: autoSize,
           height: height,
@@ -70,4 +71,5 @@ class InputButtonConfig extends StyledInputConfig {
   final TextStyle? textStyle;
   final List<String> inputStrings;
   final List<String> displayStrings;
+  final bool clearOnLongPressed;
 }

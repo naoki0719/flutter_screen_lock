@@ -7,10 +7,12 @@ abstract class StyledInputButton extends StatelessWidget {
     Key? key,
     this.config = const StyledInputConfig(),
     required this.onPressed,
+    this.onLongPress,
   }) : super(key: key);
 
   final StyledInputConfig config;
   final void Function() onPressed;
+  final void Function()? onLongPress;
 
   double computeHeight(Size boxSize) {
     if (config.autoSize) {
@@ -52,8 +54,10 @@ abstract class StyledInputButton extends StatelessWidget {
     return config.buttonStyle ?? OutlinedButton.styleFrom();
   }
 
-  Widget makeKeyContainer(
-      {required BuildContext context, required Widget child}) {
+  Widget makeKeyContainer({
+    required BuildContext context,
+    required Widget child,
+  }) {
     final boxSize = defaultSize(context);
     return Container(
       height: computeHeight(boxSize),
@@ -61,6 +65,7 @@ abstract class StyledInputButton extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       child: OutlinedButton(
         onPressed: onPressed,
+        onLongPress: onLongPress,
         child: child,
         style: makeDefaultStyle(),
       ),
