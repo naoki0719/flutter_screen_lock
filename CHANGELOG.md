@@ -1,8 +1,11 @@
 # Changelog
 
+## [5.0.6+1] - 2022-03-01
+
+- I have formatted the code properly.
 ## [5.0.6] - 2022-02-21
 
-- Clear input chars on long pressed (#42)
+- Clear input chars on long pressed (#42).
 
 ## [5.0.5] - 2022-02-14
 
