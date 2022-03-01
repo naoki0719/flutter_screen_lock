@@ -49,7 +49,9 @@ class KeyPad extends StatelessWidget {
           return DeleteButton(
             child: deleteButton,
             onPressed: () => inputState.removeCharacter(),
-            onLongPress: inputButtonConfig.clearOnLongPressed ? () => inputState.clear() : null,
+            onLongPress: inputButtonConfig.clearOnLongPressed
+                ? () => inputState.clear()
+                : null,
           );
         }
       },

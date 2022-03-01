@@ -9,7 +9,12 @@ class DeleteButton extends StyledInputButton {
     required void Function() onPressed,
     void Function()? onLongPress,
     InputButtonConfig config = const InputButtonConfig(),
-  }) : super(key: key, onPressed: onPressed, config: config, onLongPress: onLongPress);
+  }) : super(
+          key: key,
+          onPressed: onPressed,
+          config: config,
+          onLongPress: onLongPress,
+        );
 
   final Widget? child;
 
