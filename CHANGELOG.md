@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.7] - 2022-04-04
+
+- Custom animations for "secrets" can now be created.
+
 ## [5.0.6+1] - 2022-03-01
 
 - I have formatted the code properly.
