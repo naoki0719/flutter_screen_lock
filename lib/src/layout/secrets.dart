@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/secret_config.dart';
 import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
@@ -25,12 +27,13 @@ class _SecretsWithShakingAnimationState
     with SingleTickerProviderStateMixin {
   late Animation<Offset> _animation;
   late AnimationController _animationController;
+  late StreamSubscription<bool> _verifySubscription;
 
   @override
   void initState() {
     super.initState();
 
-    widget.verifyStream.listen((valid) {
+    _verifySubscription = widget.verifyStream.listen((valid) {
       if (!valid) {
         // shake animation when invalid
         _animationController.forward();
@@ -59,6 +62,7 @@ class _SecretsWithShakingAnimationState
 
   @override
   void dispose() {
+    _verifySubscription.cancel();
     _animationController.dispose();
     super.dispose();
   }

@@ -63,6 +63,12 @@ class InputButtonConfig extends StyledInputConfig {
         );
 
   static TextStyle getDefaultTextStyle(BuildContext context) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      return TextStyle(
+        fontSize: MediaQuery.of(context).size.height * 0.07,
+      );
+    }
+
     return TextStyle(
       fontSize: MediaQuery.of(context).size.height * 0.045,
     );
