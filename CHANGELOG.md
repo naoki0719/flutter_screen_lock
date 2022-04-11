@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.8+2] - 2022-04-11
+
+- Corrected image file extensions.
+- 
 ## [5.0.8+1] - 2022-04-11
 
 - Added screenshots of landscape view to the Readme.
