@@ -6,6 +6,10 @@ You can also use biometric authentication as an option.
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/flutter_screen_lock_v3.gif" />
 
+## Landscape view
+
+<img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/landscape.gif" />
+
 ## 4.x to 5 migration
 
 Change to the next import only.
