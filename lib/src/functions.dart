@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/src/configurations/screen_lock_config.dart';
-import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
-import 'package:flutter_screen_lock/src/heading_title.dart';
-import 'package:flutter_screen_lock/src/input_controller.dart';
-import 'package:flutter_screen_lock/src/screen_lock.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+
+typedef SecretsBuilderCallback = Widget Function(
+  SecretsConfig config,
+  int length,
+  Stream<String> inputStream,
+  Stream<bool> verifyStream,
+);
 
 /// Animated ScreenLock
 ///
@@ -33,6 +35,7 @@ import 'package:flutter_screen_lock/src/screen_lock.dart';
 /// - `confirmTitle`: Change the confirm title widget
 /// - `inputController`: Control inputs externally
 /// - `withBlur`: Blur the background
+/// - `secretsBuilder`: Custom secrets animation widget builder
 void screenLock<T>({
   required BuildContext context,
   required String correctString,
@@ -60,6 +63,7 @@ void screenLock<T>({
       const HeadingTitle(text: 'Please enter confirm passcode.'),
   InputController? inputController,
   bool withBlur = true,
+  SecretsBuilderCallback? secretsBuilder,
 }) {
   Navigator.push(
     context,
@@ -102,6 +106,7 @@ void screenLock<T>({
           confirmTitle: confirmTitle,
           inputController: inputController,
           withBlur: withBlur,
+          secretsBuilder: secretsBuilder,
         );
       },
       transitionsBuilder: (

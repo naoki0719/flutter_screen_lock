@@ -2,14 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
-import 'package:flutter_screen_lock/src/configurations/screen_lock_config.dart';
-import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/delay_screen.dart';
-import 'package:flutter_screen_lock/src/heading_title.dart';
-import 'package:flutter_screen_lock/src/input_controller.dart';
-import 'package:flutter_screen_lock/src/layout/key_pad.dart';
-import 'package:flutter_screen_lock/src/layout/secrets.dart';
 
 class ScreenLock extends StatefulWidget {
   const ScreenLock({
@@ -38,6 +32,7 @@ class ScreenLock extends StatefulWidget {
     this.deleteButton,
     this.inputController,
     this.withBlur = true,
+    this.secretsBuilder,
   })  : assert(maxRetries > -1),
         super(key: key);
 
@@ -114,8 +109,11 @@ class ScreenLock extends StatefulWidget {
   /// Control inputs externally.
   final InputController? inputController;
 
-  /// Blur the background
+  /// Blur the background.
   final bool withBlur;
+
+  /// Custom secrets animation widget builder.
+  final SecretsBuilderCallback? secretsBuilder;
 
   @override
   _ScreenLockState createState() => _ScreenLockState();
@@ -253,12 +251,19 @@ class _ScreenLockState extends State<ScreenLock> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildHeadingText(),
-            Secrets(
-              config: widget.secretsConfig,
-              length: secretLength,
-              inputStream: inputController.currentInput,
-              verifyStream: inputController.verifyInput,
-            ),
+            widget.secretsBuilder == null
+                ? SecretsWithShakingAnimation(
+                    config: widget.secretsConfig,
+                    length: secretLength,
+                    inputStream: inputController.currentInput,
+                    verifyStream: inputController.verifyInput,
+                  )
+                : widget.secretsBuilder!(
+                    widget.secretsConfig,
+                    secretLength,
+                    inputController.currentInput,
+                    inputController.verifyInput,
+                  ),
             Container(
               alignment: Alignment.center,
               child: KeyPad(

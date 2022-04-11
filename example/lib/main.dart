@@ -256,6 +256,29 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: const Text('Delete long pressed to clear input'),
             ),
+            ElevatedButton(
+              onPressed: () => showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return ScreenLock(
+                    correctString: '1234',
+                    secretsBuilder: (
+                      config,
+                      length,
+                      inputStream,
+                      verifyStream,
+                    ) =>
+                        SecretsWithCustomAnimation(
+                      verifyStream: verifyStream,
+                      config: config,
+                      inputStream: inputStream,
+                      length: length,
+                    ),
+                  );
+                },
+              ),
+              child: const Text('Secrets custom animation widget'),
+            ),
           ],
         ),
       ),
@@ -276,6 +299,74 @@ class NextPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Next Page'),
+      ),
+    );
+  }
+}
+
+class SecretsWithCustomAnimation extends StatefulWidget {
+  const SecretsWithCustomAnimation({
+    Key? key,
+    required this.config,
+    required this.length,
+    required this.inputStream,
+    required this.verifyStream,
+  }) : super(key: key);
+  final SecretsConfig config;
+  final int length;
+  final Stream<String> inputStream;
+  final Stream<bool> verifyStream;
+
+  @override
+  State<SecretsWithCustomAnimation> createState() =>
+      _SecretsWithCustomAnimationState();
+}
+
+class _SecretsWithCustomAnimationState extends State<SecretsWithCustomAnimation>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> _animation;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.verifyStream.listen((valid) {
+      if (!valid) {
+        // scale animation.
+        _animationController.forward();
+      }
+    });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 80),
+    );
+
+    _animation = Tween<double>(begin: 1, end: 2).animate(_animationController)
+      ..addStatusListener(
+        (status) {
+          if (status == AnimationStatus.completed) {
+            _animationController.reverse();
+          }
+        },
+      );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _animation,
+      child: Secrets(
+        inputStream: widget.inputStream,
+        length: widget.length,
+        config: widget.config,
       ),
     );
   }

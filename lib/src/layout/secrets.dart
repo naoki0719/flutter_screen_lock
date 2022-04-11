@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/secret_config.dart';
 import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
 
-class Secrets extends StatefulWidget {
-  const Secrets({
+class SecretsWithShakingAnimation extends StatefulWidget {
+  const SecretsWithShakingAnimation({
     Key? key,
-    this.config = const SecretsConfig(),
+    required this.config,
+    required this.length,
     required this.inputStream,
     required this.verifyStream,
-    required this.length,
   }) : super(key: key);
-
   final SecretsConfig config;
+  final int length;
   final Stream<String> inputStream;
   final Stream<bool> verifyStream;
-  final int length;
 
   @override
-  _SecretsState createState() => _SecretsState();
+  State<SecretsWithShakingAnimation> createState() =>
+      _SecretsWithShakingAnimationState();
 }
 
-class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
+class _SecretsWithShakingAnimationState
+    extends State<SecretsWithShakingAnimation>
+    with SingleTickerProviderStateMixin {
   late Animation<Offset> _animation;
   late AnimationController _animationController;
 
@@ -61,6 +63,36 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: _animation,
+      child: Secrets(
+        inputStream: widget.inputStream,
+        length: widget.length,
+        config: widget.config,
+      ),
+    );
+  }
+}
+
+class Secrets extends StatefulWidget {
+  const Secrets({
+    Key? key,
+    this.config = const SecretsConfig(),
+    required this.inputStream,
+    required this.length,
+  }) : super(key: key);
+
+  final SecretsConfig config;
+  final Stream<String> inputStream;
+  final int length;
+
+  @override
+  _SecretsState createState() => _SecretsState();
+}
+
+class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
   double _computeSpacing(BuildContext context) {
     if (widget.config.spacing != null) {
       return widget.config.spacing!;
@@ -71,36 +103,33 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-      position: _animation,
-      child: StreamBuilder<String>(
-        stream: widget.inputStream,
-        builder: (context, snapshot) {
-          return Container(
-            padding: widget.config.padding,
-            child: Wrap(
-              spacing: _computeSpacing(context),
-              children: List.generate(
-                widget.length,
-                (index) {
-                  if (!snapshot.hasData) {
-                    return Secret(
-                      config: widget.config.secretConfig,
-                      enabled: false,
-                    );
-                  }
-
+    return StreamBuilder<String>(
+      stream: widget.inputStream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: widget.config.padding,
+          child: Wrap(
+            spacing: _computeSpacing(context),
+            children: List.generate(
+              widget.length,
+              (index) {
+                if (!snapshot.hasData) {
                   return Secret(
                     config: widget.config.secretConfig,
-                    enabled: index < snapshot.data!.length,
+                    enabled: false,
                   );
-                },
-                growable: false,
-              ),
+                }
+
+                return Secret(
+                  config: widget.config.secretConfig,
+                  enabled: index < snapshot.data!.length,
+                );
+              },
+              growable: false,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
