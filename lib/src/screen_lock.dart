@@ -243,7 +243,67 @@ class _ScreenLockState extends State<ScreenLock> {
     final secretLength =
         widget.confirmation ? widget.digits : widget.correctString.length;
 
-    Widget renderContent() {
+    Widget buildSecrets() {
+      return widget.secretsBuilder == null
+          ? SecretsWithShakingAnimation(
+              config: widget.secretsConfig,
+              length: secretLength,
+              inputStream: inputController.currentInput,
+              verifyStream: inputController.verifyInput,
+            )
+          : widget.secretsBuilder!(
+              widget.secretsConfig,
+              secretLength,
+              inputController.currentInput,
+              inputController.verifyInput,
+            );
+    }
+
+    Widget buildKeyPad() {
+      return Container(
+        alignment: Alignment.center,
+        child: KeyPad(
+          inputButtonConfig: widget.inputButtonConfig,
+          inputState: inputController,
+          canCancel: widget.canCancel,
+          customizedButtonTap: widget.customizedButtonTap,
+          customizedButtonChild: widget.customizedButtonChild,
+          deleteButton: widget.deleteButton,
+          cancelButton: widget.cancelButton,
+        ),
+      );
+    }
+
+    Widget buildContent(Orientation orientation) {
+      if (orientation == Orientation.landscape) {
+        return Center(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        buildHeadingText(),
+                        buildSecrets(),
+                      ],
+                    ),
+                    buildKeyPad(),
+                  ],
+                ),
+                widget.footer ?? Container(),
+              ],
+            ),
+          ),
+        );
+      }
+
       return SizedBox(
         width: double.infinity,
         child: Column(
@@ -251,55 +311,38 @@ class _ScreenLockState extends State<ScreenLock> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildHeadingText(),
-            widget.secretsBuilder == null
-                ? SecretsWithShakingAnimation(
-                    config: widget.secretsConfig,
-                    length: secretLength,
-                    inputStream: inputController.currentInput,
-                    verifyStream: inputController.verifyInput,
-                  )
-                : widget.secretsBuilder!(
-                    widget.secretsConfig,
-                    secretLength,
-                    inputController.currentInput,
-                    inputController.verifyInput,
-                  ),
-            Container(
-              alignment: Alignment.center,
-              child: KeyPad(
-                inputButtonConfig: widget.inputButtonConfig,
-                inputState: inputController,
-                canCancel: widget.canCancel,
-                customizedButtonTap: widget.customizedButtonTap,
-                customizedButtonChild: widget.customizedButtonChild,
-                deleteButton: widget.deleteButton,
-                cancelButton: widget.cancelButton,
-              ),
-            ),
+            buildSecrets(),
+            buildKeyPad(),
             widget.footer ?? Container(),
           ],
         ),
       );
     }
 
-    Widget renderContentWithBlur() {
+    Widget buildContentWithBlur(Orientation orientation) {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-        child: renderContent(),
+        child: buildContent(orientation),
       );
     }
 
-    return WillPopScope(
-      onWillPop: () async => widget.canCancel,
-      child: Theme(
-        data: makeThemeData(),
-        child: Scaffold(
-          backgroundColor: widget.screenLockConfig.backgroundColor,
-          body: SafeArea(
-            child: widget.withBlur ? renderContentWithBlur() : renderContent(),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return WillPopScope(
+          onWillPop: () async => widget.canCancel,
+          child: Theme(
+            data: makeThemeData(),
+            child: Scaffold(
+              backgroundColor: widget.screenLockConfig.backgroundColor,
+              body: SafeArea(
+                child: widget.withBlur
+                    ? buildContentWithBlur(orientation)
+                    : buildContent(orientation),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

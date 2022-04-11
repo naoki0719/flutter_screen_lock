@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.8] - 2022-04-11
+
+- Changed widget placement on landscape devices.
+
 ## [5.0.7] - 2022-04-04
 
 - Custom animations for "secrets" can now be created.

@@ -31,6 +31,15 @@ abstract class StyledInputButton extends StatelessWidget {
   }
 
   Size defaultSize(BuildContext context) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      return Size(
+        config.height ?? MediaQuery.of(context).size.height * 0.125,
+
+        /// Subtract padding(horizontal: 50) from screen_lock.dart to calculate
+        config.width ?? (MediaQuery.of(context).size.width - 100) * 0.14,
+      );
+    }
+
     return Size(
       config.height ?? MediaQuery.of(context).size.height * 0.6 * 0.16,
 
