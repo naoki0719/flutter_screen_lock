@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 class InputController {
   InputController();
 
@@ -9,12 +11,12 @@ class InputController {
 
   final List<String> _currentInputs = [];
 
-  late StreamController<String> _inputController;
+  late ValueNotifier<String> _inputValueNotifier;
   late StreamController<bool> _verifyController;
   late StreamController<bool> _confirmedController;
 
-  /// Get latest input text stream.
-  Stream<String> get currentInput => _inputController.stream;
+  /// Get latest input text value.
+  ValueNotifier<String> get currentInput => _inputValueNotifier;
 
   /// Get verify result stream.
   Stream<bool> get verifyInput => _verifyController.stream;
@@ -33,7 +35,7 @@ class InputController {
     }
 
     _currentInputs.add(input);
-    _inputController.add(_currentInputs.join());
+    _inputValueNotifier.value = _currentInputs.join();
 
     if (_digits != _currentInputs.length) {
       return;
@@ -47,11 +49,11 @@ class InputController {
     }
   }
 
-  /// Remove the trailing characters and stream it.
+  /// Remove trailing characters and notify.
   void removeCharacter() {
     if (_currentInputs.isNotEmpty) {
       _currentInputs.removeLast();
-      _inputController.add(_currentInputs.join());
+      _inputValueNotifier.value = _currentInputs.join();
     }
   }
 
@@ -59,8 +61,10 @@ class InputController {
   void clear() {
     if (_currentInputs.isNotEmpty) {
       _currentInputs.clear();
-      if (_inputController.isClosed == false) {
-        _inputController.add('');
+      try {
+        _inputValueNotifier.value = '';
+      } catch (e) {
+        // disposed
       }
     }
   }
@@ -100,7 +104,7 @@ class InputController {
     required String correctString,
     bool isConfirmed = false,
   }) {
-    _inputController = StreamController.broadcast();
+    _inputValueNotifier = ValueNotifier<String>('');
     _verifyController = StreamController.broadcast();
     _confirmedController = StreamController.broadcast();
 
@@ -111,7 +115,7 @@ class InputController {
 
   /// Close all streams.
   void dispose() {
-    _inputController.close();
+    _inputValueNotifier.dispose();
     _verifyController.close();
     _confirmedController.close();
   }

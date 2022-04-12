@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
@@ -265,13 +266,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     secretsBuilder: (
                       config,
                       length,
-                      inputStream,
+                      input,
                       verifyStream,
                     ) =>
                         SecretsWithCustomAnimation(
                       verifyStream: verifyStream,
                       config: config,
-                      inputStream: inputStream,
+                      input: input,
                       length: length,
                     ),
                   );
@@ -309,12 +310,12 @@ class SecretsWithCustomAnimation extends StatefulWidget {
     Key? key,
     required this.config,
     required this.length,
-    required this.inputStream,
+    required this.input,
     required this.verifyStream,
   }) : super(key: key);
   final SecretsConfig config;
   final int length;
-  final Stream<String> inputStream;
+  final ValueListenable<String> input;
   final Stream<bool> verifyStream;
 
   @override
@@ -364,7 +365,7 @@ class _SecretsWithCustomAnimationState extends State<SecretsWithCustomAnimation>
     return ScaleTransition(
       scale: _animation,
       child: Secrets(
-        inputStream: widget.inputStream,
+        input: widget.input,
         length: widget.length,
         config: widget.config,
       ),
