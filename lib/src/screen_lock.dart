@@ -248,7 +248,7 @@ class _ScreenLockState extends State<ScreenLock> {
           ? SecretsWithShakingAnimation(
               config: widget.secretsConfig,
               length: secretLength,
-              inputStream: inputController.currentInput,
+              input: inputController.currentInput,
               verifyStream: inputController.verifyInput,
             )
           : widget.secretsBuilder!(

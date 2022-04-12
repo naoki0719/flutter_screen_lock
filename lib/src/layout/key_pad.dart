@@ -32,10 +32,10 @@ class KeyPad extends StatelessWidget {
   final Widget? deleteButton;
 
   Widget _buildRightSideButton() {
-    return StreamBuilder<String>(
-      stream: inputState.currentInput,
-      builder: (context, snapshot) {
-        if (snapshot.hasData == false || snapshot.data!.isEmpty) {
+    return ValueListenableBuilder<String>(
+      valueListenable: inputState.currentInput,
+      builder: (context, value, child) {
+        if (value.isEmpty) {
           if (canCancel) {
             return CancelButton(
               child: cancelButton,

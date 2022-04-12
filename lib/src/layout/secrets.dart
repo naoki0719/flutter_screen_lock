@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/secret_config.dart';
 import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
@@ -9,12 +10,12 @@ class SecretsWithShakingAnimation extends StatefulWidget {
     Key? key,
     required this.config,
     required this.length,
-    required this.inputStream,
+    required this.input,
     required this.verifyStream,
   }) : super(key: key);
   final SecretsConfig config;
   final int length;
-  final Stream<String> inputStream;
+  final ValueListenable<String> input;
   final Stream<bool> verifyStream;
 
   @override
@@ -72,7 +73,7 @@ class _SecretsWithShakingAnimationState
     return SlideTransition(
       position: _animation,
       child: Secrets(
-        inputStream: widget.inputStream,
+        input: widget.input,
         length: widget.length,
         config: widget.config,
       ),
@@ -84,12 +85,12 @@ class Secrets extends StatefulWidget {
   const Secrets({
     Key? key,
     this.config = const SecretsConfig(),
-    required this.inputStream,
+    required this.input,
     required this.length,
   }) : super(key: key);
 
   final SecretsConfig config;
-  final Stream<String> inputStream;
+  final ValueListenable<String> input;
   final int length;
 
   @override
@@ -107,9 +108,9 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
-      stream: widget.inputStream,
-      builder: (context, snapshot) {
+    return ValueListenableBuilder<String>(
+      valueListenable: widget.input,
+      builder: (context, value, child) {
         return Container(
           padding: widget.config.padding,
           child: Wrap(
@@ -117,7 +118,7 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
             children: List.generate(
               widget.length,
               (index) {
-                if (!snapshot.hasData) {
+                if (value.isEmpty) {
                   return Secret(
                     config: widget.config.secretConfig,
                     enabled: false,
@@ -126,7 +127,7 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 
                 return Secret(
                   config: widget.config.secretConfig,
-                  enabled: index < snapshot.data!.length,
+                  enabled: index < value.length,
                 );
               },
               growable: false,
