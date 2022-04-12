@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.9+1] - 2022-04-12
+
+- Updated pubspec for example.
+
 ## [5.0.9] - 2022-04-12
 
 - Changed input processing from Stream to ValueListenable. Synchronization was added to alleviate input blocking problems.
