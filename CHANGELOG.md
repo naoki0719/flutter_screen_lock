@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.11] - 2022-04-14
+
+- Deleted debugging code.
+
 ## [5.0.10+1] - 2022-04-14
 
 - Removed unused imports.
