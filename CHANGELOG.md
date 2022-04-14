@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.11+1] - 2022-04-14
+
+- Corrected the year of the license.
+
 ## [5.0.11] - 2022-04-14
 
 - Deleted debugging code.
