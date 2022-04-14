@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/delay_screen.dart';
@@ -234,8 +235,10 @@ class _ScreenLockState extends State<ScreenLock> {
 
   @override
   void dispose() {
-    inputController.dispose();
     super.dispose();
+    Future.microtask(
+      () => inputController.dispose().then((_) => null),
+    );
   }
 
   @override

@@ -114,9 +114,10 @@ class InputController {
   }
 
   /// Close all streams.
-  void dispose() {
+  Future<void> dispose() async {
     _inputValueNotifier.dispose();
-    _verifyController.close();
-    _confirmedController.close();
+    _inputValueNotifier.value = '';
+    await _verifyController.close();
+    await _confirmedController.close();
   }
 }

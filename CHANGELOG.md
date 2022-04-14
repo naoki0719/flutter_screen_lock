@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.10] - 2022-04-14
+
+- Fixed to completely discard inputController.
+
 ## [5.0.9+1] - 2022-04-12
 
 - Updated pubspec for example.
