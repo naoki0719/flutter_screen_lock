@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.10+1] - 2022-04-14
+
+- Removed unused imports.
+
 ## [5.0.10] - 2022-04-14
 
 - Fixed to completely discard inputController.
