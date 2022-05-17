@@ -42,9 +42,10 @@ class KeyPad extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
+              config: inputButtonConfig,
             );
           }
-          return HiddenButton();
+          return HiddenButton(config: inputButtonConfig);
         } else {
           return DeleteButton(
             child: deleteButton,
@@ -52,6 +53,7 @@ class KeyPad extends StatelessWidget {
             onLongPress: inputButtonConfig.clearOnLongPressed
                 ? () => inputState.clear()
                 : null,
+            config: inputButtonConfig,
           );
         }
       },
@@ -60,7 +62,7 @@ class KeyPad extends StatelessWidget {
 
   Widget _buildLeftSideButton() {
     if (customizedButtonChild == null) {
-      return HiddenButton();
+      return HiddenButton(config: inputButtonConfig);
     }
 
     return CustomizableButton(
