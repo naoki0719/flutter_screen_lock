@@ -1,5 +1,9 @@
 # Changelog
 
+## [5.0.12] - 2022-05-18
+
+- Pass inputButtonConfig to all buttons in KeyPad [#59](https://github.com/naoki0719/flutter_screen_lock/pull/59) by [@clragon](https://github.com/clragon)
+
 ## [5.0.11+1] - 2022-04-14
 
 - Corrected the year of the license.
