@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Manualy open'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
                 canCancel: false,
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 // Define it to control the confirmation state with its own events.
                 final inputController = InputController();
-                screenLock<void>(
+                screenLock(
                   context: context,
                   correctString: '',
                   confirmation: true,
@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Confirm mode'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
                 customizedButtonChild: const Icon(
@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '123456',
                 digits: '123456'.length,
@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                screenLock<void>(
+                screenLock(
                   context: context,
                   title: const Text('change title'),
                   confirmTitle: const Text('change confirm title'),
@@ -206,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Customize styles'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
                 didUnlocked: () {
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Next page with unlock'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
                 withBlur: false,
@@ -229,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Not blur'),
             ),
             ElevatedButton(
-              onPressed: () => screenLock<void>(
+              onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
                 maxRetries: 2,

@@ -38,7 +38,7 @@ typedef SecretsBuilderCallback = Widget Function(
 /// - `inputController`: Control inputs externally
 /// - `withBlur`: Blur the background
 /// - `secretsBuilder`: Custom secrets animation widget builder
-void screenLock<T>({
+Future<void> screenLock({
   required BuildContext context,
   required String correctString,
   ScreenLockConfig? screenLockConfig,
@@ -66,8 +66,8 @@ void screenLock<T>({
   InputController? inputController,
   bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
-}) {
-  Navigator.push(
+}) async {
+  return Navigator.push<void>(
     context,
     PageRouteBuilder<void>(
       opaque: false,
@@ -112,26 +112,20 @@ void screenLock<T>({
           secretsBuilder: secretsBuilder,
         ),
       ),
-      transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-      ) {
-        return SlideTransition(
+      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+          SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.0, 2.4),
+          end: Offset.zero,
+        ).animate(animation),
+        child: SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0.0, 2.4),
-            end: Offset.zero,
-          ).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(0.0, 2.4),
-            ).animate(secondaryAnimation),
-            child: child,
-          ),
-        );
-      },
+            begin: Offset.zero,
+            end: const Offset(0.0, 2.4),
+          ).animate(secondaryAnimation),
+          child: child,
+        ),
+      ),
     ),
   );
 }
