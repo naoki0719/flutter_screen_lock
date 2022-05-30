@@ -9,23 +9,23 @@ class ScreenLock extends StatefulWidget {
   const ScreenLock({
     Key? key,
     required this.correctString,
+    required this.didUnlocked,
+    this.didOpened,
+    this.didCancelled,
+    this.didConfirmed,
+    this.didError,
+    this.didMaxRetries,
+    this.customizedButtonTap,
+    this.confirmation = false,
+    this.digits = 4,
+    this.maxRetries = 0,
+    this.retryDelay = Duration.zero,
     Widget? title,
     Widget? confirmTitle,
     ScreenLockConfig? screenLockConfig,
     SecretsConfig? secretsConfig,
     InputButtonConfig? inputButtonConfig,
-    this.confirmation = false,
-    this.digits = 4,
-    this.didOpened,
-    this.didUnlocked,
-    this.didConfirmed,
-    this.didCancelled,
-    this.didError,
-    this.maxRetries = 0,
-    this.retryDelay = Duration.zero,
     this.delayChild,
-    this.didMaxRetries,
-    this.customizedButtonTap,
     this.customizedButtonChild,
     this.footer,
     this.cancelButton,
@@ -72,13 +72,9 @@ class ScreenLock extends StatefulWidget {
   final void Function()? didOpened;
 
   /// Called if the value matches the correctString.
-  ///
-  /// To close the screen, call `Navigator.pop(context)`.
-  final void Function()? didUnlocked;
+  final void Function() didUnlocked;
 
   /// Called when the first and second inputs match during confirmation.
-  ///
-  /// To close the screen, call `Navigator.pop(context)`.
   final void Function(String matchedText)? didConfirmed;
 
   /// Called when the user cancels.
@@ -144,12 +140,7 @@ class _ScreenLockState extends State<ScreenLock> {
   String firstInput = '';
 
   void unlocked() {
-    if (widget.didUnlocked != null) {
-      widget.didUnlocked!();
-      return;
-    }
-
-    Navigator.pop(context);
+    widget.didUnlocked();
   }
 
   void inputDelay() {

@@ -58,7 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (context) {
-                  return const ScreenLock(correctString: '1234');
+                  return ScreenLock(
+                    correctString: '1234',
+                    didUnlocked: Navigator.of(context).pop,
+                  );
                 },
               ),
               child: const Text('Manualy open'),
@@ -247,11 +250,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => showDialog<void>(
                 context: context,
                 builder: (context) {
-                  return const ScreenLock(
+                  return ScreenLock(
                     correctString: '1234',
-                    inputButtonConfig: InputButtonConfig(
+                    inputButtonConfig: const InputButtonConfig(
                       clearOnLongPressed: true,
                     ),
+                    didUnlocked: Navigator.of(context).pop,
                   );
                 },
               ),
@@ -275,6 +279,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       input: input,
                       length: length,
                     ),
+                    didUnlocked: Navigator.of(context).pop,
                   );
                 },
               ),
