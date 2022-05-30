@@ -276,68 +276,66 @@ class _ScreenLockState extends State<ScreenLock> {
       );
     }
 
-    Widget buildContent(Orientation orientation) {
-      if (orientation == Orientation.landscape) {
-        return Center(
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildHeadingText(),
-                        buildSecrets(),
-                      ],
-                    ),
-                    buildKeyPad(),
-                  ],
-                ),
-                widget.footer ?? Container(),
-              ],
+    Widget buildContent() {
+      return OrientationBuilder(builder: (context, orientation) {
+        if (orientation == Orientation.landscape) {
+          return Center(
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          buildHeadingText(),
+                          buildSecrets(),
+                        ],
+                      ),
+                      buildKeyPad(),
+                    ],
+                  ),
+                  widget.footer ?? Container(),
+                ],
+              ),
             ),
+          );
+        }
+
+        return SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buildHeadingText(),
+              buildSecrets(),
+              buildKeyPad(),
+              widget.footer ?? Container(),
+            ],
           ),
         );
-      }
-
-      return SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildHeadingText(),
-            buildSecrets(),
-            buildKeyPad(),
-            widget.footer ?? Container(),
-          ],
-        ),
-      );
+      });
     }
 
-    Widget buildContentWithBlur(Orientation orientation) {
+    Widget buildContentWithBlur() {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-        child: buildContent(orientation),
+        child: buildContent(),
       );
     }
 
-    return OrientationBuilder(
-      builder: (context, orientation) => Theme(
-        data: makeThemeData(),
-        child: Scaffold(
-          backgroundColor: widget.screenLockConfig.backgroundColor,
-          body: SafeArea(
-            child: widget.withBlur
-                ? buildContentWithBlur(orientation)
-                : buildContent(orientation),
-          ),
+    return Theme(
+      data: makeThemeData(),
+      child: Scaffold(
+        backgroundColor: widget.screenLockConfig.backgroundColor,
+        body: SafeArea(
+          child: widget.withBlur ? buildContentWithBlur() : buildContent(),
         ),
       ),
     );
