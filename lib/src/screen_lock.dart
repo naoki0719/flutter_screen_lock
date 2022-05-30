@@ -157,10 +157,7 @@ class _ScreenLockState extends State<ScreenLock> {
       ),
     );
 
-    Timer.periodic(widget.retryDelay, (timer) {
-      Navigator.pop(context);
-      timer.cancel();
-    });
+    Timer(widget.retryDelay, () => Navigator.of(context).pop());
   }
 
   void error() {
