@@ -139,10 +139,6 @@ class _ScreenLockState extends State<ScreenLock> {
 
   String firstInput = '';
 
-  void unlocked() {
-    widget.didUnlocked();
-  }
-
   void inputDelay() {
     if (widget.retryDelay.compareTo(Duration.zero) == 0) {
       return;
@@ -161,14 +157,10 @@ class _ScreenLockState extends State<ScreenLock> {
   }
 
   void error() {
-    if (widget.didError != null) {
-      widget.didError!(retries);
-    }
+    widget.didError?.call(retries);
 
     if (widget.maxRetries >= 1 && widget.maxRetries <= retries) {
-      if (widget.didMaxRetries != null) {
-        widget.didMaxRetries!(retries);
-      }
+      widget.didMaxRetries?.call(retries);
 
       // reset retries
       retries = 0;
@@ -218,18 +210,16 @@ class _ScreenLockState extends State<ScreenLock> {
 
       if (success) {
         if (widget.confirmation) {
-          if (widget.didConfirmed != null) {
-            widget.didConfirmed!(inputController.confirmedInput);
-          }
+          widget.didConfirmed?.call(inputController.confirmedInput);
         } else {
-          unlocked();
+          widget.didUnlocked();
         }
       } else {
         error();
       }
     });
 
-    WidgetsBinding.instance!
+    WidgetsBinding.instance
         .addPostFrameCallback((_) => widget.didOpened?.call());
   }
 
