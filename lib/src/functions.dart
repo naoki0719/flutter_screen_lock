@@ -73,23 +73,13 @@ Future<void> screenLock({
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
       pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
-        onWillPop: () async {
-          if (canCancel) {
-            didCancelled?.call();
-          }
-          return canCancel;
-        },
+        onWillPop: () async => canCancel && didCancelled == null,
         child: ScreenLock(
           correctString: correctString,
           screenLockConfig: screenLockConfig,
           secretsConfig: secretsConfig,
           inputButtonConfig: inputButtonConfig,
-          didCancelled: canCancel
-              ? () {
-                  didCancelled?.call();
-                  Navigator.of(context).pop();
-                }
-              : null,
+          didCancelled: didCancelled ?? Navigator.of(context).pop,
           confirmation: confirmation,
           digits: digits,
           maxRetries: maxRetries,
