@@ -73,58 +73,46 @@ void screenLock<T>({
     PageRouteBuilder<void>(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secodaryAnimation,
-      ) {
-        animation.addStatusListener((status) {
-          if (status == AnimationStatus.completed) {
-            if (didOpened != null) {
-              didOpened();
-            }
+      pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
+        onWillPop: () async {
+          if (canCancel) {
+            didCancelled?.call();
           }
-        });
-        return WillPopScope(
-          onWillPop: () async {
-            if (canCancel) {
-              didCancelled?.call();
-            }
-            return canCancel;
-          },
-          child: ScreenLock(
-            correctString: correctString,
-            screenLockConfig: screenLockConfig,
-            secretsConfig: secretsConfig,
-            inputButtonConfig: inputButtonConfig,
-            didCancelled: canCancel
-                ? () {
-                    didCancelled?.call();
-                    Navigator.of(context).pop();
-                  }
-                : null,
-            confirmation: confirmation,
-            digits: digits,
-            maxRetries: maxRetries,
-            retryDelay: retryDelay,
-            delayChild: delayChild,
-            didUnlocked: didUnlocked,
-            didError: didError,
-            didMaxRetries: didMaxRetries,
-            didConfirmed: didConfirmed,
-            customizedButtonTap: customizedButtonTap,
-            customizedButtonChild: customizedButtonChild,
-            footer: footer,
-            deleteButton: deleteButton,
-            cancelButton: cancelButton,
-            title: title,
-            confirmTitle: confirmTitle,
-            inputController: inputController,
-            withBlur: withBlur,
-            secretsBuilder: secretsBuilder,
-          ),
-        );
-      },
+          return canCancel;
+        },
+        child: ScreenLock(
+          correctString: correctString,
+          screenLockConfig: screenLockConfig,
+          secretsConfig: secretsConfig,
+          inputButtonConfig: inputButtonConfig,
+          didCancelled: canCancel
+              ? () {
+                  didCancelled?.call();
+                  Navigator.of(context).pop();
+                }
+              : null,
+          confirmation: confirmation,
+          digits: digits,
+          maxRetries: maxRetries,
+          retryDelay: retryDelay,
+          delayChild: delayChild,
+          didUnlocked: didUnlocked,
+          didError: didError,
+          didMaxRetries: didMaxRetries,
+          didConfirmed: didConfirmed,
+          didOpened: didOpened,
+          customizedButtonTap: customizedButtonTap,
+          customizedButtonChild: customizedButtonChild,
+          footer: footer,
+          deleteButton: deleteButton,
+          cancelButton: cancelButton,
+          title: title,
+          confirmTitle: confirmTitle,
+          inputController: inputController,
+          withBlur: withBlur,
+          secretsBuilder: secretsBuilder,
+        ),
+      ),
       transitionsBuilder: (
         BuildContext context,
         Animation<double> animation,

@@ -17,6 +17,7 @@ class ScreenLock extends StatefulWidget {
     this.inputButtonConfig = const InputButtonConfig(),
     this.confirmation = false,
     this.digits = 4,
+    this.didOpened,
     this.didUnlocked,
     this.didConfirmed,
     this.didCancelled,
@@ -59,6 +60,11 @@ class ScreenLock extends StatefulWidget {
 
   /// Set the maximum number of characters to enter when confirmation is true.
   final int digits;
+
+  /// Called when the screen is shown the first time.
+  ///
+  /// Useful if you want to show biometric authentication.
+  final void Function()? didOpened;
 
   /// Called if the value matches the correctString.
   ///
@@ -232,6 +238,9 @@ class _ScreenLockState extends State<ScreenLock> {
         error();
       }
     });
+
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => widget.didOpened?.call());
   }
 
   @override
