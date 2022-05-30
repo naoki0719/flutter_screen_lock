@@ -105,7 +105,7 @@ class ScreenLock extends StatefulWidget {
   final void Function(int retries)? didMaxRetries;
 
   /// Tapped for left side lower button.
-  final Future<void> Function()? customizedButtonTap;
+  final void Function()? customizedButtonTap;
 
   /// Child for bottom left side button.
   final Widget? customizedButtonChild;

@@ -28,7 +28,7 @@ class KeyPad extends StatelessWidget {
   final InputButtonConfig inputButtonConfig;
   final Widget? customizedButtonChild;
   final void Function()? didCancelled;
-  final Future<void> Function()? customizedButtonTap;
+  final void Function()? customizedButtonTap;
   final Widget? cancelButton;
   final Widget? deleteButton;
 

@@ -56,7 +56,7 @@ Future<void> screenLock({
   void Function()? didOpened,
   void Function(String matchedText)? didConfirmed,
   void Function()? didCancelled,
-  Future<void> Function()? customizedButtonTap,
+  void Function()? customizedButtonTap,
   Widget? customizedButtonChild,
   Widget? footer,
   Widget? cancelButton,
