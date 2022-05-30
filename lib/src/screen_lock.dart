@@ -235,10 +235,8 @@ class _ScreenLockState extends State<ScreenLock> {
 
   @override
   void dispose() {
+    inputController.dispose();
     super.dispose();
-    Future.microtask(
-      () => inputController.dispose().then((_) => null),
-    );
   }
 
   @override

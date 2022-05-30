@@ -64,8 +64,8 @@ class _SecretsWithShakingAnimationState
   @override
   void dispose() {
     _animationController.dispose();
+    _verifySubscription.cancel();
     super.dispose();
-    Future.microtask(() => _verifySubscription.cancel().then((_) => null));
   }
 
   @override
