@@ -15,11 +15,11 @@ class ScreenLock extends StatefulWidget {
     this.screenLockConfig = const ScreenLockConfig(),
     this.secretsConfig = const SecretsConfig(),
     this.inputButtonConfig = const InputButtonConfig(),
-    this.canCancel = true,
     this.confirmation = false,
     this.digits = 4,
     this.didUnlocked,
     this.didConfirmed,
+    this.didCancelled,
     this.didError,
     this.maxRetries = 0,
     this.retryDelay = Duration.zero,
@@ -54,9 +54,6 @@ class ScreenLock extends StatefulWidget {
   /// Heading confirm title for ScreenLock.
   final Widget confirmTitle;
 
-  /// You can cancel and close the ScreenLock.
-  final bool canCancel;
-
   /// Make sure the first and second inputs are the same.
   final bool confirmation;
 
@@ -72,6 +69,11 @@ class ScreenLock extends StatefulWidget {
   ///
   /// To close the screen, call `Navigator.pop(context)`.
   final void Function(String matchedText)? didConfirmed;
+
+  /// Called when the user cancels.
+  ///
+  /// If null, the user cannot cancel.
+  final void Function()? didCancelled;
 
   /// Called if the value does not match the correctString.
   final void Function(int retries)? didError;
@@ -267,7 +269,7 @@ class _ScreenLockState extends State<ScreenLock> {
         child: KeyPad(
           inputButtonConfig: widget.inputButtonConfig,
           inputState: inputController,
-          canCancel: widget.canCancel,
+          didCancelled: widget.didCancelled,
           customizedButtonTap: widget.customizedButtonTap,
           customizedButtonChild: widget.customizedButtonChild,
           deleteButton: widget.deleteButton,
@@ -329,22 +331,17 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     return OrientationBuilder(
-      builder: (context, orientation) {
-        return WillPopScope(
-          onWillPop: () async => widget.canCancel,
-          child: Theme(
-            data: makeThemeData(),
-            child: Scaffold(
-              backgroundColor: widget.screenLockConfig.backgroundColor,
-              body: SafeArea(
-                child: widget.withBlur
-                    ? buildContentWithBlur(orientation)
-                    : buildContent(orientation),
-              ),
-            ),
+      builder: (context, orientation) => Theme(
+        data: makeThemeData(),
+        child: Scaffold(
+          backgroundColor: widget.screenLockConfig.backgroundColor,
+          body: SafeArea(
+            child: widget.withBlur
+                ? buildContentWithBlur(orientation)
+                : buildContent(orientation),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

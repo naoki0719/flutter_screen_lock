@@ -27,6 +27,7 @@ typedef SecretsBuilderCallback = Widget Function(
 /// - `didMaxRetries`: Events that have reached the maximum number of attempts
 /// - `didOpened`: For example, when you want to perform biometric authentication
 /// - `didConfirmed`: Called when the first and second inputs match during confirmation
+/// - `didCancelled`: Called when the user cancels the screen
 /// - `customizedButtonTap`: Tapped for left side lower button
 /// - `customizedButtonChild`: Child for bottom left side button
 /// - `footer`: Add a Widget to the footer
@@ -54,6 +55,7 @@ void screenLock<T>({
   void Function(int retries)? didMaxRetries,
   void Function()? didOpened,
   void Function(String matchedText)? didConfirmed,
+  void Function()? didCancelled,
   Future<void> Function()? customizedButtonTap,
   Widget? customizedButtonChild,
   Widget? footer,
@@ -83,31 +85,44 @@ void screenLock<T>({
             }
           }
         });
-        return ScreenLock(
-          correctString: correctString,
-          screenLockConfig: screenLockConfig,
-          secretsConfig: secretsConfig,
-          inputButtonConfig: inputButtonConfig,
-          canCancel: canCancel,
-          confirmation: confirmation,
-          digits: digits,
-          maxRetries: maxRetries,
-          retryDelay: retryDelay,
-          delayChild: delayChild,
-          didUnlocked: didUnlocked,
-          didError: didError,
-          didMaxRetries: didMaxRetries,
-          didConfirmed: didConfirmed,
-          customizedButtonTap: customizedButtonTap,
-          customizedButtonChild: customizedButtonChild,
-          footer: footer,
-          deleteButton: deleteButton,
-          cancelButton: cancelButton,
-          title: title,
-          confirmTitle: confirmTitle,
-          inputController: inputController,
-          withBlur: withBlur,
-          secretsBuilder: secretsBuilder,
+        return WillPopScope(
+          onWillPop: () async {
+            if (canCancel) {
+              didCancelled?.call();
+            }
+            return canCancel;
+          },
+          child: ScreenLock(
+            correctString: correctString,
+            screenLockConfig: screenLockConfig,
+            secretsConfig: secretsConfig,
+            inputButtonConfig: inputButtonConfig,
+            didCancelled: canCancel
+                ? () {
+                    didCancelled?.call();
+                    Navigator.of(context).pop();
+                  }
+                : null,
+            confirmation: confirmation,
+            digits: digits,
+            maxRetries: maxRetries,
+            retryDelay: retryDelay,
+            delayChild: delayChild,
+            didUnlocked: didUnlocked,
+            didError: didError,
+            didMaxRetries: didMaxRetries,
+            didConfirmed: didConfirmed,
+            customizedButtonTap: customizedButtonTap,
+            customizedButtonChild: customizedButtonChild,
+            footer: footer,
+            deleteButton: deleteButton,
+            cancelButton: cancelButton,
+            title: title,
+            confirmTitle: confirmTitle,
+            inputController: inputController,
+            withBlur: withBlur,
+            secretsBuilder: secretsBuilder,
+          ),
         );
       },
       transitionsBuilder: (
