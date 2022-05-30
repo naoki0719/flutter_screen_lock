@@ -42,48 +42,39 @@ class ScreenLock extends StatefulWidget {
         assert(maxRetries > -1),
         super(key: key);
 
-  /// Configurations of [ScreenLock].
-  final ScreenLockConfig screenLockConfig;
-
-  /// Configurations of [Secrets].
-  final SecretsConfig secretsConfig;
-
-  /// Configurations of [InputButton].
-  final InputButtonConfig inputButtonConfig;
-
   /// Input correct string.
   final String correctString;
 
-  /// Heading title for ScreenLock.
-  final Widget title;
-
-  /// Heading confirm title for ScreenLock.
-  final Widget confirmTitle;
-
-  /// Make sure the first and second inputs are the same.
-  final bool confirmation;
-
-  /// Set the maximum number of characters to enter when confirmation is true.
-  final int digits;
+  /// Called if the value matches the correctString.
+  final void Function() didUnlocked;
 
   /// Called when the screen is shown the first time.
   ///
   /// Useful if you want to show biometric authentication.
   final void Function()? didOpened;
 
-  /// Called if the value matches the correctString.
-  final void Function() didUnlocked;
-
-  /// Called when the first and second inputs match during confirmation.
-  final void Function(String matchedText)? didConfirmed;
-
   /// Called when the user cancels.
   ///
   /// If null, the user cannot cancel.
   final void Function()? didCancelled;
 
+  /// Called when the first and second inputs match during confirmation.
+  final void Function(String matchedText)? didConfirmed;
+
   /// Called if the value does not match the correctString.
   final void Function(int retries)? didError;
+
+  /// Events that have reached the maximum number of attempts.
+  final void Function(int retries)? didMaxRetries;
+
+  /// Tapped for left side lower button.
+  final void Function()? customizedButtonTap;
+
+  /// Make sure the first and second inputs are the same.
+  final bool confirmation;
+
+  /// Set the maximum number of characters to enter when confirmation is true.
+  final int digits;
 
   /// `0` is unlimited.
   /// For example, if it is set to 1, didMaxRetries will be called on the first failure.
@@ -94,14 +85,23 @@ class ScreenLock extends StatefulWidget {
   /// Duration.zero is no delay.
   final Duration retryDelay;
 
+  /// Heading title for ScreenLock.
+  final Widget title;
+
+  /// Heading confirm title for ScreenLock.
+  final Widget confirmTitle;
+
+  /// Configurations of [ScreenLock].
+  final ScreenLockConfig screenLockConfig;
+
+  /// Configurations of [Secrets].
+  final SecretsConfig secretsConfig;
+
+  /// Configurations of [InputButton].
+  final InputButtonConfig inputButtonConfig;
+
   /// Specify the widget during input invalidation by retry delay.
   final Widget? delayChild;
-
-  /// Events that have reached the maximum number of attempts.
-  final void Function(int retries)? didMaxRetries;
-
-  /// Tapped for left side lower button.
-  final void Function()? customizedButtonTap;
 
   /// Child for bottom left side button.
   final Widget? customizedButtonChild;
