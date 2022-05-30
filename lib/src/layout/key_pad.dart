@@ -16,12 +16,13 @@ class KeyPad extends StatelessWidget {
     Key? key,
     required this.inputState,
     required this.didCancelled,
-    this.inputButtonConfig = const InputButtonConfig(),
+    InputButtonConfig? inputButtonConfig,
     this.customizedButtonChild,
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  }) : super(key: key);
+  })  : inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
+        super(key: key);
 
   final InputController inputState;
   final InputButtonConfig inputButtonConfig;

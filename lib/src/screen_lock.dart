@@ -9,12 +9,11 @@ class ScreenLock extends StatefulWidget {
   const ScreenLock({
     Key? key,
     required this.correctString,
-    this.title = const HeadingTitle(text: 'Please enter passcode.'),
-    this.confirmTitle =
-        const HeadingTitle(text: 'Please enter confirm passcode.'),
-    this.screenLockConfig = const ScreenLockConfig(),
-    this.secretsConfig = const SecretsConfig(),
-    this.inputButtonConfig = const InputButtonConfig(),
+    Widget? title,
+    Widget? confirmTitle,
+    ScreenLockConfig? screenLockConfig,
+    SecretsConfig? secretsConfig,
+    InputButtonConfig? inputButtonConfig,
     this.confirmation = false,
     this.digits = 4,
     this.didOpened,
@@ -34,7 +33,13 @@ class ScreenLock extends StatefulWidget {
     this.inputController,
     this.withBlur = true,
     this.secretsBuilder,
-  })  : assert(maxRetries > -1),
+  })  : title = title ?? const HeadingTitle(text: 'Please enter passcode.'),
+        confirmTitle = confirmTitle ??
+            const HeadingTitle(text: 'Please enter confirm passcode.'),
+        screenLockConfig = screenLockConfig ?? const ScreenLockConfig(),
+        secretsConfig = secretsConfig ?? const SecretsConfig(),
+        inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
+        assert(maxRetries > -1),
         super(key: key);
 
   /// Configurations of [ScreenLock].
@@ -203,11 +208,8 @@ class _ScreenLockState extends State<ScreenLock> {
   }
 
   ThemeData makeThemeData() {
-    if (widget.screenLockConfig.themeData != null) {
-      return widget.screenLockConfig.themeData!;
-    }
-
-    return ScreenLockConfig.defaultThemeData;
+    return widget.screenLockConfig.themeData ??
+        ScreenLockConfig.defaultThemeData;
   }
 
   @override
