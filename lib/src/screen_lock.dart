@@ -263,8 +263,7 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     Widget buildKeyPad() {
-      return Container(
-        alignment: Alignment.center,
+      return Center(
         child: KeyPad(
           inputButtonConfig: widget.inputButtonConfig,
           inputState: inputController,
