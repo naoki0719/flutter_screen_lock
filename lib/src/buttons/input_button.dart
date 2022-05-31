@@ -7,8 +7,9 @@ class InputButton extends StyledInputButton {
     Key? key,
     required this.displayText,
     required Function() onPressed,
-    this.config = const InputButtonConfig(),
-  }) : super(key: key, onPressed: onPressed, config: config);
+    InputButtonConfig? config,
+  })  : config = config ?? const InputButtonConfig(),
+        super(key: key, onPressed: onPressed, config: config);
 
   final String displayText;
 

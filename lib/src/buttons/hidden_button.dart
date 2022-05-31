@@ -6,11 +6,11 @@ import 'package:flutter_screen_lock/src/configurations/input_button_config.dart'
 class HiddenButton extends StyledInputButton {
   HiddenButton({
     Key? key,
-    this.child = const Text(''),
-    InputButtonConfig config = const InputButtonConfig(),
+    this.child,
+    InputButtonConfig? config,
   }) : super(key: key, onPressed: () {}, config: config);
 
-  final Widget child;
+  final Widget? child;
 
   @override
   ButtonStyle makeDefaultStyle() {

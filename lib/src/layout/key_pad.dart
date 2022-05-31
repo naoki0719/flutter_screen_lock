@@ -15,19 +15,20 @@ class KeyPad extends StatelessWidget {
   const KeyPad({
     Key? key,
     required this.inputState,
-    required this.canCancel,
-    this.inputButtonConfig = const InputButtonConfig(),
+    required this.didCancelled,
+    InputButtonConfig? inputButtonConfig,
     this.customizedButtonChild,
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  }) : super(key: key);
+  })  : inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
+        super(key: key);
 
   final InputController inputState;
-  final bool canCancel;
   final InputButtonConfig inputButtonConfig;
   final Widget? customizedButtonChild;
-  final Future<void> Function()? customizedButtonTap;
+  final void Function()? didCancelled;
+  final void Function()? customizedButtonTap;
   final Widget? cancelButton;
   final Widget? deleteButton;
 
@@ -36,12 +37,10 @@ class KeyPad extends StatelessWidget {
       valueListenable: inputState.currentInput,
       builder: (context, value, child) {
         if (value.isEmpty) {
-          if (canCancel) {
+          if (didCancelled != null) {
             return CancelButton(
               child: cancelButton,
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: didCancelled!,
               config: inputButtonConfig,
             );
           }

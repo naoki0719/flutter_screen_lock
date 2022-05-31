@@ -49,9 +49,7 @@ class _SecretsWithShakingAnimationState
     _animation = _animationController
         .drive(CurveTween(curve: Curves.elasticIn))
         .drive(Tween<Offset>(begin: Offset.zero, end: const Offset(0.05, 0)))
-      ..addListener(() {
-        setState(() {});
-      })
+      ..addListener(() => setState(() {}))
       ..addStatusListener(
         (status) {
           if (status == AnimationStatus.completed) {
@@ -64,8 +62,8 @@ class _SecretsWithShakingAnimationState
   @override
   void dispose() {
     _animationController.dispose();
+    _verifySubscription.cancel();
     super.dispose();
-    Future.microtask(() => _verifySubscription.cancel().then((_) => null));
   }
 
   @override
