@@ -125,7 +125,7 @@ class ScreenLock extends StatefulWidget {
   final SecretsBuilderCallback? secretsBuilder;
 
   @override
-  _ScreenLockState createState() => _ScreenLockState();
+  State<ScreenLock> createState() => _ScreenLockState();
 }
 
 class _ScreenLockState extends State<ScreenLock> {

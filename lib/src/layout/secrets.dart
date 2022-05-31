@@ -92,7 +92,7 @@ class Secrets extends StatefulWidget {
   final int length;
 
   @override
-  _SecretsState createState() => _SecretsState();
+  State<Secrets> createState() => _SecretsState();
 }
 
 class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
