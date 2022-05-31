@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) {
                   return ScreenLock(
                     correctString: '1234',
+                    didCancelled: Navigator.of(context).pop,
                     didUnlocked: Navigator.of(context).pop,
                   );
                 },
