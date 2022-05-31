@@ -76,8 +76,8 @@ abstract class StyledInputButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
-        child: child ?? const Text(''),
         style: makeDefaultStyle(),
+        child: child ?? const Text(''),
       ),
     );
   }

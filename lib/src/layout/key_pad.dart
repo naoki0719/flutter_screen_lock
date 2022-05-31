@@ -39,20 +39,20 @@ class KeyPad extends StatelessWidget {
         if (value.isEmpty) {
           if (didCancelled != null) {
             return CancelButton(
-              child: cancelButton,
               onPressed: didCancelled!,
               config: inputButtonConfig,
+              child: cancelButton,
             );
           }
           return HiddenButton(config: inputButtonConfig);
         } else {
           return DeleteButton(
-            child: deleteButton,
             onPressed: () => inputState.removeCharacter(),
             onLongPress: inputButtonConfig.clearOnLongPressed
                 ? () => inputState.clear()
                 : null,
             config: inputButtonConfig,
+            child: deleteButton,
           );
         }
       },
@@ -65,8 +65,8 @@ class KeyPad extends StatelessWidget {
     }
 
     return CustomizableButton(
-      child: customizedButtonChild!,
       onPressed: customizedButtonTap!,
+      child: customizedButtonChild!,
     );
   }
 
