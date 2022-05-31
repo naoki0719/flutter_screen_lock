@@ -67,6 +67,11 @@ Future<void> screenLock({
   bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
 }) async {
+  VoidCallback? defaultDidCancelled;
+  if (canCancel && didCancelled == null) {
+    defaultDidCancelled = Navigator.of(context).pop;
+  }
+
   return Navigator.push<void>(
     context,
     PageRouteBuilder<void>(
@@ -79,7 +84,7 @@ Future<void> screenLock({
           screenLockConfig: screenLockConfig,
           secretsConfig: secretsConfig,
           inputButtonConfig: inputButtonConfig,
-          didCancelled: didCancelled ?? Navigator.of(context).pop,
+          didCancelled: defaultDidCancelled,
           confirmation: confirmation,
           digits: digits,
           maxRetries: maxRetries,
