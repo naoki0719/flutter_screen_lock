@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.0] - 2022-05-31
+
+- Available in Flutter 3.0 and above.
+- Many options have been reconfigured. [#65](https://github.com/naoki0719/flutter_screen_lock/pull/65) by [@clragon](https://github.com/clragon)
+- Navigator.pop is done at the user's own risk.
+- For the aforementioned reasons, we provide situational callbacks.
+
 ## [5.0.12] - 2022-05-18
 
 - Pass inputButtonConfig to all buttons in KeyPad [#59](https://github.com/naoki0719/flutter_screen_lock/pull/59) by [@clragon](https://github.com/clragon)

@@ -5,10 +5,11 @@ import 'package:flutter_screen_lock/src/configurations/input_button_config.dart'
 abstract class StyledInputButton extends StatelessWidget {
   const StyledInputButton({
     Key? key,
-    this.config = const StyledInputConfig(),
+    StyledInputConfig? config,
     required this.onPressed,
     this.onLongPress,
-  }) : super(key: key);
+  })  : config = config ?? const StyledInputConfig(),
+        super(key: key);
 
   final StyledInputConfig config;
   final void Function() onPressed;
@@ -65,7 +66,7 @@ abstract class StyledInputButton extends StatelessWidget {
 
   Widget makeKeyContainer({
     required BuildContext context,
-    required Widget child,
+    required Widget? child,
   }) {
     final boxSize = defaultSize(context);
     return Container(
@@ -75,8 +76,8 @@ abstract class StyledInputButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
-        child: child,
         style: makeDefaultStyle(),
+        child: child ?? const Text(''),
       ),
     );
   }

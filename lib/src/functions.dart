@@ -27,6 +27,7 @@ typedef SecretsBuilderCallback = Widget Function(
 /// - `didMaxRetries`: Events that have reached the maximum number of attempts
 /// - `didOpened`: For example, when you want to perform biometric authentication
 /// - `didConfirmed`: Called when the first and second inputs match during confirmation
+/// - `didCancelled`: Called when the user cancels the screen
 /// - `customizedButtonTap`: Tapped for left side lower button
 /// - `customizedButtonChild`: Child for bottom left side button
 /// - `footer`: Add a Widget to the footer
@@ -37,67 +38,63 @@ typedef SecretsBuilderCallback = Widget Function(
 /// - `inputController`: Control inputs externally
 /// - `withBlur`: Blur the background
 /// - `secretsBuilder`: Custom secrets animation widget builder
-void screenLock<T>({
+Future<void> screenLock({
   required BuildContext context,
   required String correctString,
-  ScreenLockConfig screenLockConfig = const ScreenLockConfig(),
-  SecretsConfig secretsConfig = const SecretsConfig(),
-  InputButtonConfig inputButtonConfig = const InputButtonConfig(),
-  bool canCancel = true,
+  void Function()? didUnlocked,
+  void Function()? didOpened,
+  void Function()? didCancelled,
+  void Function(String matchedText)? didConfirmed,
+  void Function(int retries)? didError,
+  void Function(int retries)? didMaxRetries,
+  void Function()? customizedButtonTap,
   bool confirmation = false,
+  bool canCancel = true,
   int digits = 4,
   int maxRetries = 0,
   Duration retryDelay = Duration.zero,
+  Widget? title,
+  Widget? confirmTitle,
+  ScreenLockConfig? screenLockConfig,
+  SecretsConfig? secretsConfig,
+  InputButtonConfig? inputButtonConfig,
   Widget? delayChild,
-  void Function()? didUnlocked,
-  void Function(int retries)? didError,
-  void Function(int retries)? didMaxRetries,
-  void Function()? didOpened,
-  void Function(String matchedText)? didConfirmed,
-  Future<void> Function()? customizedButtonTap,
   Widget? customizedButtonChild,
   Widget? footer,
   Widget? cancelButton,
   Widget? deleteButton,
-  Widget title = const HeadingTitle(text: 'Please enter passcode.'),
-  Widget confirmTitle =
-      const HeadingTitle(text: 'Please enter confirm passcode.'),
   InputController? inputController,
   bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
-}) {
-  Navigator.push(
+}) async {
+  VoidCallback? defaultDidCancelled;
+  if (canCancel && didCancelled == null) {
+    defaultDidCancelled = Navigator.of(context).pop;
+  }
+
+  return Navigator.push<void>(
     context,
     PageRouteBuilder<void>(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secodaryAnimation,
-      ) {
-        animation.addStatusListener((status) {
-          if (status == AnimationStatus.completed) {
-            if (didOpened != null) {
-              didOpened();
-            }
-          }
-        });
-        return ScreenLock(
+      pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
+        onWillPop: () async => canCancel && didCancelled == null,
+        child: ScreenLock(
           correctString: correctString,
           screenLockConfig: screenLockConfig,
           secretsConfig: secretsConfig,
           inputButtonConfig: inputButtonConfig,
-          canCancel: canCancel,
+          didCancelled: defaultDidCancelled,
           confirmation: confirmation,
           digits: digits,
           maxRetries: maxRetries,
           retryDelay: retryDelay,
           delayChild: delayChild,
-          didUnlocked: didUnlocked,
+          didUnlocked: didUnlocked ?? Navigator.of(context).pop,
           didError: didError,
           didMaxRetries: didMaxRetries,
           didConfirmed: didConfirmed,
+          didOpened: didOpened,
           customizedButtonTap: customizedButtonTap,
           customizedButtonChild: customizedButtonChild,
           footer: footer,
@@ -108,28 +105,22 @@ void screenLock<T>({
           inputController: inputController,
           withBlur: withBlur,
           secretsBuilder: secretsBuilder,
-        );
-      },
-      transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-      ) {
-        return SlideTransition(
+        ),
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+          SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.0, 2.4),
+          end: Offset.zero,
+        ).animate(animation),
+        child: SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0.0, 2.4),
-            end: Offset.zero,
-          ).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(0.0, 2.4),
-            ).animate(secondaryAnimation),
-            child: child,
-          ),
-        );
-      },
+            begin: Offset.zero,
+            end: const Offset(0.0, 2.4),
+          ).animate(secondaryAnimation),
+          child: child,
+        ),
+      ),
     ),
   );
 }

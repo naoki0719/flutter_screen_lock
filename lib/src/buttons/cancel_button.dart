@@ -7,7 +7,7 @@ class CancelButton extends StyledInputButton {
     Key? key,
     this.child,
     required void Function() onPressed,
-    InputButtonConfig config = const InputButtonConfig(),
+    InputButtonConfig? config,
   }) : super(key: key, onPressed: onPressed, config: config);
 
   final Widget? child;
