@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
 
+typedef DelayBuilderCallback = Widget Function(
+    BuildContext context, Duration delay);
+
 class ScreenLock extends StatefulWidget {
   const ScreenLock({
     Key? key,
@@ -101,7 +104,7 @@ class ScreenLock extends StatefulWidget {
   final InputButtonConfig inputButtonConfig;
 
   /// Specify the widget during input invalidation by retry delay.
-  final Widget Function(Duration delay)? delayBuilder;
+  final DelayBuilderCallback? delayBuilder;
 
   /// Child for bottom left side button.
   final Widget? customizedButtonChild;
@@ -187,7 +190,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
   Widget makeDelayBuilder(Duration duration) {
     if (widget.delayBuilder != null) {
-      return widget.delayBuilder!(duration);
+      return widget.delayBuilder!(context, duration);
     } else {
       return HeadingTitle(
         text:
@@ -197,28 +200,33 @@ class _ScreenLockState extends State<ScreenLock> {
   }
 
   Widget buildHeadingText() {
-    return StreamBuilder<Duration>(
-      stream: inputDelayController.stream,
-      builder: (context, snapshot) {
-        if (inputDelayed && snapshot.hasData) {
-          return makeDelayBuilder(snapshot.data!);
-        }
+    Widget child = widget.title;
 
-        if (widget.confirmation) {
-          return StreamBuilder<bool>(
-            stream: inputController.confirmed,
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!) {
-                return widget.confirmTitle;
-              }
-              return widget.title;
-            },
-          );
-        }
+    if (widget.confirmation) {
+      child = StreamBuilder<bool>(
+        stream: inputController.confirmed,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!) {
+            return widget.confirmTitle;
+          }
+          return child;
+        },
+      );
+    }
 
-        return widget.title;
-      },
-    );
+    if (widget.retryDelay != (Duration.zero)) {
+      child = StreamBuilder<Duration>(
+        stream: inputDelayController.stream,
+        builder: (context, snapshot) {
+          if (inputDelayed && snapshot.hasData) {
+            return makeDelayBuilder(snapshot.data!);
+          }
+          return child;
+        },
+      );
+    }
+
+    return child;
   }
 
   ThemeData makeThemeData() {

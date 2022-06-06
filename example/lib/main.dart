@@ -238,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 correctString: '1234',
                 maxRetries: 2,
                 retryDelay: const Duration(seconds: 3),
-                delayBuilder: (delay) => HeadingTitle(
+                delayBuilder: (context, delay) => HeadingTitle(
                   text:
                       'Cannot be entered for ${(delay.inMilliseconds / 1000).ceil()} seconds.',
                 ),
