@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-import 'package:flutter_screen_lock/src/delay_screen.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
 
 class ScreenLock extends StatefulWidget {
@@ -26,7 +25,7 @@ class ScreenLock extends StatefulWidget {
     ScreenLockConfig? screenLockConfig,
     SecretsConfig? secretsConfig,
     InputButtonConfig? inputButtonConfig,
-    this.delayChild,
+    this.delayBuilder,
     this.customizedButtonChild,
     this.footer,
     this.cancelButton,
@@ -47,17 +46,17 @@ class ScreenLock extends StatefulWidget {
   final String correctString;
 
   /// Called if the value matches the correctString.
-  final void Function() didUnlocked;
+  final VoidCallback didUnlocked;
 
   /// Called when the screen is shown the first time.
   ///
   /// Useful if you want to show biometric authentication.
-  final void Function()? didOpened;
+  final VoidCallback? didOpened;
 
   /// Called when the user cancels.
   ///
   /// If null, the user cannot cancel.
-  final void Function()? didCancelled;
+  final VoidCallback? didCancelled;
 
   /// Called when the first and second inputs match during confirmation.
   final void Function(String matchedText)? didConfirmed;
@@ -69,7 +68,7 @@ class ScreenLock extends StatefulWidget {
   final void Function(int retries)? didMaxRetries;
 
   /// Tapped for left side lower button.
-  final void Function()? customizedButtonTap;
+  final VoidCallback? customizedButtonTap;
 
   /// Make sure the first and second inputs are the same.
   final bool confirmation;
@@ -102,7 +101,7 @@ class ScreenLock extends StatefulWidget {
   final InputButtonConfig inputButtonConfig;
 
   /// Specify the widget during input invalidation by retry delay.
-  final Widget? delayChild;
+  final Widget Function(Duration delay)? delayBuilder;
 
   /// Child for bottom left side button.
   final Widget? customizedButtonChild;
@@ -140,21 +139,35 @@ class _ScreenLockState extends State<ScreenLock> {
 
   String firstInput = '';
 
+  final StreamController<Duration> inputDelayController =
+      StreamController.broadcast();
+
+  bool inputDelayed = false;
+
   void inputDelay() {
-    if (widget.retryDelay.compareTo(Duration.zero) == 0) {
+    if (widget.retryDelay == (Duration.zero)) {
       return;
     }
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DelayScreen(
-          child: widget.delayChild,
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    inputController.clear();
+    DateTime unlockTime = DateTime.now().add(widget.retryDelay);
+    inputDelayController.add(widget.retryDelay);
 
-    Timer(widget.retryDelay, () => Navigator.of(context).pop());
+    setState(() {
+      inputDelayed = true;
+    });
+
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      Duration difference = unlockTime.difference(DateTime.now());
+      if (difference <= Duration.zero) {
+        setState(() {
+          inputDelayed = false;
+        });
+        timer.cancel();
+      } else {
+        inputDelayController.add(difference);
+      }
+    });
   }
 
   void error() {
@@ -172,20 +185,40 @@ class _ScreenLockState extends State<ScreenLock> {
     retries++;
   }
 
-  Widget buildHeadingText() {
-    if (widget.confirmation) {
-      return StreamBuilder<bool>(
-        stream: inputController.confirmed,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data!) {
-            return widget.confirmTitle;
-          }
-          return widget.title;
-        },
+  Widget makeDelayBuilder(Duration duration) {
+    if (widget.delayBuilder != null) {
+      return widget.delayBuilder!(duration);
+    } else {
+      return HeadingTitle(
+        text:
+            'Input locked for ${(duration.inMilliseconds / 1000).ceil()} seconds.',
       );
     }
+  }
 
-    return widget.title;
+  Widget buildHeadingText() {
+    return StreamBuilder<Duration>(
+      stream: inputDelayController.stream,
+      builder: (context, snapshot) {
+        if (inputDelayed && snapshot.hasData) {
+          return makeDelayBuilder(snapshot.data!);
+        }
+
+        if (widget.confirmation) {
+          return StreamBuilder<bool>(
+            stream: inputController.confirmed,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!) {
+                return widget.confirmTitle;
+              }
+              return widget.title;
+            },
+          );
+        }
+
+        return widget.title;
+      },
+    );
   }
 
   ThemeData makeThemeData() {
@@ -254,6 +287,7 @@ class _ScreenLockState extends State<ScreenLock> {
     Widget buildKeyPad() {
       return Center(
         child: KeyPad(
+          enabled: !inputDelayed,
           inputButtonConfig: widget.inputButtonConfig,
           inputState: inputController,
           didCancelled: widget.didCancelled,
@@ -278,13 +312,15 @@ class _ScreenLockState extends State<ScreenLock> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          buildHeadingText(),
-                          buildSecrets(),
-                        ],
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            buildHeadingText(),
+                            buildSecrets(),
+                          ],
+                        ),
                       ),
                       buildKeyPad(),
                     ],

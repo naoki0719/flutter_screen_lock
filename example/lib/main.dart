@@ -238,11 +238,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 correctString: '1234',
                 maxRetries: 2,
                 retryDelay: const Duration(seconds: 3),
-                delayChild: const Center(
-                  child: Text(
-                    'Cannot be entered temporarily because it failed the specified number of times.',
-                    softWrap: true,
-                  ),
+                delayBuilder: (delay) => HeadingTitle(
+                  text:
+                      'Cannot be entered for ${(delay.inMilliseconds / 1000).ceil()} seconds.',
                 ),
               ),
               child: const Text('Delay next retry'),
