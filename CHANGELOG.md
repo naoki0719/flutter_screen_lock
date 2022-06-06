@@ -1,5 +1,10 @@
 # Changelog
 
+## [6.0.0] - 2022-06-06
+
+- Fix didCancelled in screenLock [#69](https://github.com/naoki0719/flutter_screen_lock/pull/69) by [@clragon](https://github.com/clragon)
+- Removed unnecessary imports [#70](https://github.com/naoki0719/flutter_screen_lock/pull/70) by [@clragon](https://github.com/clragon)
+
 ## [6.0.0] - 2022-05-31
 
 - Available in Flutter 3.0 and above.
