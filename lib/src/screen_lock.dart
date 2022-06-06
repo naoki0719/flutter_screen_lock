@@ -1,12 +1,21 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
 
 typedef DelayBuilderCallback = Widget Function(
     BuildContext context, Duration delay);
+
+typedef SecretsBuilderCallback = Widget Function(
+  BuildContext context,
+  SecretsConfig config,
+  int length,
+  ValueListenable<String> input,
+  Stream<bool> verifyStream,
+);
 
 class ScreenLock extends StatefulWidget {
   const ScreenLock({
@@ -285,6 +294,7 @@ class _ScreenLockState extends State<ScreenLock> {
               verifyStream: inputController.verifyInput,
             )
           : widget.secretsBuilder!(
+              context,
               widget.secretsConfig,
               secretLength,
               inputController.currentInput,

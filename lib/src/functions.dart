@@ -1,13 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-
-typedef SecretsBuilderCallback = Widget Function(
-  SecretsConfig config,
-  int length,
-  ValueListenable<String> input,
-  Stream<bool> verifyStream,
-);
 
 /// Animated ScreenLock
 ///

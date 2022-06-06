@@ -267,6 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return ScreenLock(
                     correctString: '1234',
                     secretsBuilder: (
+                      context,
                       config,
                       length,
                       input,
