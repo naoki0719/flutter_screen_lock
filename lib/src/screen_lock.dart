@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/delay_screen.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
-import 'package:flutter_screen_lock/src/layout/secrets.dart';
 
 class ScreenLock extends StatefulWidget {
   const ScreenLock({
