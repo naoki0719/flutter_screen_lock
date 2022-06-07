@@ -225,7 +225,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
     Widget buildDelay(Widget child) {
       if (widget.retryDelay != (Duration.zero)) {
-        child = StreamBuilder<Duration>(
+        return StreamBuilder<Duration>(
           stream: inputDelayController.stream,
           builder: (context, snapshot) {
             if (inputDelayed && snapshot.hasData) {
