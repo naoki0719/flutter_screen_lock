@@ -45,9 +45,9 @@ class ScreenLock extends StatefulWidget {
     this.inputController,
     this.withBlur = true,
     this.secretsBuilder,
-  })  : title = title ?? const HeadingTitle(text: 'Please enter passcode.'),
-        confirmTitle = confirmTitle ??
-            const HeadingTitle(text: 'Please enter confirm passcode.'),
+  })  : title = title ?? const Text('Please enter passcode.'),
+        confirmTitle =
+            confirmTitle ?? const Text('Please enter confirm passcode.'),
         screenLockConfig = screenLockConfig ?? const ScreenLockConfig(),
         secretsConfig = secretsConfig ?? const SecretsConfig(),
         inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
@@ -201,9 +201,8 @@ class _ScreenLockState extends State<ScreenLock> {
     if (widget.delayBuilder != null) {
       return widget.delayBuilder!(context, duration);
     } else {
-      return HeadingTitle(
-        text:
-            'Input locked for ${(duration.inMilliseconds / 1000).ceil()} seconds.',
+      return Text(
+        'Input locked for ${(duration.inMilliseconds / 1000).ceil()} seconds.',
       );
     }
   }
@@ -235,7 +234,13 @@ class _ScreenLockState extends State<ScreenLock> {
       );
     }
 
-    return child;
+    return Builder(
+      builder: (context) => DefaultTextStyle(
+        style: Theme.of(context).textTheme.headline1!,
+        textAlign: TextAlign.center,
+        child: child,
+      ),
+    );
   }
 
   ThemeData makeThemeData() {
