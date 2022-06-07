@@ -12,6 +12,7 @@ class HeadingTitle extends StatelessWidget {
     return Text(
       text,
       style: themeData.textTheme.headline1,
+      textAlign: TextAlign.center,
     );
   }
 }
