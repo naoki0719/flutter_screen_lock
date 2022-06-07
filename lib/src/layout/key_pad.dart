@@ -94,6 +94,7 @@ class KeyPad extends StatelessWidget {
     final display = inputButtonConfig.displayStrings[0];
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildLeftSideButton(),

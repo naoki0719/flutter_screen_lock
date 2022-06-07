@@ -45,9 +45,9 @@ class ScreenLock extends StatefulWidget {
     this.inputController,
     this.withBlur = true,
     this.secretsBuilder,
-  })  : title = title ?? const HeadingTitle(text: 'Please enter passcode.'),
-        confirmTitle = confirmTitle ??
-            const HeadingTitle(text: 'Please enter confirm passcode.'),
+  })  : title = title ?? const Text('Please enter passcode.'),
+        confirmTitle =
+            confirmTitle ?? const Text('Please enter confirm passcode.'),
         screenLockConfig = screenLockConfig ?? const ScreenLockConfig(),
         secretsConfig = secretsConfig ?? const SecretsConfig(),
         inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
@@ -201,41 +201,54 @@ class _ScreenLockState extends State<ScreenLock> {
     if (widget.delayBuilder != null) {
       return widget.delayBuilder!(context, duration);
     } else {
-      return HeadingTitle(
-        text:
-            'Input locked for ${(duration.inMilliseconds / 1000).ceil()} seconds.',
+      return Text(
+        'Input locked for ${(duration.inMilliseconds / 1000).ceil()} seconds.',
       );
     }
   }
 
   Widget buildHeadingText() {
-    Widget child = widget.title;
-
-    if (widget.confirmation) {
-      child = StreamBuilder<bool>(
-        stream: inputController.confirmed,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data!) {
-            return widget.confirmTitle;
-          }
-          return child;
-        },
-      );
+    Widget buildConfirmed(Widget child) {
+      if (widget.confirmation) {
+        return StreamBuilder<bool>(
+          stream: inputController.confirmed,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return widget.confirmTitle;
+            }
+            return child;
+          },
+        );
+      }
+      return child;
     }
 
-    if (widget.retryDelay != (Duration.zero)) {
-      child = StreamBuilder<Duration>(
-        stream: inputDelayController.stream,
-        builder: (context, snapshot) {
-          if (inputDelayed && snapshot.hasData) {
-            return makeDelayBuilder(snapshot.data!);
-          }
-          return child;
-        },
-      );
+    Widget buildDelay(Widget child) {
+      if (widget.retryDelay != (Duration.zero)) {
+        child = StreamBuilder<Duration>(
+          stream: inputDelayController.stream,
+          builder: (context, snapshot) {
+            if (inputDelayed && snapshot.hasData) {
+              return makeDelayBuilder(snapshot.data!);
+            }
+            return child;
+          },
+        );
+      }
+      return child;
     }
 
-    return child;
+    return Builder(
+      builder: (context) => DefaultTextStyle(
+        style: Theme.of(context).textTheme.headline1!,
+        textAlign: TextAlign.center,
+        child: buildDelay(
+          buildConfirmed(
+            widget.title,
+          ),
+        ),
+      ),
+    );
   }
 
   ThemeData makeThemeData() {
@@ -318,52 +331,31 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     Widget buildContent() {
-      return OrientationBuilder(builder: (context, orientation) {
-        if (orientation == Orientation.landscape) {
-          return Center(
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            buildHeadingText(),
-                            buildSecrets(),
-                          ],
-                        ),
-                      ),
-                      buildKeyPad(),
-                    ],
-                  ),
-                  widget.footer ?? Container(),
-                ],
-              ),
+      return OrientationBuilder(
+        builder: (context, orientation) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flex(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              direction: {
+                Orientation.portrait: Axis.vertical,
+                Orientation.landscape: Axis.horizontal,
+              }[orientation]!,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    buildHeadingText(),
+                    buildSecrets(),
+                  ],
+                ),
+                buildKeyPad(),
+              ],
             ),
-          );
-        }
-
-        return SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              buildHeadingText(),
-              buildSecrets(),
-              buildKeyPad(),
-              widget.footer ?? Container(),
-            ],
-          ),
-        );
-      });
+            if (widget.footer != null) widget.footer!,
+          ],
+        ),
+      );
     }
 
     Widget buildContentWithBlur() {
