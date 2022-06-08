@@ -16,6 +16,7 @@ class KeyPad extends StatelessWidget {
     Key? key,
     required this.inputState,
     required this.didCancelled,
+    this.enabled = true,
     InputButtonConfig? inputButtonConfig,
     this.customizedButtonChild,
     this.customizedButtonTap,
@@ -25,18 +26,19 @@ class KeyPad extends StatelessWidget {
         super(key: key);
 
   final InputController inputState;
+  final VoidCallback? didCancelled;
+  final bool enabled;
   final InputButtonConfig inputButtonConfig;
   final Widget? customizedButtonChild;
-  final void Function()? didCancelled;
-  final void Function()? customizedButtonTap;
-  final Widget? cancelButton;
+  final VoidCallback? customizedButtonTap;
   final Widget? deleteButton;
+  final Widget? cancelButton;
 
   Widget _buildRightSideButton() {
     return ValueListenableBuilder<String>(
       valueListenable: inputState.currentInput,
       builder: (context, value, child) {
-        if (value.isEmpty) {
+        if (!enabled || value.isEmpty) {
           if (didCancelled != null) {
             return CancelButton(
               onPressed: didCancelled!,
@@ -80,7 +82,7 @@ class KeyPad extends StatelessWidget {
 
         return InputButton(
           config: inputButtonConfig,
-          onPressed: () => inputState.addCharacter(input),
+          onPressed: enabled ? () => inputState.addCharacter(input) : null,
           displayText: display,
         );
       }),
@@ -92,12 +94,13 @@ class KeyPad extends StatelessWidget {
     final display = inputButtonConfig.displayStrings[0];
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildLeftSideButton(),
         InputButton(
           config: inputButtonConfig,
-          onPressed: () => inputState.addCharacter(input),
+          onPressed: enabled ? () => inputState.addCharacter(input) : null,
           displayText: display,
         ),
         _buildRightSideButton(),

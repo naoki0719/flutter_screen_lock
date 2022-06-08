@@ -6,8 +6,8 @@ class DeleteButton extends StyledInputButton {
   const DeleteButton({
     Key? key,
     this.child,
-    required void Function() onPressed,
-    void Function()? onLongPress,
+    required VoidCallback onPressed,
+    VoidCallback? onLongPress,
     InputButtonConfig? config,
   }) : super(
           key: key,
