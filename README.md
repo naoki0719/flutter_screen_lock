@@ -10,6 +10,13 @@ You can also use biometric authentication as an option.
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/landscape.png" />
 
+## 6.x to 7 migration
+
+Change delayChilde to delayBuilder.
+It used to push another screen, but has been changed to display a message in TextWidget.
+
+We would like to thank [clragon](https://github.com/clragon) for their significant contribution to these changes.
+
 ## 5.x to 6 migration
 
 The major change is that Navigator.pop will be controlled by the developer.
