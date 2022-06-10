@@ -79,12 +79,11 @@ class StyledInputButton extends StatelessWidget {
     return size.width < size.height ? size.width : size.height;
   }
 
-  ButtonStyle? _makeButtonStyle() {
-    if (config.textStyle == null) {
-      return config.buttonStyle;
-    }
+  ButtonStyle _makeButtonStyle(BuildContext context) {
     return (config.buttonStyle ?? OutlinedButton.styleFrom()).copyWith(
-      textStyle: MaterialStateProperty.all<TextStyle>(config.textStyle!),
+      textStyle: MaterialStateProperty.all<TextStyle>(
+        config.textStyle ?? StyledInputConfig.getDefaultTextStyle(context),
+      ),
     );
   }
 
@@ -98,7 +97,7 @@ class StyledInputButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
-        style: _makeButtonStyle(),
+        style: _makeButtonStyle(context),
         child: child ?? const Text(''),
       ),
     );
