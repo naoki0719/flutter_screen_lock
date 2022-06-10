@@ -12,8 +12,8 @@ abstract class StyledInputButton extends StatelessWidget {
         super(key: key);
 
   final StyledInputConfig config;
-  final void Function() onPressed;
-  final void Function()? onLongPress;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
 
   double computeHeight(Size boxSize) {
     if (config.autoSize) {

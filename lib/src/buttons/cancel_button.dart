@@ -6,7 +6,7 @@ class CancelButton extends StyledInputButton {
   const CancelButton({
     Key? key,
     this.child,
-    required void Function() onPressed,
+    required VoidCallback onPressed,
     InputButtonConfig? config,
   }) : super(key: key, onPressed: onPressed, config: config);
 

@@ -1,13 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-
-typedef SecretsBuilderCallback = Widget Function(
-  SecretsConfig config,
-  int length,
-  ValueListenable<String> input,
-  Stream<bool> verifyStream,
-);
 
 /// Animated ScreenLock
 ///
@@ -41,13 +33,13 @@ typedef SecretsBuilderCallback = Widget Function(
 Future<void> screenLock({
   required BuildContext context,
   required String correctString,
-  void Function()? didUnlocked,
-  void Function()? didOpened,
-  void Function()? didCancelled,
+  VoidCallback? didUnlocked,
+  VoidCallback? didOpened,
+  VoidCallback? didCancelled,
   void Function(String matchedText)? didConfirmed,
   void Function(int retries)? didError,
   void Function(int retries)? didMaxRetries,
-  void Function()? customizedButtonTap,
+  VoidCallback? customizedButtonTap,
   bool confirmation = false,
   bool canCancel = true,
   int digits = 4,
@@ -58,7 +50,7 @@ Future<void> screenLock({
   ScreenLockConfig? screenLockConfig,
   SecretsConfig? secretsConfig,
   InputButtonConfig? inputButtonConfig,
-  Widget? delayChild,
+  DelayBuilderCallback? delayBuilder,
   Widget? customizedButtonChild,
   Widget? footer,
   Widget? cancelButton,
@@ -85,7 +77,7 @@ Future<void> screenLock({
           digits: digits,
           maxRetries: maxRetries,
           retryDelay: retryDelay,
-          delayChild: delayChild,
+          delayBuilder: delayBuilder,
           didUnlocked: didUnlocked ?? Navigator.of(context).pop,
           didError: didError,
           didMaxRetries: didMaxRetries,

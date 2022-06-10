@@ -1,5 +1,9 @@
 # Changelog
 
+## [7.0.0] - 2022-06-09
+
+- Property from `delayChild` to `delayBuilder`. This will disable input after a specified number of failed attempts and will be displayed by the Text Widget. [#78](https://github.com/naoki0719/flutter_screen_lock/pull/78) by [@clragon](https://github.com/clragon)
+
 ## [6.0.1] - 2022-06-06
 
 - Fix didCancelled in screenLock [#69](https://github.com/naoki0719/flutter_screen_lock/pull/69) by [@clragon](https://github.com/clragon)
