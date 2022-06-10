@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/configurations/styled_input_button_config.dart';
 
 /// [OutlinedButton] based button.
 class StyledInputButton extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screen_lock/src/configurations/key_pad_config.dart';
 import 'package:flutter_screen_lock/src/layout/styled_input_button.dart';
-import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
 import 'package:flutter_screen_lock/src/input_controller.dart';
 
 /// In order to arrange the buttons neatly by their size,
