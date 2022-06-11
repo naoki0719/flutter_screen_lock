@@ -171,6 +171,7 @@ class _ScreenLockState extends State<ScreenLock> {
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (!mounted) {
         timer.cancel();
+        return;
       }
 
       Duration difference = unlockTime.difference(DateTime.now());
