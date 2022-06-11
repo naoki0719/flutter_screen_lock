@@ -1,19 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/src/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/src/configurations/styled_input_button_config.dart';
 
 /// [OutlinedButton] based button.
-abstract class StyledInputButton extends StatelessWidget {
+class StyledInputButton extends StatelessWidget {
   const StyledInputButton({
     Key? key,
-    StyledInputConfig? config,
+    this.child,
     required this.onPressed,
     this.onLongPress,
+    StyledInputConfig? config,
   })  : config = config ?? const StyledInputConfig(),
         super(key: key);
 
-  final StyledInputConfig config;
+  factory StyledInputButton.transparent({
+    Key? key,
+    Widget? child,
+    required VoidCallback? onPressed,
+    VoidCallback? onLongPress,
+    StyledInputConfig? config,
+  }) =>
+      StyledInputButton(
+        key: key,
+        onPressed: onPressed,
+        onLongPress: onLongPress,
+        config: StyledInputConfig(
+          height: config?.height,
+          width: config?.width,
+          autoSize: config?.autoSize ?? true,
+          buttonStyle:
+              (config?.buttonStyle ?? OutlinedButton.styleFrom()).copyWith(
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.transparent),
+          ),
+        ),
+        child: child,
+      );
+
+  final Widget? child;
   final VoidCallback? onPressed;
   final VoidCallback? onLongPress;
+  final StyledInputConfig config;
 
   double computeHeight(Size boxSize) {
     if (config.autoSize) {
@@ -49,25 +75,20 @@ abstract class StyledInputButton extends StatelessWidget {
     );
   }
 
-  EdgeInsetsGeometry defaultMargin() {
-    return const EdgeInsets.all(10);
-  }
-
   double _computeAutoSize(Size size) {
     return size.width < size.height ? size.width : size.height;
   }
 
-  /// Make default style from [OutlinedButton]
-  ///
-  /// Override this to customize the style.
-  ButtonStyle makeDefaultStyle() {
-    return config.buttonStyle ?? OutlinedButton.styleFrom();
+  ButtonStyle _makeButtonStyle(BuildContext context) {
+    return (config.buttonStyle ?? OutlinedButton.styleFrom()).copyWith(
+      textStyle: MaterialStateProperty.all<TextStyle>(
+        config.textStyle ?? StyledInputConfig.getDefaultTextStyle(context),
+      ),
+    );
   }
 
-  Widget makeKeyContainer({
-    required BuildContext context,
-    required Widget? child,
-  }) {
+  @override
+  Widget build(BuildContext context) {
     final boxSize = defaultSize(context);
     return Container(
       height: computeHeight(boxSize),
@@ -76,7 +97,7 @@ abstract class StyledInputButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
-        style: makeDefaultStyle(),
+        style: _makeButtonStyle(context),
         child: child ?? const Text(''),
       ),
     );

@@ -49,7 +49,7 @@ Future<void> screenLock({
   Widget? confirmTitle,
   ScreenLockConfig? screenLockConfig,
   SecretsConfig? secretsConfig,
-  InputButtonConfig? inputButtonConfig,
+  KeyPadConfig? keyPadConfig,
   DelayBuilderCallback? delayBuilder,
   Widget? customizedButtonChild,
   Widget? footer,
@@ -70,7 +70,7 @@ Future<void> screenLock({
           correctString: correctString,
           screenLockConfig: screenLockConfig,
           secretsConfig: secretsConfig,
-          inputButtonConfig: inputButtonConfig,
+          keyPadConfig: keyPadConfig,
           didCancelled:
               canCancel ? didCancelled ?? Navigator.of(context).pop : null,
           confirmation: confirmation,

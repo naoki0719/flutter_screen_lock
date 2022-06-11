@@ -5,8 +5,12 @@ class StyledInputConfig {
     this.height,
     this.width,
     this.autoSize = true,
+    this.textStyle,
     this.buttonStyle,
   });
+
+  // TextStyle for this button
+  final TextStyle? textStyle;
 
   /// Button height
   final double? height;
@@ -21,47 +25,8 @@ class StyledInputConfig {
 
   /// It is recommended that you use [OutlinedButton.styleFrom()] to change it.
   final ButtonStyle? buttonStyle;
-}
 
-class InputButtonConfig extends StyledInputConfig {
-  const InputButtonConfig({
-    double? height,
-    double? width,
-    bool autoSize = true,
-    ButtonStyle? buttonStyle,
-    this.textStyle,
-    this.inputStrings = const [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-    ],
-    this.displayStrings = const [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-    ],
-    this.clearOnLongPressed = false,
-  }) : super(
-          autoSize: autoSize,
-          height: height,
-          width: width,
-          buttonStyle: buttonStyle,
-        );
-
+  /// Returns the default text style for buttons.
   static TextStyle getDefaultTextStyle(BuildContext context) {
     if (MediaQuery.of(context).orientation == Orientation.landscape) {
       return TextStyle(
@@ -73,9 +38,4 @@ class InputButtonConfig extends StyledInputConfig {
       fontSize: MediaQuery.of(context).size.height * 0.045,
     );
   }
-
-  final TextStyle? textStyle;
-  final List<String> inputStrings;
-  final List<String> displayStrings;
-  final bool clearOnLongPressed;
 }

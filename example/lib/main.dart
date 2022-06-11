@@ -181,8 +181,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   ),
-                  inputButtonConfig: InputButtonConfig(
-                      textStyle: InputButtonConfig.getDefaultTextStyle(context)
+                  keyPadConfig: KeyPadConfig(
+                    buttonConfig: StyledInputConfig(
+                      textStyle: StyledInputConfig.getDefaultTextStyle(context)
                           .copyWith(
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
@@ -191,18 +192,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         shape: const RoundedRectangleBorder(),
                         backgroundColor: Colors.deepOrange,
                       ),
-                      displayStrings: [
-                        '零',
-                        '壱',
-                        '弐',
-                        '参',
-                        '肆',
-                        '伍',
-                        '陸',
-                        '質',
-                        '捌',
-                        '玖'
-                      ]),
+                    ),
+                    displayStrings: [
+                      '零',
+                      '壱',
+                      '弐',
+                      '参',
+                      '肆',
+                      '伍',
+                      '陸',
+                      '質',
+                      '捌',
+                      '玖'
+                    ],
+                  ),
                   cancelButton: const Icon(Icons.close),
                   deleteButton: const Icon(Icons.delete),
                 );
@@ -250,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) {
                   return ScreenLock(
                     correctString: '1234',
-                    inputButtonConfig: const InputButtonConfig(
+                    keyPadConfig: const KeyPadConfig(
                       clearOnLongPressed: true,
                     ),
                     didUnlocked: Navigator.of(context).pop,

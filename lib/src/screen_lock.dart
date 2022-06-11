@@ -36,7 +36,7 @@ class ScreenLock extends StatefulWidget {
     Widget? confirmTitle,
     ScreenLockConfig? screenLockConfig,
     SecretsConfig? secretsConfig,
-    InputButtonConfig? inputButtonConfig,
+    this.keyPadConfig,
     this.delayBuilder,
     this.customizedButtonChild,
     this.footer,
@@ -50,7 +50,6 @@ class ScreenLock extends StatefulWidget {
             confirmTitle ?? const Text('Please enter confirm passcode.'),
         screenLockConfig = screenLockConfig ?? const ScreenLockConfig(),
         secretsConfig = secretsConfig ?? const SecretsConfig(),
-        inputButtonConfig = inputButtonConfig ?? const InputButtonConfig(),
         assert(maxRetries > -1),
         super(key: key);
 
@@ -109,8 +108,8 @@ class ScreenLock extends StatefulWidget {
   /// Configurations of [Secrets].
   final SecretsConfig secretsConfig;
 
-  /// Configurations of [InputButton].
-  final InputButtonConfig inputButtonConfig;
+  /// Configurations of [KeyPad].
+  final KeyPadConfig? keyPadConfig;
 
   /// Specify the widget during input invalidation by retry delay.
   final DelayBuilderCallback? delayBuilder;
@@ -324,7 +323,7 @@ class _ScreenLockState extends State<ScreenLock> {
       return Center(
         child: KeyPad(
           enabled: !inputDelayed,
-          inputButtonConfig: widget.inputButtonConfig,
+          keyPadConfig: widget.keyPadConfig,
           inputState: inputController,
           didCancelled: widget.didCancelled,
           customizedButtonTap: widget.customizedButtonTap,
