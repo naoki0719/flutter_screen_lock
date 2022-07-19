@@ -30,6 +30,7 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 /// - `inputController`: Control inputs externally
 /// - `withBlur`: Blur the background
 /// - `secretsBuilder`: Custom secrets animation widget builder
+/// - `useLandscape`: Use a landscape orientation. Default `true`
 Future<void> screenLock({
   required BuildContext context,
   required String correctString,
@@ -58,6 +59,7 @@ Future<void> screenLock({
   InputController? inputController,
   bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
+  bool useLandscape = true,
 }) async {
   return Navigator.push<void>(
     context,
@@ -93,6 +95,7 @@ Future<void> screenLock({
           inputController: inputController,
           withBlur: withBlur,
           secretsBuilder: secretsBuilder,
+          useLandscape: useLandscape,
         ),
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
