@@ -45,6 +45,7 @@ class ScreenLock extends StatefulWidget {
     this.inputController,
     this.withBlur = true,
     this.secretsBuilder,
+    this.useLandscape = true,
   })  : title = title ?? const Text('Please enter passcode.'),
         confirmTitle =
             confirmTitle ?? const Text('Please enter confirm passcode.'),
@@ -134,6 +135,9 @@ class ScreenLock extends StatefulWidget {
 
   /// Custom secrets animation widget builder.
   final SecretsBuilderCallback? secretsBuilder;
+
+  /// Use a landscape orientation.
+  final bool useLandscape;
 
   @override
   State<ScreenLock> createState() => _ScreenLockState();
@@ -302,6 +306,16 @@ class _ScreenLockState extends State<ScreenLock> {
     final secretLength =
         widget.confirmation ? widget.digits : widget.correctString.length;
 
+    final orientations = <Orientation, Axis>{
+      Orientation.portrait: Axis.vertical,
+    };
+
+    if (widget.useLandscape) {
+      orientations[Orientation.landscape] = Axis.horizontal;
+    } else {
+      orientations[Orientation.landscape] = Axis.vertical;
+    }
+
     Widget buildSecrets() {
       return widget.secretsBuilder == null
           ? SecretsWithShakingAnimation(
@@ -341,10 +355,7 @@ class _ScreenLockState extends State<ScreenLock> {
           children: [
             Flex(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              direction: {
-                Orientation.portrait: Axis.vertical,
-                Orientation.landscape: Axis.horizontal,
-              }[orientation]!,
+              direction: orientations[orientation]!,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -287,6 +287,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: const Text('Secrets custom animation widget'),
             ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                correctString: '1234',
+                useLandscape: false,
+              ),
+              child: const Text('Disable landscape mode'),
+            ),
           ],
         ),
       ),

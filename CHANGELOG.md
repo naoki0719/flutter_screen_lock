@@ -1,5 +1,9 @@
 # Changelog
 
+## [7.0.3] - 2022-07-19
+
+- Added useLandscape property.
+
 ## [7.0.2] - 2022-06-11
 
 - Unify all buttons. [#81](https://github.com/naoki0719/flutter_screen_lock/pull/81) by [@clragon](https://github.com/clragon)
