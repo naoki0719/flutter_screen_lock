@@ -1,5 +1,10 @@
 # Changelog
 
+## [7.0.3] - 2022-07-21
+
+- Added option for onValidate callback.
+  - ⚠️There is a known bug where Secrets are not satisfied if the callback delays processing.
+
 ## [7.0.3] - 2022-07-19
 
 - Added useLandscape property.

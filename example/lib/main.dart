@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
@@ -294,6 +296,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 useLandscape: false,
               ),
               child: const Text('Disable landscape mode'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock(
+                context: context,
+                digits: 4,
+                correctString: '',
+                onValidate: (x) async {
+                  sleep(Duration(milliseconds: 500));
+                  return '1234' == x;
+                },
+              ),
+              child: const Text('Callback validation'),
             ),
           ],
         ),

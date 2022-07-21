@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 class InputController {
   InputController();
@@ -8,6 +9,7 @@ class InputController {
   late int _digits;
   late String _correctString;
   late bool _isConfirmed;
+  late ValidationCallback? _validationCallback;
 
   final List<String> _currentInputs = [];
 
@@ -91,6 +93,15 @@ class InputController {
       correctString = _correctString;
     }
 
+    if (_validationCallback == null) {
+      _localValidation(inputText, correctString);
+    } else {
+      _validationCallback!(inputText)
+          .then((success) => _verifyController.add(success));
+    }
+  }
+
+  void _localValidation(String inputText, String correctString) {
     if (inputText == correctString) {
       _verifyController.add(true);
     } else {
@@ -99,11 +110,11 @@ class InputController {
   }
 
   /// Create each stream.
-  void initialize({
-    required int digits,
-    required String correctString,
-    bool isConfirmed = false,
-  }) {
+  void initialize(
+      {required int digits,
+      required String correctString,
+      bool isConfirmed = false,
+      ValidationCallback? onValidate}) {
     _inputValueNotifier = ValueNotifier<String>('');
     _verifyController = StreamController.broadcast();
     _confirmedController = StreamController.broadcast();
@@ -111,6 +122,7 @@ class InputController {
     _digits = digits;
     _correctString = correctString;
     _isConfirmed = isConfirmed;
+    _validationCallback = onValidate;
   }
 
   /// Close all streams.

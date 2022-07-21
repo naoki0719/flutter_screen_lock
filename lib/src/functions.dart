@@ -31,6 +31,7 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 /// - `withBlur`: Blur the background
 /// - `secretsBuilder`: Custom secrets animation widget builder
 /// - `useLandscape`: Use a landscape orientation. Default `true`
+/// - `onValidate`: Callback to validate input values filled in [digits].
 Future<void> screenLock({
   required BuildContext context,
   required String correctString,
@@ -60,6 +61,7 @@ Future<void> screenLock({
   bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
   bool useLandscape = true,
+  ValidationCallback? onValidate,
 }) async {
   return Navigator.push<void>(
     context,
@@ -96,6 +98,7 @@ Future<void> screenLock({
           withBlur: withBlur,
           secretsBuilder: secretsBuilder,
           useLandscape: useLandscape,
+          onValidate: onValidate,
         ),
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>

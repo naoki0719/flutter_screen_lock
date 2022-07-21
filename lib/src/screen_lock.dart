@@ -17,6 +17,10 @@ typedef SecretsBuilderCallback = Widget Function(
   Stream<bool> verifyStream,
 );
 
+typedef ValidationCallback = Future<bool> Function(
+  String input,
+);
+
 class ScreenLock extends StatefulWidget {
   const ScreenLock({
     Key? key,
@@ -46,6 +50,7 @@ class ScreenLock extends StatefulWidget {
     this.withBlur = true,
     this.secretsBuilder,
     this.useLandscape = true,
+    this.onValidate,
   })  : title = title ?? const Text('Please enter passcode.'),
         confirmTitle =
             confirmTitle ?? const Text('Please enter confirm passcode.'),
@@ -138,6 +143,11 @@ class ScreenLock extends StatefulWidget {
 
   /// Use a landscape orientation.
   final bool useLandscape;
+
+  /// Callback to validate input values filled in [digits].
+  ///
+  /// If `true` is returned, the lock is unlocked.
+  final ValidationCallback? onValidate;
 
   @override
   State<ScreenLock> createState() => _ScreenLockState();
@@ -272,6 +282,7 @@ class _ScreenLockState extends State<ScreenLock> {
       correctString: widget.correctString,
       digits: widget.digits,
       isConfirmed: widget.confirmation,
+      onValidate: widget.onValidate,
     );
 
     inputController.verifyInput.listen((success) {
@@ -303,8 +314,15 @@ class _ScreenLockState extends State<ScreenLock> {
 
   @override
   Widget build(BuildContext context) {
-    final secretLength =
-        widget.confirmation ? widget.digits : widget.correctString.length;
+    late final int secretLength;
+
+    if (widget.confirmation) {
+      secretLength = widget.digits;
+    } else {
+      secretLength = widget.correctString.isNotEmpty
+          ? widget.correctString.length
+          : widget.digits;
+    }
 
     final orientations = <Orientation, Axis>{
       Orientation.portrait: Axis.vertical,
