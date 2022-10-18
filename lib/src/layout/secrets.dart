@@ -7,12 +7,13 @@ import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
 
 class SecretsWithShakingAnimation extends StatefulWidget {
   const SecretsWithShakingAnimation({
-    Key? key,
+    super.key,
     required this.config,
     required this.length,
     required this.input,
     required this.verifyStream,
-  }) : super(key: key);
+  });
+
   final SecretsConfig config;
   final int length;
   final ValueListenable<String> input;
@@ -81,11 +82,11 @@ class _SecretsWithShakingAnimationState
 
 class Secrets extends StatefulWidget {
   const Secrets({
-    Key? key,
-    this.config = const SecretsConfig(),
+    super.key,
+    SecretsConfig? config,
     required this.input,
     required this.length,
-  }) : super(key: key);
+  }) : config = config ?? const SecretsConfig();
 
   final SecretsConfig config;
   final ValueListenable<String> input;
@@ -139,14 +140,13 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
 
 class Secret extends StatelessWidget {
   const Secret({
-    Key? key,
+    super.key,
+    SecretConfig? config,
     this.enabled = false,
-    this.config = const SecretConfig(),
-  }) : super(key: key);
-
-  final bool enabled;
+  }) : config = config ?? const SecretConfig();
 
   final SecretConfig config;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {

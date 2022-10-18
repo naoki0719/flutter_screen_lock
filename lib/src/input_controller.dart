@@ -7,8 +7,7 @@ class InputController {
   InputController();
 
   late int _digits;
-  late String _correctString;
-  late bool _isConfirmed;
+  late String? _correctString;
   late ValidationCallback? _validationCallback;
 
   final List<String> _currentInputs = [];
@@ -43,7 +42,7 @@ class InputController {
       return;
     }
 
-    if (_isConfirmed && _firstInput.isEmpty) {
+    if (_correctString == null && _firstInput.isEmpty) {
       setConfirmed();
       clear();
     } else {
@@ -87,10 +86,10 @@ class InputController {
     final inputText = _currentInputs.join();
     late String correctString;
 
-    if (_isConfirmed) {
-      correctString = _firstInput;
+    if (_correctString != null) {
+      correctString = _correctString!;
     } else {
-      correctString = _correctString;
+      correctString = _firstInput;
     }
 
     if (_validationCallback == null) {
@@ -112,8 +111,7 @@ class InputController {
   /// Create each stream.
   void initialize({
     required int digits,
-    required String correctString,
-    bool isConfirmed = false,
+    required String? correctString,
     ValidationCallback? onValidate,
   }) {
     _inputValueNotifier = ValueNotifier<String>('');
@@ -122,7 +120,6 @@ class InputController {
 
     _digits = digits;
     _correctString = correctString;
-    _isConfirmed = isConfirmed;
     _validationCallback = onValidate;
   }
 

@@ -9,7 +9,7 @@ import 'package:flutter_screen_lock/src/input_controller.dart';
 /// which makes it difficult to specify the size intuitively.
 class KeyPad extends StatelessWidget {
   const KeyPad({
-    Key? key,
+    super.key,
     required this.inputState,
     required this.didCancelled,
     this.enabled = true,
@@ -18,8 +18,7 @@ class KeyPad extends StatelessWidget {
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  })  : keyPadConfig = keyPadConfig ?? const KeyPadConfig(),
-        super(key: key);
+  }) : keyPadConfig = keyPadConfig ?? const KeyPadConfig();
 
   final InputController inputState;
   final VoidCallback? didCancelled;

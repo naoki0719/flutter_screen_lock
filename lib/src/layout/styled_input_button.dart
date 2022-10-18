@@ -4,13 +4,12 @@ import 'package:flutter_screen_lock/src/configurations/styled_input_button_confi
 /// [OutlinedButton] based button.
 class StyledInputButton extends StatelessWidget {
   const StyledInputButton({
-    Key? key,
+    super.key,
     this.child,
     required this.onPressed,
     this.onLongPress,
     StyledInputConfig? config,
-  })  : config = config ?? const StyledInputConfig(),
-        super(key: key);
+  }) : config = config ?? const StyledInputConfig();
 
   factory StyledInputButton.transparent({
     Key? key,
