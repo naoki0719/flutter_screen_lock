@@ -54,16 +54,16 @@ screenLock(
 );
 ```
 
-### Pin creation
+### Passcode creation
 
-You can have users create a new pin with confirmation
+You can have users create a new passcode with confirmation
 
 ```dart
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 screenLockCreate(
   context: context,
-  onConfirmed: (value) => print(value), // store new pin somewhere here
+  onConfirmed: (value) => print(value), // store new passcode somewhere here
 );
 ```
 
@@ -94,7 +94,6 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/material.dart';
 
-/// Method extraction to call by initial display and custom buttons.
 Future<void> localAuth(BuildContext context) async {
   final localAuth = LocalAuthentication();
   final didAuthenticate = await localAuth.authenticateWithBiometrics(
