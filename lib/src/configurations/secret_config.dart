@@ -11,10 +11,19 @@ class SecretConfig {
     this.builder,
   });
 
+  /// Size (width and height) the secret.
   final double size;
+
+  /// Border size for the secret.
   final double borderSize;
+
+  /// Border color for the secret.
   final Color borderColor;
+
+  /// Color for the enabled secret.
   final Color enabledColor;
+
+  /// Color for the disabled secret.
   final Color disabledColor;
 
   final Widget Function(

@@ -3,10 +3,8 @@ import 'package:flutter_screen_lock/src/configurations/key_pad_config.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad_button.dart';
 import 'package:flutter_screen_lock/src/input_controller.dart';
 
-/// In order to arrange the buttons neatly by their size,
-/// I dared to adjust them without using GridView or Wrap.
-/// If you use GridView, you have to specify the overall width to adjust the size of the button,
-/// which makes it difficult to specify the size intuitively.
+/// [GridView] or [Wrap] make it difficult to specify the item size intuitively.
+/// We therefore arrange them manually with [Column]s and [Row]s
 class KeyPad extends StatelessWidget {
   const KeyPad({
     super.key,

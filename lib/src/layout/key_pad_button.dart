@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/key_pad_button_config.dart';
 
-/// [OutlinedButton] based button.
+/// Button in a [KeyPad].
 class KeyPadButton extends StatelessWidget {
   const KeyPadButton({
     super.key,

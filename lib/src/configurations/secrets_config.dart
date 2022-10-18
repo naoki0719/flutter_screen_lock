@@ -16,4 +16,17 @@ class SecretsConfig {
 
   /// Config for secrets.
   final SecretConfig secretConfig;
+
+  /// Copies a [SecretsConfig] with new values.
+  SecretsConfig copyWith({
+    double? spacing,
+    EdgeInsetsGeometry? padding,
+    SecretConfig? secretConfig,
+  }) {
+    return SecretsConfig(
+      spacing: spacing ?? this.spacing,
+      padding: padding ?? this.padding,
+      secretConfig: secretConfig ?? this.secretConfig,
+    );
+  }
 }
