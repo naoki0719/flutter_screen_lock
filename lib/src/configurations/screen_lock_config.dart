@@ -24,9 +24,9 @@ class ScreenLockConfig {
   /// Base [ThemeData] that is overriden by other specified values.
   final ThemeData? themeData;
 
-  /// Adds the values of this config to another [ThemeData].
-  ThemeData withThemeData(ThemeData other) {
-    return other.copyWith(
+  /// Returns this config as a [ThemeData].
+  ThemeData toThemeData() {
+    return (themeData ?? ThemeData()).copyWith(
       scaffoldBackgroundColor: backgroundColor,
       outlinedButtonTheme: OutlinedButtonThemeData(style: buttonStyle),
       textTheme: TextTheme(
@@ -36,24 +36,24 @@ class ScreenLockConfig {
     );
   }
 
-  /// Returns this config as a [ThemeData].
-  ThemeData toThemeData() => withThemeData(themeData ?? ThemeData());
-
-  // Copies a [ScreenLockConfig] with new values.
+  /// Copies a [ScreenLockConfig] with new values.
   ScreenLockConfig copyWith({
     Color? backgroundColor,
     TextStyle? titleTextStyle,
     TextStyle? textStyle,
     ButtonStyle? buttonStyle,
+    ThemeData? themeData,
   }) {
     return ScreenLockConfig(
       backgroundColor: backgroundColor ?? this.backgroundColor,
       titleTextStyle: titleTextStyle ?? this.titleTextStyle,
       textStyle: textStyle ?? this.textStyle,
       buttonStyle: buttonStyle ?? this.buttonStyle,
+      themeData: themeData ?? this.themeData,
     );
   }
 
+  /// Default [ScreenLockConfig].
   static final ScreenLockConfig defaultConfig = ScreenLockConfig(
     backgroundColor: const Color(0x88545454),
     buttonStyle: OutlinedButton.styleFrom(

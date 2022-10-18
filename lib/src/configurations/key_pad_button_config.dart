@@ -22,24 +22,10 @@ class KeyPadButtonConfig {
   /// Button background color.
   final Color? backgroundColor;
 
-  /// Full button style. Overrides all other values except [size].
+  /// Base [ButtonStyle] that is overriden by other specified values.
   final ButtonStyle? buttonStyle;
 
-  /// Creates a configuration from an existing [ButtonStyle].
-  KeyPadButtonConfig fromButtonStyle({
-    double? size,
-    required ButtonStyle style,
-  }) {
-    Set<MaterialState> states = MaterialState.values.toSet();
-    return KeyPadButtonConfig(
-      size: size,
-      fontSize: style.textStyle?.resolve(states)?.fontSize,
-      foregroundColor: style.foregroundColor?.resolve(states),
-      backgroundColor: style.backgroundColor?.resolve(states),
-    );
-  }
-
-  /// Base [ButtonStyle] that is overriden by other specified values.
+  /// Returns this config as a [ButtonStyle].
   ButtonStyle toButtonStyle() {
     ButtonStyle composed = OutlinedButton.styleFrom(
       textStyle: TextStyle(fontSize: fontSize),
@@ -57,7 +43,7 @@ class KeyPadButtonConfig {
     }
   }
 
-  // Copies a [KeyPadButtonConfig] with new values.
+  /// Copies a [KeyPadButtonConfig] with new values.
   KeyPadButtonConfig copyWith({
     double? size,
     double? fontSize,
