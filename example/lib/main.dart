@@ -120,9 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       correctString: '123456',
                       canCancel: false,
                       footer: Container(
+                        width: 68,
+                        height: 68,
                         padding: const EdgeInsets.only(top: 10),
                         child: OutlinedButton(
-                          child: const Text('Cancel'),
+                          child: const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text('Cancel'),
+                          ),
                           onPressed: () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.transparent,

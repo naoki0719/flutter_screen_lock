@@ -46,14 +46,12 @@ class KeyPad extends StatelessWidget {
       onPressed: didCancelled,
       config: keyPadConfig.buttonConfig,
       child: cancelButton ??
-          const FittedBox(
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-              softWrap: false,
+          const Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 16,
             ),
+            softWrap: false,
           ),
     );
   }
