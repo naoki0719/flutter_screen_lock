@@ -66,8 +66,8 @@ class ScreenLock extends StatefulWidget {
     this.deleteButton,
     this.inputController,
     this.secretsBuilder,
-    this.useBlur = false,
-    this.useLandscape = false,
+    this.useBlur = true,
+    this.useLandscape = true,
   })  : correctString = null,
         title = title ?? const Text('Please enter new passcode.'),
         confirmTitle =
