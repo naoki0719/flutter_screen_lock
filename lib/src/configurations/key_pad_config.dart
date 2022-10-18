@@ -14,7 +14,7 @@ class KeyPadConfig {
     '9',
   ];
 
-  final StyledInputConfig? buttonConfig;
+  final KeyPadButtonConfig? buttonConfig;
   final List<String> inputStrings;
   final List<String> displayStrings;
   final bool clearOnLongPressed;

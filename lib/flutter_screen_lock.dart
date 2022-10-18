@@ -1,6 +1,6 @@
 library flutter_screen_lock;
 
-export 'src/configurations/styled_input_button_config.dart';
+export 'src/configurations/key_pad_button_config.dart';
 export 'src/configurations/key_pad_config.dart';
 export 'src/configurations/screen_lock_config.dart';
 export 'src/configurations/secret_config.dart';

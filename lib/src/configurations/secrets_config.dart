@@ -3,25 +3,17 @@ import 'package:flutter_screen_lock/src/configurations/secret_config.dart';
 
 class SecretsConfig {
   const SecretsConfig({
-    this.spacing,
-    this.spacingRatio = 0.05,
+    double? spacing,
     this.padding = const EdgeInsets.only(top: 20, bottom: 50),
     this.secretConfig = const SecretConfig(),
-  });
+  }) : spacing = 12;
 
-  /// Absolute space between secret widgets.
-  /// If specified together with spacingRatio, this will take precedence.
-  final double? spacing;
+  /// Space between secret widgets.
+  final double spacing;
 
-  /// Space ratio between secret widgets.
-  ///
-  /// Default `0.05`
-  final double spacingRatio;
-
-  /// padding of Secrets Widget.
-  ///
-  /// Default [EdgeInsets.only(top: 20, bottom: 50)]
+  /// Padding of secrets widget.
   final EdgeInsetsGeometry padding;
 
+  /// Config for secrets.
   final SecretConfig secretConfig;
 }

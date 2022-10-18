@@ -1,42 +1,37 @@
 import 'package:flutter/material.dart';
 
-/// Configuration of [Secret]
+/// Configuration of a [Secret] widget.
 class SecretConfig {
   const SecretConfig({
-    this.width = 16,
-    this.height = 16,
-    this.borderSize = 1.0,
+    this.size = 16,
+    this.borderSize = 1,
     this.borderColor = Colors.white,
     this.enabledColor = Colors.white,
     this.disabledColor = Colors.transparent,
-    this.build,
+    this.builder,
   });
 
-  final double width;
-  final double height;
+  final double size;
   final double borderSize;
   final Color borderColor;
   final Color enabledColor;
   final Color disabledColor;
 
-  /// `build` override function
   final Widget Function(
-    BuildContext context, {
-    required bool enabled,
-    required SecretConfig config,
-  })? build;
+    BuildContext context,
+    SecretConfig config,
+    bool enabled,
+  )? builder;
 
   SecretConfig copyWith({
-    double? width,
-    double? height,
+    double? size,
     double? borderSize,
     Color? borderColor,
     Color? enabledColor,
     Color? disabledColor,
   }) {
     return SecretConfig(
-      width: width ?? this.width,
-      height: height ?? this.height,
+      size: size ?? this.size,
       borderSize: borderSize ?? this.borderSize,
       borderColor: borderColor ?? this.borderColor,
       enabledColor: enabledColor ?? this.enabledColor,

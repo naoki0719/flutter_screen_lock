@@ -195,9 +195,11 @@ screenLockCreate(
 
 ### 7.x to 8 migration
 
-- Change all callback names from `didSomething` to `onSomething`
+- change all callback names from `didSomething` to `onSomething`
 - change `screenLock` with `confirm: true` to `screenLockCreate`
 - change `ScreenLock` with `confirm: true` to `ScreenLock.create`
+- replace `StyledInputConfig` with `KeyPadButtonConfig`
+- replace `spacingRatio` with fixed value in `spacing`
 
 ### 6.x to 7 migration
 

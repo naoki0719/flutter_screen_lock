@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/key_pad_config.dart';
-import 'package:flutter_screen_lock/src/layout/styled_input_button.dart';
+import 'package:flutter_screen_lock/src/layout/key_pad_button.dart';
 import 'package:flutter_screen_lock/src/input_controller.dart';
 
 /// In order to arrange the buttons neatly by their size,
@@ -30,7 +30,7 @@ class KeyPad extends StatelessWidget {
   final Widget? cancelButton;
 
   Widget _buildDeleteButton() {
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: () => inputState.removeCharacter(),
       onLongPress:
           keyPadConfig.clearOnLongPressed ? () => inputState.clear() : null,
@@ -44,7 +44,7 @@ class KeyPad extends StatelessWidget {
       return _buildHiddenButton();
     }
 
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: didCancelled,
       config: keyPadConfig.buttonConfig,
       child: cancelButton ??
@@ -61,7 +61,7 @@ class KeyPad extends StatelessWidget {
   }
 
   Widget _buildHiddenButton() {
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: () {},
       config: keyPadConfig.buttonConfig,
     );
@@ -85,7 +85,7 @@ class KeyPad extends StatelessWidget {
       return _buildHiddenButton();
     }
 
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: customizedButtonTap!,
       config: keyPadConfig.buttonConfig,
       child: customizedButtonChild!,
@@ -100,7 +100,7 @@ class KeyPad extends StatelessWidget {
         final input = keyPadConfig.inputStrings[number];
         final display = keyPadConfig.displayStrings[number];
 
-        return StyledInputButton(
+        return KeyPadButton(
           config: keyPadConfig.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),
@@ -118,7 +118,7 @@ class KeyPad extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildLeftSideButton(),
-        StyledInputButton(
+        KeyPadButton(
           config: keyPadConfig.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),

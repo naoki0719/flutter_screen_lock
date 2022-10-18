@@ -399,8 +399,8 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     return Theme(
-      data: widget.screenLockConfig?.themeData ??
-          ScreenLockConfig.defaultThemeData,
+      data: (widget.screenLockConfig ?? ScreenLockConfig.defaultConfig)
+          .toThemeData(),
       child: Scaffold(
         body: SafeArea(
           child: buildContentWithBlur(useBlur: widget.useBlur),

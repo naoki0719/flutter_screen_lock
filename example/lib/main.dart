@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Wrap(
                 spacing: 16,
                 runSpacing: 16,
-                alignment: WrapAlignment.spaceBetween,
+                alignment: WrapAlignment.start,
                 children: [
                   ElevatedButton(
                     onPressed: () => showDialog<void>(
@@ -150,11 +150,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             borderSize: 2.0,
                             disabledColor: Colors.black,
                             enabledColor: Colors.amber,
-                            height: 15,
-                            width: 15,
-                            build: (context,
-                                    {required config, required enabled}) =>
-                                Container(
+                            size: 15,
+                            builder: (context, config, enabled) => Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
                                 color: enabled
@@ -166,20 +163,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(10),
-                              width: config.width,
-                              height: config.height,
+                              width: config.size,
+                              height: config.size,
                             ),
                           ),
                         ),
                         keyPadConfig: KeyPadConfig(
-                          buttonConfig: StyledInputConfig(
-                            textStyle:
-                                StyledInputConfig.getDefaultTextStyle(context)
-                                    .copyWith(
-                              color: Colors.orange,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          buttonConfig: KeyPadButtonConfig(
                             buttonStyle: OutlinedButton.styleFrom(
+                              textStyle: const TextStyle(
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold,
+                              ),
                               shape: const RoundedRectangleBorder(),
                               backgroundColor: Colors.deepOrange,
                             ),
@@ -194,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             '陸',
                             '質',
                             '捌',
-                            '玖'
+                            '玖',
                           ],
                         ),
                         cancelButton: const Icon(Icons.close),
