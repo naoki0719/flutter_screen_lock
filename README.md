@@ -199,22 +199,20 @@ screenLockCreate(
 - Change `screenLock` with `confirm: true` to `screenLockCreate`
 - Change `ScreenLock` with `confirm: true` to `ScreenLock.create`
 - Replace `StyledInputConfig` with `KeyPadButtonConfig`
-- Replace `spacingRatio` with fixed value in `spacing`
+- Replace `spacingRatio` with fixed value `spacing` in `Secrets` 
 
 ### 6.x to 7 migration
 
 - Requires dart >= 2.17 and Flutter 3.0
 - Replace `InputButtonConfig` with `KeyPadConfig`.
-- Change `delayChild` to `delayBuilder`.
-
+- Change `delayChild` to `delayBuilder`.  
   `delayBuilder` is no longer displayed in a new screen. Instead, it is now located above the `Secrets`.
 - Accept `BuildContext` in `secretsBuilder`.
 
-
 ### 5.x to 6 migration
 
-- `ScreenLock` does not use `Navigator.pop` internally anymore.
-  The developer should now pop by themselves when desired.
+- `ScreenLock` does not use `Navigator.pop` internally anymore.   
+  The developer should now pop by themselves when desired.   
   `screenLock` call will pop automatically if `onUnlocked` is `null`.
 
 ### 4.x to 5 migration
