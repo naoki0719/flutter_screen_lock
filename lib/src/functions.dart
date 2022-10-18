@@ -14,12 +14,13 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 /// - `maxRetries`: `0` is unlimited. For example, if it is set to 1, didMaxRetries will be called on the first failure. Default `0`
 /// - `retryDelay`: Delay until we can retry. Duration.zero is no delay.
 /// - `delayChild`: Specify the widget during input invalidation by retry delay.
-/// - `didUnlocked`: Called if the value matches the correctString.
-/// - `didError`: Called if the value does not match the correctString.
-/// - `didMaxRetries`: Events that have reached the maximum number of attempts
-/// - `didOpened`: For example, when you want to perform biometric authentication
-/// - `didConfirmed`: Called when the first and second inputs match during confirmation
-/// - `didCancelled`: Called when the user cancels the screen
+/// - `onUnlocked`: Called if the value matches the correctString.
+/// - `onValidate`: Callback to validate input values filled in [digits].
+/// - `onError`: Called if the value does not match the correctString.
+/// - `onMaxRetries`: Events that have reached the maximum number of attempts
+/// - `onOpened`: For example, when you want to perform biometric authentication
+/// - `onConfirmed`: Called when the first and second inputs match during confirmation
+/// - `onCancelled`: Called when the user cancels the screen
 /// - `customizedButtonTap`: Tapped for left side lower button
 /// - `customizedButtonChild`: Child for bottom left side button
 /// - `footer`: Add a Widget to the footer
@@ -31,16 +32,16 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 /// - `withBlur`: Blur the background
 /// - `secretsBuilder`: Custom secrets animation widget builder
 /// - `useLandscape`: Use a landscape orientation. Default `true`
-/// - `onValidate`: Callback to validate input values filled in [digits].
 Future<void> screenLock({
   required BuildContext context,
   required String correctString,
-  VoidCallback? didUnlocked,
-  VoidCallback? didOpened,
-  VoidCallback? didCancelled,
-  void Function(String matchedText)? didConfirmed,
-  void Function(int retries)? didError,
-  void Function(int retries)? didMaxRetries,
+  VoidCallback? onUnlocked,
+  ValidationCallback? onValidate,
+  VoidCallback? onOpened,
+  VoidCallback? onCancelled,
+  void Function(String matchedText)? onConfirmed,
+  void Function(int retries)? onError,
+  void Function(int retries)? onMaxRetries,
   VoidCallback? customizedButtonTap,
   bool confirmation = false,
   bool canCancel = true,
@@ -58,10 +59,9 @@ Future<void> screenLock({
   Widget? cancelButton,
   Widget? deleteButton,
   InputController? inputController,
-  bool withBlur = true,
   SecretsBuilderCallback? secretsBuilder,
+  bool useBlur = true,
   bool useLandscape = true,
-  ValidationCallback? onValidate,
 }) async {
   return Navigator.push<void>(
     context,
@@ -69,24 +69,24 @@ Future<void> screenLock({
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
       pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
-        onWillPop: () async => canCancel && didCancelled == null,
+        onWillPop: () async => canCancel && onCancelled == null,
         child: ScreenLock(
           correctString: correctString,
           screenLockConfig: screenLockConfig,
           secretsConfig: secretsConfig,
           keyPadConfig: keyPadConfig,
-          didCancelled:
-              canCancel ? didCancelled ?? Navigator.of(context).pop : null,
+          onCancelled:
+              canCancel ? onCancelled ?? Navigator.of(context).pop : null,
           confirmation: confirmation,
           digits: digits,
           maxRetries: maxRetries,
           retryDelay: retryDelay,
           delayBuilder: delayBuilder,
-          didUnlocked: didUnlocked ?? Navigator.of(context).pop,
-          didError: didError,
-          didMaxRetries: didMaxRetries,
-          didConfirmed: didConfirmed,
-          didOpened: didOpened,
+          onUnlocked: onUnlocked ?? Navigator.of(context).pop,
+          onError: onError,
+          onMaxRetries: onMaxRetries,
+          onConfirmed: onConfirmed,
+          onOpened: onOpened,
           customizedButtonTap: customizedButtonTap,
           customizedButtonChild: customizedButtonChild,
           footer: footer,
@@ -95,7 +95,7 @@ Future<void> screenLock({
           title: title,
           confirmTitle: confirmTitle,
           inputController: inputController,
-          withBlur: withBlur,
+          useBlur: useBlur,
           secretsBuilder: secretsBuilder,
           useLandscape: useLandscape,
           onValidate: onValidate,

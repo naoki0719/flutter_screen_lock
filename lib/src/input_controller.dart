@@ -110,11 +110,12 @@ class InputController {
   }
 
   /// Create each stream.
-  void initialize(
-      {required int digits,
-      required String correctString,
-      bool isConfirmed = false,
-      ValidationCallback? onValidate}) {
+  void initialize({
+    required int digits,
+    required String correctString,
+    bool isConfirmed = false,
+    ValidationCallback? onValidate,
+  }) {
     _inputValueNotifier = ValueNotifier<String>('');
     _verifyController = StreamController.broadcast();
     _confirmedController = StreamController.broadcast();

@@ -25,12 +25,13 @@ class ScreenLock extends StatefulWidget {
   const ScreenLock({
     Key? key,
     required this.correctString,
-    required this.didUnlocked,
-    this.didOpened,
-    this.didCancelled,
-    this.didConfirmed,
-    this.didError,
-    this.didMaxRetries,
+    required this.onUnlocked,
+    this.onOpened,
+    this.onValidate,
+    this.onCancelled,
+    this.onConfirmed,
+    this.onError,
+    this.onMaxRetries,
     this.customizedButtonTap,
     this.confirmation = false,
     this.digits = 4,
@@ -47,10 +48,9 @@ class ScreenLock extends StatefulWidget {
     this.cancelButton,
     this.deleteButton,
     this.inputController,
-    this.withBlur = true,
     this.secretsBuilder,
+    this.useBlur = true,
     this.useLandscape = true,
-    this.onValidate,
   })  : title = title ?? const Text('Please enter passcode.'),
         confirmTitle =
             confirmTitle ?? const Text('Please enter confirm passcode.'),
@@ -63,26 +63,31 @@ class ScreenLock extends StatefulWidget {
   final String correctString;
 
   /// Called if the value matches the correctString.
-  final VoidCallback didUnlocked;
+  final VoidCallback onUnlocked;
+
+  /// Callback to validate input values filled in [digits].
+  ///
+  /// If `true` is returned, the lock is unlocked.
+  final ValidationCallback? onValidate;
 
   /// Called when the screen is shown the first time.
   ///
   /// Useful if you want to show biometric authentication.
-  final VoidCallback? didOpened;
+  final VoidCallback? onOpened;
 
   /// Called when the user cancels.
   ///
   /// If null, the user cannot cancel.
-  final VoidCallback? didCancelled;
+  final VoidCallback? onCancelled;
 
   /// Called when the first and second inputs match during confirmation.
-  final void Function(String matchedText)? didConfirmed;
+  final void Function(String matchedText)? onConfirmed;
 
   /// Called if the value does not match the correctString.
-  final void Function(int retries)? didError;
+  final void Function(int retries)? onError;
 
   /// Events that have reached the maximum number of attempts.
-  final void Function(int retries)? didMaxRetries;
+  final void Function(int retries)? onMaxRetries;
 
   /// Tapped for left side lower button.
   final VoidCallback? customizedButtonTap;
@@ -135,19 +140,14 @@ class ScreenLock extends StatefulWidget {
   /// Control inputs externally.
   final InputController? inputController;
 
-  /// Blur the background.
-  final bool withBlur;
-
   /// Custom secrets animation widget builder.
   final SecretsBuilderCallback? secretsBuilder;
 
+  /// Blur the background.
+  final bool useBlur;
+
   /// Use a landscape orientation.
   final bool useLandscape;
-
-  /// Callback to validate input values filled in [digits].
-  ///
-  /// If `true` is returned, the lock is unlocked.
-  final ValidationCallback? onValidate;
 
   @override
   State<ScreenLock> createState() => _ScreenLockState();
@@ -201,10 +201,10 @@ class _ScreenLockState extends State<ScreenLock> {
   }
 
   void error() {
-    widget.didError?.call(retries);
+    widget.onError?.call(retries);
 
     if (widget.maxRetries >= 1 && widget.maxRetries <= retries) {
-      widget.didMaxRetries?.call(retries);
+      widget.onMaxRetries?.call(retries);
 
       // reset retries
       retries = 0;
@@ -293,9 +293,9 @@ class _ScreenLockState extends State<ScreenLock> {
 
       if (success) {
         if (widget.confirmation) {
-          widget.didConfirmed?.call(inputController.confirmedInput);
+          widget.onConfirmed?.call(inputController.confirmedInput);
         } else {
-          widget.didUnlocked();
+          widget.onUnlocked();
         }
       } else {
         error();
@@ -303,7 +303,7 @@ class _ScreenLockState extends State<ScreenLock> {
     });
 
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.didOpened?.call());
+        .addPostFrameCallback((_) => widget.onOpened?.call());
   }
 
   @override
@@ -357,7 +357,7 @@ class _ScreenLockState extends State<ScreenLock> {
           enabled: !inputDelayed,
           keyPadConfig: widget.keyPadConfig,
           inputState: inputController,
-          didCancelled: widget.didCancelled,
+          didCancelled: widget.onCancelled,
           customizedButtonTap: widget.customizedButtonTap,
           customizedButtonChild: widget.customizedButtonChild,
           deleteButton: widget.deleteButton,
@@ -403,7 +403,7 @@ class _ScreenLockState extends State<ScreenLock> {
       child: Scaffold(
         backgroundColor: widget.screenLockConfig.backgroundColor,
         body: SafeArea(
-          child: widget.withBlur ? buildContentWithBlur() : buildContent(),
+          child: widget.useBlur ? buildContentWithBlur() : buildContent(),
         ),
       ),
     );

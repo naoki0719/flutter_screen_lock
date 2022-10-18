@@ -62,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) {
                   return ScreenLock(
                     correctString: '1234',
-                    didCancelled: Navigator.of(context).pop,
-                    didUnlocked: Navigator.of(context).pop,
+                    onCancelled: Navigator.of(context).pop,
+                    onUnlocked: Navigator.of(context).pop,
                   );
                 },
               ),
@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   correctString: '',
                   confirmation: true,
                   inputController: inputController,
-                  didConfirmed: (matchedText) {
+                  onConfirmed: (matchedText) {
                     // ignore: avoid_print
                     print(matchedText);
                   },
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 customizedButtonTap: () async {
                   await localAuth(context);
                 },
-                didOpened: () async {
+                onOpened: () async {
                   await localAuth(context);
                 },
               ),
@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
-                didUnlocked: () {
+                onUnlocked: () {
                   Navigator.pop(context);
                   NextPage.show(context);
                 },
@@ -229,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => screenLock(
                 context: context,
                 correctString: '1234',
-                withBlur: false,
+                useBlur: false,
                 screenLockConfig: const ScreenLockConfig(
                   /// If you don't want it to be transparent, override the config
                   backgroundColor: Colors.black,
@@ -258,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     keyPadConfig: const KeyPadConfig(
                       clearOnLongPressed: true,
                     ),
-                    didUnlocked: Navigator.of(context).pop,
+                    onUnlocked: Navigator.of(context).pop,
                   );
                 },
               ),
@@ -283,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       input: input,
                       length: length,
                     ),
-                    didUnlocked: Navigator.of(context).pop,
+                    onUnlocked: Navigator.of(context).pop,
                   );
                 },
               ),
@@ -303,7 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 digits: 4,
                 correctString: '',
                 onValidate: (x) async {
-                  sleep(Duration(milliseconds: 500));
+                  sleep(const Duration(milliseconds: 500));
                   return '1234' == x;
                 },
               ),

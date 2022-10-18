@@ -15,7 +15,7 @@ class ScreenLockConfig {
     scaffoldBackgroundColor: const Color(0x88545454),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        primary: const Color(0xFFFFFFFF),
+        foregroundColor: const Color(0xFFFFFFFF),
         backgroundColor: const Color(0xFF808080),
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(0),
