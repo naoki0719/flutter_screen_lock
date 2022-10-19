@@ -7,12 +7,13 @@ import 'package:flutter_screen_lock/src/configurations/secrets_config.dart';
 
 class SecretsWithShakingAnimation extends StatefulWidget {
   const SecretsWithShakingAnimation({
-    Key? key,
+    super.key,
     required this.config,
     required this.length,
     required this.input,
     required this.verifyStream,
-  }) : super(key: key);
+  });
+
   final SecretsConfig config;
   final int length;
   final ValueListenable<String> input;
@@ -81,11 +82,11 @@ class _SecretsWithShakingAnimationState
 
 class Secrets extends StatefulWidget {
   const Secrets({
-    Key? key,
-    this.config = const SecretsConfig(),
+    super.key,
+    SecretsConfig? config,
     required this.input,
     required this.length,
-  }) : super(key: key);
+  }) : config = config ?? const SecretsConfig();
 
   final SecretsConfig config;
   final ValueListenable<String> input;
@@ -96,66 +97,54 @@ class Secrets extends StatefulWidget {
 }
 
 class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
-  double _computeSpacing(BuildContext context) {
-    if (widget.config.spacing != null) {
-      return widget.config.spacing!;
-    }
-
-    return MediaQuery.of(context).size.width * widget.config.spacingRatio;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
       valueListenable: widget.input,
-      builder: (context, value, child) {
-        return Container(
-          padding: widget.config.padding,
-          child: Wrap(
-            spacing: _computeSpacing(context),
-            children: List.generate(
-              widget.length,
-              (index) {
-                if (value.isEmpty) {
-                  return Secret(
-                    config: widget.config.secretConfig,
-                    enabled: false,
-                  );
-                }
-
+      builder: (context, value, child) => Padding(
+        padding: widget.config.padding,
+        child: Wrap(
+          spacing: widget.config.spacing,
+          children: List.generate(
+            widget.length,
+            (index) {
+              if (value.isEmpty) {
                 return Secret(
                   config: widget.config.secretConfig,
-                  enabled: index < value.length,
+                  enabled: false,
                 );
-              },
-              growable: false,
-            ),
+              }
+
+              return Secret(
+                config: widget.config.secretConfig,
+                enabled: index < value.length,
+              );
+            },
+            growable: false,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
 class Secret extends StatelessWidget {
   const Secret({
-    Key? key,
+    super.key,
+    SecretConfig? config,
     this.enabled = false,
-    this.config = const SecretConfig(),
-  }) : super(key: key);
-
-  final bool enabled;
+  }) : config = config ?? const SecretConfig();
 
   final SecretConfig config;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    if (config.build != null) {
-      // Custom build.
-      return config.build!(
+    if (config.builder != null) {
+      return config.builder!(
         context,
-        config: config,
-        enabled: enabled,
+        config,
+        enabled,
       );
     }
 
@@ -168,8 +157,8 @@ class Secret extends StatelessWidget {
           color: config.borderColor,
         ),
       ),
-      width: config.width,
-      height: config.height,
+      width: config.size,
+      height: config.size,
     );
   }
 }

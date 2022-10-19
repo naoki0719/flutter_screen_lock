@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/src/configurations/key_pad_config.dart';
-import 'package:flutter_screen_lock/src/layout/styled_input_button.dart';
+import 'package:flutter_screen_lock/src/layout/key_pad_button.dart';
 import 'package:flutter_screen_lock/src/input_controller.dart';
 
-/// In order to arrange the buttons neatly by their size,
-/// I dared to adjust them without using GridView or Wrap.
-/// If you use GridView, you have to specify the overall width to adjust the size of the button,
-/// which makes it difficult to specify the size intuitively.
+/// [GridView] or [Wrap] make it difficult to specify the item size intuitively.
+/// We therefore arrange them manually with [Column]s and [Row]s
 class KeyPad extends StatelessWidget {
   const KeyPad({
-    Key? key,
+    super.key,
     required this.inputState,
     required this.didCancelled,
     this.enabled = true,
@@ -18,8 +16,7 @@ class KeyPad extends StatelessWidget {
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  })  : keyPadConfig = keyPadConfig ?? const KeyPadConfig(),
-        super(key: key);
+  }) : keyPadConfig = keyPadConfig ?? const KeyPadConfig();
 
   final InputController inputState;
   final VoidCallback? didCancelled;
@@ -31,7 +28,7 @@ class KeyPad extends StatelessWidget {
   final Widget? cancelButton;
 
   Widget _buildDeleteButton() {
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: () => inputState.removeCharacter(),
       onLongPress:
           keyPadConfig.clearOnLongPressed ? () => inputState.clear() : null,
@@ -45,24 +42,22 @@ class KeyPad extends StatelessWidget {
       return _buildHiddenButton();
     }
 
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: didCancelled,
       config: keyPadConfig.buttonConfig,
       child: cancelButton ??
-          const FittedBox(
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-              softWrap: false,
+          const Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 16,
             ),
+            softWrap: false,
           ),
     );
   }
 
   Widget _buildHiddenButton() {
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: () {},
       config: keyPadConfig.buttonConfig,
     );
@@ -86,7 +81,7 @@ class KeyPad extends StatelessWidget {
       return _buildHiddenButton();
     }
 
-    return StyledInputButton.transparent(
+    return KeyPadButton.transparent(
       onPressed: customizedButtonTap!,
       config: keyPadConfig.buttonConfig,
       child: customizedButtonChild!,
@@ -101,7 +96,7 @@ class KeyPad extends StatelessWidget {
         final input = keyPadConfig.inputStrings[number];
         final display = keyPadConfig.displayStrings[number];
 
-        return StyledInputButton(
+        return KeyPadButton(
           config: keyPadConfig.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),
@@ -119,7 +114,7 @@ class KeyPad extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildLeftSideButton(),
-        StyledInputButton(
+        KeyPadButton(
           config: keyPadConfig.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),

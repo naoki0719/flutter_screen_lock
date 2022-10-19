@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('input stream test', () {
     final state = InputController();
-    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
+    state.initialize(digits: 4, correctString: '1234');
 
     expectLater(
       state.currentInput,
@@ -33,7 +33,7 @@ void main() {
 
   test('input verify', () {
     final state = InputController();
-    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
+    state.initialize(digits: 4, correctString: '1234');
 
     expectLater(state.verifyInput, emitsInOrder(<bool>[true]));
 
@@ -45,7 +45,7 @@ void main() {
 
   test('input verify as failed', () {
     final state = InputController();
-    state.initialize(digits: 4, correctString: '1234', isConfirmed: false);
+    state.initialize(digits: 4, correctString: '1234');
 
     expectLater(state.verifyInput, emitsInOrder(<bool>[false]));
 
