@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.0.0] - 2022-10-27
+
+- Change all callback names from `didSomething` to `onSomething`.
+- Change `screenLock` with `confirm: true` to `screenLockCreate`.
+- Change `ScreenLock` with `confirm: true` to `ScreenLock.create`.
+- Replace `StyledInputConfig` with `KeyPadButtonConfig`.
+- Replace `spacingRatio` with fixed value `spacing` in `Secrets`.
+
 ## [7.0.3] - 2022-07-21
 
 - Added option for onValidate callback.
@@ -80,6 +88,7 @@
 ## [5.0.6+1] - 2022-03-01
 
 - I have formatted the code properly.
+
 ## [5.0.6] - 2022-02-21
 
 - Clear input chars on long pressed (#42).
