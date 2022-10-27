@@ -146,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onConfirmed: (value) => Navigator.of(context).pop(),
                         screenLockConfig: const ScreenLockConfig(
                           backgroundColor: Colors.deepOrange,
+                          titleTextStyle: TextStyle(fontSize: 24),
                         ),
                         secretsConfig: SecretsConfig(
                           spacing: 15, // or spacingRatio
@@ -222,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       screenLockConfig: const ScreenLockConfig(
                         /// If you don't want it to be transparent, override the config
                         backgroundColor: Colors.black,
+                        titleTextStyle: TextStyle(fontSize: 24),
                       ),
                     ),
                     child: const Text('Not blur'),
