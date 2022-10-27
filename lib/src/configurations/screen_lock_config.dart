@@ -3,39 +3,73 @@ import 'package:flutter/material.dart';
 class ScreenLockConfig {
   const ScreenLockConfig({
     this.backgroundColor,
+    this.titleTextStyle,
+    this.textStyle,
+    this.buttonStyle,
     this.themeData,
   });
 
-  /// ScreenLock default theme data.
-  ///
-  /// - Heading title is textTheme.heading1
-  /// - Bottom both side text color is outlinedButtonTheme > style > primary
-  /// - Number text button is outlinedButtonTheme
-  static final ThemeData defaultThemeData = ThemeData(
-    scaffoldBackgroundColor: const Color(0x88545454),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        primary: const Color(0xFFFFFFFF),
-        backgroundColor: const Color(0xFF808080),
-        shape: const CircleBorder(),
-        padding: const EdgeInsets.all(0),
-        side: BorderSide.none,
-      ),
-    ),
-    textTheme: const TextTheme(
-      headline1: TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-      ),
-      bodyText2: TextStyle(
-        color: Colors.white,
-        fontSize: 18,
-      ),
-    ),
-  );
-
-  /// background color of ScreenLock.
+  /// Background color of the ScreenLock.
   final Color? backgroundColor;
 
+  /// Text style for title Texts.
+  final TextStyle? titleTextStyle;
+
+  /// Text style for other Texts.
+  final TextStyle? textStyle;
+
+  /// Button style for keypad buttons.
+  final ButtonStyle? buttonStyle;
+
+  /// Base [ThemeData] that is overriden by other specified values.
   final ThemeData? themeData;
+
+  /// Returns this config as a [ThemeData].
+  ThemeData toThemeData() {
+    return (themeData ?? ThemeData()).copyWith(
+      scaffoldBackgroundColor: backgroundColor,
+      outlinedButtonTheme: OutlinedButtonThemeData(style: buttonStyle),
+      textTheme: TextTheme(
+        headline1: titleTextStyle,
+        bodyText2: textStyle,
+      ),
+    );
+  }
+
+  /// Copies a [ScreenLockConfig] with new values.
+  ScreenLockConfig copyWith({
+    Color? backgroundColor,
+    TextStyle? titleTextStyle,
+    TextStyle? textStyle,
+    ButtonStyle? buttonStyle,
+    ThemeData? themeData,
+  }) {
+    return ScreenLockConfig(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      titleTextStyle: titleTextStyle ?? this.titleTextStyle,
+      textStyle: textStyle ?? this.textStyle,
+      buttonStyle: buttonStyle ?? this.buttonStyle,
+      themeData: themeData ?? this.themeData,
+    );
+  }
+
+  /// Default [ScreenLockConfig].
+  static final ScreenLockConfig defaultConfig = ScreenLockConfig(
+    backgroundColor: const Color(0x88545454),
+    buttonStyle: OutlinedButton.styleFrom(
+      foregroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFF808080),
+      shape: const CircleBorder(),
+      padding: const EdgeInsets.all(0),
+      side: BorderSide.none,
+    ),
+    titleTextStyle: const TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+    ),
+    textStyle: const TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+    ),
+  );
 }

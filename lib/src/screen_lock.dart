@@ -6,96 +6,115 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
 
-typedef DelayBuilderCallback = Widget Function(
-    BuildContext context, Duration delay);
-
-typedef SecretsBuilderCallback = Widget Function(
-  BuildContext context,
-  SecretsConfig config,
-  int length,
-  ValueListenable<String> input,
-  Stream<bool> verifyStream,
-);
-
-typedef ValidationCallback = Future<bool> Function(
-  String input,
-);
-
 class ScreenLock extends StatefulWidget {
+  /// Animated ScreenLock
   const ScreenLock({
-    Key? key,
-    required this.correctString,
-    required this.didUnlocked,
-    this.didOpened,
-    this.didCancelled,
-    this.didConfirmed,
-    this.didError,
-    this.didMaxRetries,
-    this.customizedButtonTap,
-    this.confirmation = false,
-    this.digits = 4,
+    super.key,
+    required String this.correctString,
+    required VoidCallback this.onUnlocked,
+    this.onOpened,
+    this.onValidate,
+    this.onCancelled,
+    this.onError,
+    this.onMaxRetries,
     this.maxRetries = 0,
     this.retryDelay = Duration.zero,
     Widget? title,
-    Widget? confirmTitle,
-    ScreenLockConfig? screenLockConfig,
+    this.screenLockConfig,
     SecretsConfig? secretsConfig,
     this.keyPadConfig,
     this.delayBuilder,
     this.customizedButtonChild,
+    this.customizedButtonTap,
     this.footer,
     this.cancelButton,
     this.deleteButton,
     this.inputController,
-    this.withBlur = true,
     this.secretsBuilder,
+    this.useBlur = true,
     this.useLandscape = true,
-    this.onValidate,
   })  : title = title ?? const Text('Please enter passcode.'),
-        confirmTitle =
-            confirmTitle ?? const Text('Please enter confirm passcode.'),
-        screenLockConfig = screenLockConfig ?? const ScreenLockConfig(),
+        confirmTitle = null,
+        digits = correctString.length,
+        onConfirmed = null,
         secretsConfig = secretsConfig ?? const SecretsConfig(),
-        assert(maxRetries > -1),
-        super(key: key);
+        assert(maxRetries > -1, 'max retries cannot be less than 0'),
+        assert(correctString.length > 0, 'correct string cannot be empty');
+
+  /// Animated ScreenLock
+  const ScreenLock.create({
+    super.key,
+    required ValueChanged<String> this.onConfirmed,
+    this.onOpened,
+    this.onValidate,
+    this.onCancelled,
+    this.onError,
+    this.onMaxRetries,
+    this.maxRetries = 0,
+    this.digits = 4,
+    this.retryDelay = Duration.zero,
+    Widget? title,
+    Widget? confirmTitle,
+    this.screenLockConfig,
+    SecretsConfig? secretsConfig,
+    this.keyPadConfig,
+    this.delayBuilder,
+    this.customizedButtonChild,
+    this.customizedButtonTap,
+    this.footer,
+    this.cancelButton,
+    this.deleteButton,
+    this.inputController,
+    this.secretsBuilder,
+    this.useBlur = true,
+    this.useLandscape = true,
+  })  : correctString = null,
+        title = title ?? const Text('Please enter new passcode.'),
+        confirmTitle =
+            confirmTitle ?? const Text('Please confirm new passcode.'),
+        onUnlocked = null,
+        secretsConfig = secretsConfig ?? const SecretsConfig(),
+        assert(maxRetries > -1);
 
   /// Input correct string.
-  final String correctString;
+  final String? correctString;
 
   /// Called if the value matches the correctString.
-  final VoidCallback didUnlocked;
+  final VoidCallback? onUnlocked;
+
+  /// Callback to validate input values filled in [digits].
+  ///
+  /// If `true` is returned, the lock is unlocked.
+  final ValidationCallback? onValidate;
 
   /// Called when the screen is shown the first time.
   ///
   /// Useful if you want to show biometric authentication.
-  final VoidCallback? didOpened;
+  final VoidCallback? onOpened;
 
   /// Called when the user cancels.
   ///
   /// If null, the user cannot cancel.
-  final VoidCallback? didCancelled;
+  final VoidCallback? onCancelled;
 
   /// Called when the first and second inputs match during confirmation.
-  final void Function(String matchedText)? didConfirmed;
+  final ValueChanged<String>? onConfirmed;
 
   /// Called if the value does not match the correctString.
-  final void Function(int retries)? didError;
+  final ValueChanged<int>? onError;
 
   /// Events that have reached the maximum number of attempts.
-  final void Function(int retries)? didMaxRetries;
+  final ValueChanged<int>? onMaxRetries;
 
   /// Tapped for left side lower button.
   final VoidCallback? customizedButtonTap;
 
-  /// Make sure the first and second inputs are the same.
-  final bool confirmation;
-
-  /// Set the maximum number of characters to enter when confirmation is true.
-  final int digits;
-
   /// `0` is unlimited.
   /// For example, if it is set to 1, didMaxRetries will be called on the first failure.
   final int maxRetries;
+
+  /// Set the maximum number of characters to enter when confirmation is true.
+  final int digits;
 
   /// Delay until we can retry.
   ///
@@ -106,10 +125,10 @@ class ScreenLock extends StatefulWidget {
   final Widget title;
 
   /// Heading confirm title for ScreenLock.
-  final Widget confirmTitle;
+  final Widget? confirmTitle;
 
   /// Configurations of [ScreenLock].
-  final ScreenLockConfig screenLockConfig;
+  final ScreenLockConfig? screenLockConfig;
 
   /// Configurations of [Secrets].
   final SecretsConfig secretsConfig;
@@ -135,39 +154,75 @@ class ScreenLock extends StatefulWidget {
   /// Control inputs externally.
   final InputController? inputController;
 
-  /// Blur the background.
-  final bool withBlur;
-
   /// Custom secrets animation widget builder.
   final SecretsBuilderCallback? secretsBuilder;
 
-  /// Use a landscape orientation.
-  final bool useLandscape;
+  /// Blur the background.
+  final bool useBlur;
 
-  /// Callback to validate input values filled in [digits].
-  ///
-  /// If `true` is returned, the lock is unlocked.
-  final ValidationCallback? onValidate;
+  /// Use a landscape orientation when sufficient width is available.
+  final bool useLandscape;
 
   @override
   State<ScreenLock> createState() => _ScreenLockState();
 }
 
 class _ScreenLockState extends State<ScreenLock> {
-  late InputController inputController;
+  late InputController inputController =
+      widget.inputController ?? InputController();
 
   /// Logging retries.
   int retries = 1;
-
-  /// First input completed.
-  bool firstInputCompleted = false;
-
-  String firstInput = '';
 
   final StreamController<Duration> inputDelayController =
       StreamController.broadcast();
 
   bool inputDelayed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    inputController.initialize(
+      correctString: widget.correctString,
+      digits: widget.digits,
+      onValidate: widget.onValidate,
+    );
+
+    inputController.verifyInput.listen((success) {
+      // Wait for the animation on failure.
+      Future.delayed(const Duration(milliseconds: 300), () {
+        inputController.clear();
+      });
+
+      if (success) {
+        if (widget.correctString != null) {
+          widget.onUnlocked!();
+        } else {
+          widget.onConfirmed!(inputController.confirmedInput);
+        }
+      } else {
+        error();
+      }
+    });
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => widget.onOpened?.call());
+  }
+
+  @override
+  void didUpdateWidget(covariant ScreenLock oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.inputController != widget.inputController) {
+      inputController.dispose();
+      inputController = widget.inputController ?? InputController();
+    }
+  }
+
+  @override
+  void dispose() {
+    inputController.dispose();
+    super.dispose();
+  }
 
   void inputDelay() {
     if (widget.retryDelay == (Duration.zero)) {
@@ -201,10 +256,10 @@ class _ScreenLockState extends State<ScreenLock> {
   }
 
   void error() {
-    widget.didError?.call(retries);
+    widget.onError?.call(retries);
 
     if (widget.maxRetries >= 1 && widget.maxRetries <= retries) {
-      widget.didMaxRetries?.call(retries);
+      widget.onMaxRetries?.call(retries);
 
       // reset retries
       retries = 0;
@@ -215,7 +270,7 @@ class _ScreenLockState extends State<ScreenLock> {
     retries++;
   }
 
-  Widget makeDelayBuilder(Duration duration) {
+  Widget buildDelayChild(Duration duration) {
     if (widget.delayBuilder != null) {
       return widget.delayBuilder!(context, duration);
     } else {
@@ -227,15 +282,11 @@ class _ScreenLockState extends State<ScreenLock> {
 
   Widget buildHeadingText() {
     Widget buildConfirmed(Widget child) {
-      if (widget.confirmation) {
+      if (widget.correctString == null) {
         return StreamBuilder<bool>(
           stream: inputController.confirmed,
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!) {
-              return widget.confirmTitle;
-            }
-            return child;
-          },
+          builder: (context, snapshot) =>
+              snapshot.data == true ? widget.confirmTitle! : child,
         );
       }
       return child;
@@ -247,7 +298,7 @@ class _ScreenLockState extends State<ScreenLock> {
           stream: inputDelayController.stream,
           builder: (context, snapshot) {
             if (inputDelayed && snapshot.hasData) {
-              return makeDelayBuilder(snapshot.data!);
+              return buildDelayChild(snapshot.data!);
             }
             return child;
           },
@@ -269,86 +320,31 @@ class _ScreenLockState extends State<ScreenLock> {
     );
   }
 
-  ThemeData makeThemeData() {
-    return widget.screenLockConfig.themeData ??
-        ScreenLockConfig.defaultThemeData;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    inputController = widget.inputController ?? InputController();
-    inputController.initialize(
-      correctString: widget.correctString,
-      digits: widget.digits,
-      isConfirmed: widget.confirmation,
-      onValidate: widget.onValidate,
-    );
-
-    inputController.verifyInput.listen((success) {
-      // Wait for the animation on failure.
-      Future.delayed(const Duration(milliseconds: 300), () {
-        inputController.clear();
-      });
-
-      if (success) {
-        if (widget.confirmation) {
-          widget.didConfirmed?.call(inputController.confirmedInput);
-        } else {
-          widget.didUnlocked();
-        }
-      } else {
-        error();
-      }
-    });
-
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.didOpened?.call());
-  }
-
-  @override
-  void dispose() {
-    inputController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    late final int secretLength;
-
-    if (widget.confirmation) {
-      secretLength = widget.digits;
-    } else {
-      secretLength = widget.correctString.isNotEmpty
-          ? widget.correctString.length
-          : widget.digits;
-    }
-
     final orientations = <Orientation, Axis>{
       Orientation.portrait: Axis.vertical,
+      Orientation.landscape:
+          widget.useLandscape ? Axis.horizontal : Axis.vertical,
     };
 
-    if (widget.useLandscape) {
-      orientations[Orientation.landscape] = Axis.horizontal;
-    } else {
-      orientations[Orientation.landscape] = Axis.vertical;
-    }
-
     Widget buildSecrets() {
-      return widget.secretsBuilder == null
-          ? SecretsWithShakingAnimation(
-              config: widget.secretsConfig,
-              length: secretLength,
-              input: inputController.currentInput,
-              verifyStream: inputController.verifyInput,
-            )
-          : widget.secretsBuilder!(
-              context,
-              widget.secretsConfig,
-              secretLength,
-              inputController.currentInput,
-              inputController.verifyInput,
-            );
+      if (widget.secretsBuilder != null) {
+        return widget.secretsBuilder!(
+          context,
+          widget.secretsConfig,
+          widget.digits,
+          inputController.currentInput,
+          inputController.verifyInput,
+        );
+      } else {
+        return SecretsWithShakingAnimation(
+          config: widget.secretsConfig,
+          length: widget.digits,
+          input: inputController.currentInput,
+          verifyStream: inputController.verifyInput,
+        );
+      }
     }
 
     Widget buildKeyPad() {
@@ -357,7 +353,7 @@ class _ScreenLockState extends State<ScreenLock> {
           enabled: !inputDelayed,
           keyPadConfig: widget.keyPadConfig,
           inputState: inputController,
-          didCancelled: widget.didCancelled,
+          didCancelled: widget.onCancelled,
           customizedButtonTap: widget.customizedButtonTap,
           customizedButtonChild: widget.customizedButtonChild,
           deleteButton: widget.deleteButton,
@@ -391,21 +387,40 @@ class _ScreenLockState extends State<ScreenLock> {
       );
     }
 
-    Widget buildContentWithBlur() {
-      return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
-        child: buildContent(),
-      );
+    Widget buildContentWithBlur({required bool useBlur}) {
+      Widget child = buildContent();
+      if (useBlur) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3.5, sigmaY: 3.5),
+          child: child,
+        );
+      }
+      return child;
     }
 
     return Theme(
-      data: makeThemeData(),
+      data: (widget.screenLockConfig ?? ScreenLockConfig.defaultConfig)
+          .toThemeData(),
       child: Scaffold(
-        backgroundColor: widget.screenLockConfig.backgroundColor,
         body: SafeArea(
-          child: widget.withBlur ? buildContentWithBlur() : buildContent(),
+          child: buildContentWithBlur(useBlur: widget.useBlur),
         ),
       ),
     );
   }
 }
+
+typedef DelayBuilderCallback = Widget Function(
+    BuildContext context, Duration delay);
+
+typedef SecretsBuilderCallback = Widget Function(
+  BuildContext context,
+  SecretsConfig config,
+  int length,
+  ValueListenable<String> input,
+  Stream<bool> verifyStream,
+);
+
+typedef ValidationCallback = Future<bool> Function(
+  String input,
+);

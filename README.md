@@ -10,29 +10,6 @@ You can also use biometric authentication as an option.
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/landscape.png" />
 
-## 6.x to 7 migration
-
-Change delayChilde to delayBuilder.
-It used to push another screen, but has been changed to display a message in TextWidget.
-
-We would like to thank [clragon](https://github.com/clragon) for their significant contribution to these changes.
-
-## 5.x to 6 migration
-
-The major change is that Navigator.pop will be controlled by the developer.
-This is because it is undesirable to pop inside the package in various situations.
-However, we continue to pop in the initial value of the callback as before.
-
-We would like to thank [clragon](https://github.com/clragon) for their significant contribution to these changes.
-
-## 4.x to 5 migration
-
-Change to the next import only.
-
-```dart
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
-```
-
 ## Features
 
 - By the length of the character count
@@ -63,9 +40,9 @@ screenLock(
 );
 ```
 
-### Change digits
+### Block user
 
-Provides a screen lock that cannot be canceled.
+Provides a screen lock that cannot be cancelled.
 
 ```dart
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
@@ -77,46 +54,38 @@ screenLock(
 );
 ```
 
-### Confirmation screen
+### Passcode creation
 
-You can display the confirmation screen and get the first input with didConfirmed if the first and second inputs match.
+You can have users create a new passcode with confirmation
 
 ```dart
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
-screenLock(
+screenLockCreate(
   context: context,
-  correctString: '',
-  confirmation: true,
-  didConfirmed: (matchedText) {
-    print(matchedText);
-  },
+  onConfirmed: (value) => print(value), // store new passcode somewhere here
 );
 ```
 
-### Control the confirmation state
+### Control the creation state
 
 ```dart
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
 final inputController = InputController();
 
-screenLock(
+screenLockCreate(
   context: context,
-  correctString: '',
-  confirmation: true,
   inputController: inputController,
 );
 
-// Release the confirmation state at any event.
-inputController.unsetConfirmed();
+// Somewhere else...
+inputController.unsetConfirmed(); // reset first and confirm input
 ```
 
 ### Use local_auth
 
-Add the local_auth package to pubspec.yml.
-
-https://pub.dev/packages/local_auth
+Add the [local_auth](https://pub.dev/packages/local_auth) package to pubspec.yml.
 
 It includes an example that calls biometrics as soon as screenLock is displayed in `didOpened`.
 
@@ -125,7 +94,6 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/material.dart';
 
-/// Method extraction to call by initial display and custom buttons.
 Future<void> localAuth(BuildContext context) async {
   final localAuth = LocalAuthentication();
   final didAuthenticate = await localAuth.authenticateWithBiometrics(
@@ -138,31 +106,27 @@ Future<void> localAuth(BuildContext context) async {
 screenLock(
   context: context,
   correctString: '1234',
-  customizedButtonChild: Icon(
-    Icons.fingerprint,
-  ),
-  customizedButtonTap: () async {
-    await localAuth(context);
-  },
-  didOpened: () async {
-    await localAuth(context);
-  },
+  customizedButtonChild: Icon(Icons.fingerprint),
+  customizedButtonTap: () async => await localAuth(context),
+  didOpened: () async => await localAuth(context),
 );
 ```
 
-### Full customize
+### Fully customize
+
+You can customize every aspect of the screenlock.
+Here is an example:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 
-screenLock(
+screenLockCreate(
   context: context,
-  title: Text('change title'),
-  confirmTitle: Text('change confirm title'),
-  correctString: '1234',
-  confirmation: true,
-  screenLockConfig: ScreenLockConfig(
+  title: const Text('change title'),
+  confirmTitle: const Text('change confirm title'),
+  onConfirmed: (value) => Navigator.of(context).pop(),
+  screenLockConfig: const ScreenLockConfig(
     backgroundColor: Colors.deepOrange,
   ),
   secretsConfig: SecretsConfig(
@@ -175,39 +139,50 @@ screenLock(
       enabledColor: Colors.amber,
       height: 15,
       width: 15,
-      build: (context, {config, enabled}) {
-        return SizedBox(
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: enabled
-                  ? config.enabledColor
-                  : config.disabledColor,
-              border: Border.all(
-                width: config.borderSize,
-                color: config.borderColor,
-              ),
-            ),
-            padding: EdgeInsets.all(10),
-            width: config.width,
-            height: config.height,
+      build: (context,
+              {required config, required enabled}) =>
+          Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: enabled
+              ? config.enabledColor
+              : config.disabledColor,
+          border: Border.all(
+            width: config.borderSize,
+            color: config.borderColor,
           ),
-          width: config.width,
-          height: config.height,
-        );
-      },
+        ),
+        padding: const EdgeInsets.all(10),
+        width: config.width,
+        height: config.height,
+      ),
     ),
   ),
-  inputButtonConfig: InputButtonConfig(
-    textStyle:
-        InputButtonConfig.getDefaultTextStyle(context).copyWith(
-      color: Colors.orange,
-      fontWeight: FontWeight.bold,
+  keyPadConfig: KeyPadConfig(
+    buttonConfig: StyledInputConfig(
+      textStyle:
+          StyledInputConfig.getDefaultTextStyle(context)
+              .copyWith(
+        color: Colors.orange,
+        fontWeight: FontWeight.bold,
+      ),
+      buttonStyle: OutlinedButton.styleFrom(
+        shape: const RoundedRectangleBorder(),
+        backgroundColor: Colors.deepOrange,
+      ),
     ),
-    buttonStyle: OutlinedButton.styleFrom(
-      shape: RoundedRectangleBorder(),
-      backgroundColor: Colors.deepOrange,
-    ),
+    displayStrings: [
+      '零',
+      '壱',
+      '弐',
+      '参',
+      '肆',
+      '伍',
+      '陸',
+      '質',
+      '捌',
+      '玖'
+    ],
   ),
   cancelButton: const Icon(Icons.close),
   deleteButton: const Icon(Icons.delete),
@@ -216,14 +191,52 @@ screenLock(
 
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/customize_styles_v3.png" />
 
-## Apps I use
+## Version migration
 
-TimeKey
+### 7.x to 8 migration
 
-[iOS](https://apps.apple.com/us/app/timekey-authenticator/id1506129753)
+- Change all callback names from `didSomething` to `onSomething`
+- Change `screenLock` with `confirm: true` to `screenLockCreate`
+- Change `ScreenLock` with `confirm: true` to `ScreenLock.create`
+- Replace `StyledInputConfig` with `KeyPadButtonConfig`
+- Replace `spacingRatio` with fixed value `spacing` in `Secrets` 
 
-[Android](https://play.google.com/store/apps/details?id=net.incrementleaf.TimeKey)
+### 6.x to 7 migration
 
-## Back me up!
+- Requires dart >= 2.17 and Flutter 3.0
+- Replace `InputButtonConfig` with `KeyPadConfig`.
+- Change `delayChild` to `delayBuilder`.  
+  `delayBuilder` is no longer displayed in a new screen. Instead, it is now located above the `Secrets`.
+- Accept `BuildContext` in `secretsBuilder`.
+
+### 5.x to 6 migration
+
+- `ScreenLock` does not use `Navigator.pop` internally anymore.   
+  The developer should now pop by themselves when desired.   
+  `screenLock` call will pop automatically if `onUnlocked` is `null`.
+
+### 4.x to 5 migration
+
+Import name has changed from:
+
+```dart
+import 'package:flutter_screen_lock/functions.dart';
+```
+
+to
+
+```dart
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+```
+
+## Apps that use this library
+
+### TimeKey
+
+- [iOS](https://apps.apple.com/us/app/timekey-authenticator/id1506129753)
+
+- [Android](https://play.google.com/store/apps/details?id=net.incrementleaf.TimeKey)
+
+## Support me!
 
 <a href="https://www.buymeacoffee.com/noa.nao" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="30%" ></a>
