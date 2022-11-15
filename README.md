@@ -193,6 +193,11 @@ screenLockCreate(
 
 ## Version migration
 
+### 8.x to 9 migration
+
+- Change `screenLockConfig` parameter to `config`
+- Change `keyPadConfig` parameter to `config`
+
 ### 7.x to 8 migration
 
 - Change all callback names from `didSomething` to `onSomething`
