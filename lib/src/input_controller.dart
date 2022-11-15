@@ -31,7 +31,7 @@ class InputController {
 
   /// Add some text at the end and stream it.
   void addCharacter(String input) {
-    if (_digits < _currentInputs.length) {
+    if (_currentInputs.length >= _digits) {
       return;
     }
 

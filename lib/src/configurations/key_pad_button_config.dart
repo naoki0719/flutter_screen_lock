@@ -4,6 +4,7 @@ class KeyPadButtonConfig {
   const KeyPadButtonConfig({
     double? size,
     double? fontSize,
+    double? actionFontSize,
     this.foregroundColor,
     this.backgroundColor,
     this.buttonStyle,
@@ -22,13 +23,16 @@ class KeyPadButtonConfig {
   /// Button background color.
   final Color? backgroundColor;
 
-  /// Base [ButtonStyle] that is overriden by other specified values.
+  /// Base [ButtonStyle] that is overridden by other specified values.
   final ButtonStyle? buttonStyle;
 
   /// Returns this config as a [ButtonStyle].
   ButtonStyle toButtonStyle() {
     ButtonStyle composed = OutlinedButton.styleFrom(
-      textStyle: TextStyle(fontSize: fontSize),
+      textStyle: TextStyle(
+        fontSize: fontSize,
+        overflow: TextOverflow.fade,
+      ),
       foregroundColor: foregroundColor,
       backgroundColor: backgroundColor,
     );

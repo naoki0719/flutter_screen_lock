@@ -3,13 +3,17 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 class KeyPadConfig {
   const KeyPadConfig({
     this.buttonConfig,
+    this.actionButtonConfig,
     this.inputStrings = _numbers,
     List<String>? displayStrings,
     this.clearOnLongPressed = false,
   }) : displayStrings = displayStrings ?? inputStrings;
 
-  /// Config for all [KeyPadButton] children.
+  /// Config for numeric [KeyPadButton]s.
   final KeyPadButtonConfig? buttonConfig;
+
+  /// Config for actionable [KeyPadButton]s.
+  final KeyPadButtonConfig? actionButtonConfig;
 
   /// The strings the user can input.
   final List<String> inputStrings;

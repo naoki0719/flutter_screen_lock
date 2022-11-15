@@ -21,7 +21,7 @@ class ScreenLockConfig {
   /// Button style for keypad buttons.
   final ButtonStyle? buttonStyle;
 
-  /// Base [ThemeData] that is overriden by other specified values.
+  /// Base [ThemeData] that is overridden by other specified values.
   final ThemeData? themeData;
 
   /// Returns this config as a [ThemeData].
@@ -30,7 +30,7 @@ class ScreenLockConfig {
       scaffoldBackgroundColor: backgroundColor,
       outlinedButtonTheme: OutlinedButtonThemeData(style: buttonStyle),
       textTheme: TextTheme(
-        headline1: titleTextStyle,
+        headline6: titleTextStyle,
         bodyText2: textStyle,
       ),
     );

@@ -20,7 +20,7 @@ class ScreenLock extends StatefulWidget {
     this.maxRetries = 0,
     this.retryDelay = Duration.zero,
     Widget? title,
-    this.screenLockConfig,
+    this.config,
     SecretsConfig? secretsConfig,
     this.keyPadConfig,
     this.delayBuilder,
@@ -55,7 +55,7 @@ class ScreenLock extends StatefulWidget {
     this.retryDelay = Duration.zero,
     Widget? title,
     Widget? confirmTitle,
-    this.screenLockConfig,
+    this.config,
     SecretsConfig? secretsConfig,
     this.keyPadConfig,
     this.delayBuilder,
@@ -128,7 +128,7 @@ class ScreenLock extends StatefulWidget {
   final Widget? confirmTitle;
 
   /// Configurations of [ScreenLock].
-  final ScreenLockConfig? screenLockConfig;
+  final ScreenLockConfig? config;
 
   /// Configurations of [Secrets].
   final SecretsConfig secretsConfig;
@@ -178,6 +178,7 @@ class _ScreenLockState extends State<ScreenLock> {
       StreamController.broadcast();
 
   bool inputDelayed = false;
+  bool enabled = true;
 
   @override
   void initState() {
@@ -189,12 +190,10 @@ class _ScreenLockState extends State<ScreenLock> {
     );
 
     inputController.verifyInput.listen((success) {
-      // Wait for the animation on failure.
-      Future.delayed(const Duration(milliseconds: 300), () {
-        inputController.clear();
-      });
-
       if (success) {
+        setState(() {
+          enabled = false;
+        });
         if (widget.correctString != null) {
           widget.onUnlocked!();
         } else {
@@ -202,6 +201,11 @@ class _ScreenLockState extends State<ScreenLock> {
         }
       } else {
         error();
+
+        // Wait for the animation on failure.
+        Future.delayed(const Duration(milliseconds: 300), () {
+          inputController.clear();
+        });
       }
     });
 
@@ -309,7 +313,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
     return Builder(
       builder: (context) => DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline1!,
+        style: Theme.of(context).textTheme.headline6!,
         textAlign: TextAlign.center,
         child: buildDelay(
           buildConfirmed(
@@ -350,8 +354,8 @@ class _ScreenLockState extends State<ScreenLock> {
     Widget buildKeyPad() {
       return Center(
         child: KeyPad(
-          enabled: !inputDelayed,
-          keyPadConfig: widget.keyPadConfig,
+          enabled: enabled && !inputDelayed,
+          config: widget.keyPadConfig,
           inputState: inputController,
           didCancelled: widget.onCancelled,
           customizedButtonTap: widget.customizedButtonTap,
@@ -399,8 +403,7 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     return Theme(
-      data: (widget.screenLockConfig ?? ScreenLockConfig.defaultConfig)
-          .toThemeData(),
+      data: (widget.config ?? ScreenLockConfig.defaultConfig).toThemeData(),
       child: Scaffold(
         body: SafeArea(
           child: buildContentWithBlur(useBlur: widget.useBlur),
