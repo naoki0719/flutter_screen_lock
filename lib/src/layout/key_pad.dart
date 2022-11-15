@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screen_lock/src/configurations/key_pad_config.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad_button.dart';
-import 'package:flutter_screen_lock/src/input_controller.dart';
 
 /// [GridView] or [Wrap] make it difficult to specify the item size intuitively.
 /// We therefore arrange them manually with [Column]s and [Row]s
@@ -11,28 +10,30 @@ class KeyPad extends StatelessWidget {
     required this.inputState,
     required this.didCancelled,
     this.enabled = true,
-    KeyPadConfig? keyPadConfig,
+    KeyPadConfig? config,
     this.customizedButtonChild,
     this.customizedButtonTap,
     this.deleteButton,
     this.cancelButton,
-  }) : keyPadConfig = keyPadConfig ?? const KeyPadConfig();
+  }) : config = config ?? const KeyPadConfig();
 
   final InputController inputState;
   final VoidCallback? didCancelled;
   final bool enabled;
-  final KeyPadConfig keyPadConfig;
+  final KeyPadConfig config;
   final Widget? customizedButtonChild;
   final VoidCallback? customizedButtonTap;
   final Widget? deleteButton;
   final Widget? cancelButton;
 
+  KeyPadButtonConfig get actionButtonConfig =>
+      config.actionButtonConfig ?? const KeyPadButtonConfig(fontSize: 18);
+
   Widget _buildDeleteButton() {
     return KeyPadButton.transparent(
       onPressed: () => inputState.removeCharacter(),
-      onLongPress:
-          keyPadConfig.clearOnLongPressed ? () => inputState.clear() : null,
-      config: keyPadConfig.buttonConfig,
+      onLongPress: config.clearOnLongPressed ? () => inputState.clear() : null,
+      config: actionButtonConfig,
       child: deleteButton ?? const Icon(Icons.backspace),
     );
   }
@@ -44,14 +45,11 @@ class KeyPad extends StatelessWidget {
 
     return KeyPadButton.transparent(
       onPressed: didCancelled,
-      config: keyPadConfig.buttonConfig,
+      config: actionButtonConfig,
       child: cancelButton ??
           const Text(
             'Cancel',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-            softWrap: false,
+            textAlign: TextAlign.center,
           ),
     );
   }
@@ -59,7 +57,7 @@ class KeyPad extends StatelessWidget {
   Widget _buildHiddenButton() {
     return KeyPadButton.transparent(
       onPressed: () {},
-      config: keyPadConfig.buttonConfig,
+      config: actionButtonConfig,
     );
   }
 
@@ -83,7 +81,7 @@ class KeyPad extends StatelessWidget {
 
     return KeyPadButton.transparent(
       onPressed: customizedButtonTap!,
-      config: keyPadConfig.buttonConfig,
+      config: actionButtonConfig,
       child: customizedButtonChild!,
     );
   }
@@ -93,11 +91,11 @@ class KeyPad extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(3, (index) {
         final number = (rowNumber - 1) * 3 + index + 1;
-        final input = keyPadConfig.inputStrings[number];
-        final display = keyPadConfig.displayStrings[number];
+        final input = config.inputStrings[number];
+        final display = config.displayStrings[number];
 
         return KeyPadButton(
-          config: keyPadConfig.buttonConfig,
+          config: config.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),
         );
@@ -106,8 +104,8 @@ class KeyPad extends StatelessWidget {
   }
 
   Widget _generateLastRow(BuildContext context) {
-    final input = keyPadConfig.inputStrings[0];
-    final display = keyPadConfig.displayStrings[0];
+    final input = config.inputStrings[0];
+    final display = config.displayStrings[0];
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -115,7 +113,7 @@ class KeyPad extends StatelessWidget {
       children: [
         _buildLeftSideButton(),
         KeyPadButton(
-          config: keyPadConfig.buttonConfig,
+          config: config.buttonConfig,
           onPressed: enabled ? () => inputState.addCharacter(input) : null,
           child: Text(display),
         ),
@@ -126,8 +124,8 @@ class KeyPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(keyPadConfig.displayStrings.length == 10);
-    assert(keyPadConfig.inputStrings.length == 10);
+    assert(config.displayStrings.length == 10);
+    assert(config.inputStrings.length == 10);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

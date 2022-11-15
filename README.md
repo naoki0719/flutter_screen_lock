@@ -126,7 +126,7 @@ screenLockCreate(
   title: const Text('change title'),
   confirmTitle: const Text('change confirm title'),
   onConfirmed: (value) => Navigator.of(context).pop(),
-  screenLockConfig: const ScreenLockConfig(
+  config: const ScreenLockConfig(
     backgroundColor: Colors.deepOrange,
   ),
   secretsConfig: SecretsConfig(
@@ -192,6 +192,11 @@ screenLockCreate(
 <img src="https://raw.githubusercontent.com/naoki0719/flutter_screen_lock/master/resources/customize_styles_v3.png" />
 
 ## Version migration
+
+### 8.x to 9 migration
+
+- Change `screenLockConfig` parameter to `config`
+- Change `keyPadConfig` parameter to `config`
 
 ### 7.x to 8 migration
 
