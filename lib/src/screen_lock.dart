@@ -178,6 +178,7 @@ class _ScreenLockState extends State<ScreenLock> {
       StreamController.broadcast();
 
   bool inputDelayed = false;
+  bool enabled = true;
 
   @override
   void initState() {
@@ -189,12 +190,10 @@ class _ScreenLockState extends State<ScreenLock> {
     );
 
     inputController.verifyInput.listen((success) {
-      // Wait for the animation on failure.
-      Future.delayed(const Duration(milliseconds: 300), () {
-        inputController.clear();
-      });
-
       if (success) {
+        setState(() {
+          enabled = false;
+        });
         if (widget.correctString != null) {
           widget.onUnlocked!();
         } else {
@@ -202,6 +201,11 @@ class _ScreenLockState extends State<ScreenLock> {
         }
       } else {
         error();
+
+        // Wait for the animation on failure.
+        Future.delayed(const Duration(milliseconds: 300), () {
+          inputController.clear();
+        });
       }
     });
 
@@ -350,7 +354,7 @@ class _ScreenLockState extends State<ScreenLock> {
     Widget buildKeyPad() {
       return Center(
         child: KeyPad(
-          enabled: !inputDelayed,
+          enabled: enabled && !inputDelayed,
           config: widget.keyPadConfig,
           inputState: inputController,
           didCancelled: widget.onCancelled,
