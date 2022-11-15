@@ -126,7 +126,7 @@ screenLockCreate(
   title: const Text('change title'),
   confirmTitle: const Text('change confirm title'),
   onConfirmed: (value) => Navigator.of(context).pop(),
-  screenLockConfig: const ScreenLockConfig(
+  config: const ScreenLockConfig(
     backgroundColor: Colors.deepOrange,
   ),
   secretsConfig: SecretsConfig(
