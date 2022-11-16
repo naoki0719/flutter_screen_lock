@@ -1,5 +1,14 @@
 # Changelog
 
+## [9.0.0+1] - 2022-11-17
+
+- Added change log.
+
+## [9.0.0] - 2022-11-16
+
+- Fixed allowing entering too many digits.
+- Fixed ScreenLockConfig Title styling from ThemeData.
+
 ## [8.0.0] - 2022-10-27
 
 - Change all callback names from `didSomething` to `onSomething`.
