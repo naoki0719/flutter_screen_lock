@@ -1,5 +1,9 @@
 # Changelog
 
+## [9.0.0+1] - 2023-02-15
+
+- Disable splash animation for hidden buttons.
+
 ## [9.0.0+1] - 2022-11-17
 
 - Added change log.
