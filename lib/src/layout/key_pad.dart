@@ -56,7 +56,7 @@ class KeyPad extends StatelessWidget {
 
   Widget _buildHiddenButton() {
     return KeyPadButton.transparent(
-      onPressed: () {},
+      onPressed: null,
       config: actionButtonConfig,
     );
   }
