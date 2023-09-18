@@ -62,7 +62,9 @@ Future<void> screenLock({
       barrierColor: Colors.black.withOpacity(0.8),
       pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
         onWillPop: () async => canCancel && onCancelled == null,
-        child: ScreenLock(
+        child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: ScreenLock(
           correctString: correctString,
           onUnlocked: onUnlocked ?? Navigator.of(context).pop,
           onOpened: onOpened,
@@ -87,7 +89,7 @@ Future<void> screenLock({
           secretsBuilder: secretsBuilder,
           useBlur: useBlur,
           useLandscape: useLandscape,
-        ),
+        )),
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           SlideTransition(
@@ -169,7 +171,9 @@ Future<void> screenLockCreate({
       barrierColor: Colors.black.withOpacity(0.8),
       pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
         onWillPop: () async => canCancel && onCancelled == null,
-        child: ScreenLock.create(
+        child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: ScreenLock.create(
           onConfirmed: onConfirmed,
           onOpened: onOpened,
           onValidate: onValidate,
@@ -195,7 +199,7 @@ Future<void> screenLockCreate({
           secretsBuilder: secretsBuilder,
           useBlur: useBlur,
           useLandscape: useLandscape,
-        ),
+        )),
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           SlideTransition(
