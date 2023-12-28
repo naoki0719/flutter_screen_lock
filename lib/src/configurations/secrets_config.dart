@@ -6,7 +6,7 @@ class SecretsConfig {
     double? spacing,
     this.padding = const EdgeInsets.only(top: 20, bottom: 50),
     this.secretConfig = const SecretConfig(),
-  }) : spacing = 12;
+  }) : spacing = spacing ?? 12;
 
   /// Space between secret widgets.
   final double spacing;
