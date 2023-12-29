@@ -1,6 +1,10 @@
 # Changelog
 
-## [9.0.0+1] - 2023-02-15
+## [9.0.2] - 2023-12-29
+
+- Fixed spacing issues with SecretsConfig. by [@DhavalRKansara](https://github.com/DhavalRKansara)
+
+## [9.0.1] - 2023-02-15
 
 - Disable splash animation for hidden buttons.
 
