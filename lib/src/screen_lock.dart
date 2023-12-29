@@ -107,7 +107,8 @@ class ScreenLock extends StatefulWidget {
   final ValueChanged<int>? onMaxRetries;
 
   /// Tapped for left side lower button.
-  final VoidCallback? customizedButtonTap;
+  final Function(bool confirmed, InputController controller)?
+      customizedButtonTap;
 
   /// `0` is unlimited.
   /// For example, if it is set to 1, didMaxRetries will be called on the first failure.
@@ -140,7 +141,7 @@ class ScreenLock extends StatefulWidget {
   final DelayBuilderCallback? delayBuilder;
 
   /// Child for bottom left side button.
-  final Widget? customizedButtonChild;
+  final Widget Function(bool confirmed)? customizedButtonChild;
 
   /// Footer widget.
   final Widget? footer;
@@ -313,7 +314,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
     return Builder(
       builder: (context) => DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline6!,
+        style: Theme.of(context).textTheme.titleLarge!,
         textAlign: TextAlign.center,
         child: buildDelay(
           buildConfirmed(
@@ -322,6 +323,17 @@ class _ScreenLockState extends State<ScreenLock> {
         ),
       ),
     );
+  }
+
+  Widget? customizedButtonChild() {
+    if (widget.customizedButtonChild != null) {
+      return StreamBuilder<bool>(
+        stream: inputController.confirmed,
+        builder: (context, snapshot) =>
+            widget.customizedButtonChild!(snapshot.data == true),
+      );
+    }
+    return null;
   }
 
   @override
@@ -352,18 +364,23 @@ class _ScreenLockState extends State<ScreenLock> {
     }
 
     Widget buildKeyPad() {
-      return Center(
-        child: KeyPad(
-          enabled: enabled && !inputDelayed,
-          config: widget.keyPadConfig,
-          inputState: inputController,
-          didCancelled: widget.onCancelled,
-          customizedButtonTap: widget.customizedButtonTap,
-          customizedButtonChild: widget.customizedButtonChild,
-          deleteButton: widget.deleteButton,
-          cancelButton: widget.cancelButton,
-        ),
-      );
+      return StreamBuilder<bool>(
+          stream: inputController.confirmed,
+          builder: (context, snapshot) {
+            return Center(
+              child: KeyPad(
+                enabled: enabled && !inputDelayed,
+                config: widget.keyPadConfig,
+                inputState: inputController,
+                didCancelled: widget.onCancelled,
+                customizedButtonTap: () => widget.customizedButtonTap
+                    ?.call(snapshot.data == true, inputController),
+                customizedButtonChild: customizedButtonChild(),
+                deleteButton: widget.deleteButton,
+                cancelButton: widget.cancelButton,
+              ),
+            );
+          });
     }
 
     Widget buildContent() {

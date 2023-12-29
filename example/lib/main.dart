@@ -95,6 +95,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           },
                           child: const Text('Reset input'),
                         ),
+                        customizedButtonChild: (bool confirmed) => Icon(
+                          confirmed
+                              ? Icons.restart_alt_rounded
+                              : Icons.arrow_back,
+                        ),
+                        customizedButtonTap: (confirmed, controller) {
+                          if (confirmed) {
+                            controller.unsetConfirmed();
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+                        },
                       );
                     },
                     child: const Text('Confirm mode'),
@@ -103,10 +115,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () => screenLock(
                       context: context,
                       correctString: '1234',
-                      customizedButtonChild: const Icon(
+                      customizedButtonChild: (_) => const Icon(
                         Icons.fingerprint,
                       ),
-                      customizedButtonTap: () async => await localAuth(context),
+                      customizedButtonTap: (confirmed, controller) async =>
+                          await localAuth(context),
                       onOpened: () async => await localAuth(context),
                     ),
                     child: const Text(
