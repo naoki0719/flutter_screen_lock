@@ -313,7 +313,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
     return Builder(
       builder: (context) => DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline6!,
+        style: Theme.of(context).textTheme.titleLarge!,
         textAlign: TextAlign.center,
         child: buildDelay(
           buildConfirmed(
