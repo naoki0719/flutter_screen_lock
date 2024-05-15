@@ -38,4 +38,6 @@ lib/generated_plugin_registrant.dart
 example/ios/Flutter/.last_build_id
 
 # fvm related
-.fvm
+
+# FVM Version Cache
+.fvm/
