@@ -30,8 +30,8 @@ class ScreenLockConfig {
       scaffoldBackgroundColor: backgroundColor,
       outlinedButtonTheme: OutlinedButtonThemeData(style: buttonStyle),
       textTheme: TextTheme(
-        headline6: titleTextStyle,
-        bodyText2: textStyle,
+        headlineSmall: titleTextStyle,
+        bodyMedium: textStyle,
       ),
     );
   }
