@@ -60,8 +60,8 @@ Future<void> screenLock({
     PageRouteBuilder<void>(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
-      pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
-        onWillPop: () async => canCancel && onCancelled == null,
+      pageBuilder: (context, animation, secondaryAnimation) => PopScope(
+        canPop: canCancel && onCancelled == null,
         child: ScreenLock(
           correctString: correctString,
           onUnlocked: onUnlocked ?? Navigator.of(context).pop,
@@ -167,8 +167,8 @@ Future<void> screenLockCreate({
     PageRouteBuilder<void>(
       opaque: false,
       barrierColor: Colors.black.withOpacity(0.8),
-      pageBuilder: (context, animation, secondaryAnimation) => WillPopScope(
-        onWillPop: () async => canCancel && onCancelled == null,
+      pageBuilder: (context, animation, secondaryAnimation) => PopScope(
+        canPop: canCancel && onCancelled == null,
         child: ScreenLock.create(
           onConfirmed: onConfirmed,
           onOpened: onOpened,

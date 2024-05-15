@@ -1,4 +1,7 @@
 # Changelog
+## [9.0.3] - 2024-05-15
+
+- Fixed incompatible changes caused by upgrading Flutter. by [@Allenxuxu](https://github.com/Allenxuxu) and [@kostas95](https://github.com/kostas95)
 
 ## [9.0.2] - 2023-12-29
 

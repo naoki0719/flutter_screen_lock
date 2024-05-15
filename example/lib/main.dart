@@ -25,23 +25,24 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<void> localAuth(BuildContext context) async {
-    final localAuth = LocalAuthentication();
-    final didAuthenticate = await localAuth.authenticate(
-      localizedReason: 'Please authenticate',
-      biometricOnly: true,
-    );
-    if (didAuthenticate) {
-      Navigator.pop(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    Future<void> localAuth(BuildContext context) async {
+      final localAuth = LocalAuthentication();
+      final didAuthenticate = await localAuth.authenticate(
+        localizedReason: 'Please authenticate',
+        options: const AuthenticationOptions(biometricOnly: true),
+      );
+
+      if (didAuthenticate && context.mounted) {
+        Navigator.pop(context);
+      }
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Next Screen Lock'),
@@ -124,13 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 68,
                         padding: const EdgeInsets.only(top: 10),
                         child: OutlinedButton(
-                          child: const Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text('Cancel'),
-                          ),
                           onPressed: () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Colors.transparent,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text('Cancel'),
                           ),
                         ),
                       ),
