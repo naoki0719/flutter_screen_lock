@@ -4,7 +4,7 @@ homepage: https://github.com/naoki0719/flutter_screen_lock
 version: 9.0.4
 
 environment:
-  sdk: ">=3.0.0 <3.4.0"
+  sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
   flutter:
