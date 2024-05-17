@@ -28,7 +28,8 @@ class KeyPadButton extends StatelessWidget {
           foregroundColor: config?.foregroundColor,
           backgroundColor: Colors.transparent,
           buttonStyle: config?.buttonStyle?.copyWith(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.transparent),
           ),
         ),
         child: child,
