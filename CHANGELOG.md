@@ -1,4 +1,9 @@
 # Changelog
+
+## [9.1.0] - 2024-05-17
+
+- Fix version to Flutter 3.22.x
+
 ## [9.0.4] - 2024-05-16
 
 - Restore deprecated classes in Flutter 3.22.x.
