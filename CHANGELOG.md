@@ -1,5 +1,9 @@
 # Changelog
 
+## [9.2.0] - 2024-12-12
+
+- Fix version to Flutter 3.27.x
+
 ## [9.1.1] - 2024-12-12
 
 - Enhance secret configuration with error handling.
