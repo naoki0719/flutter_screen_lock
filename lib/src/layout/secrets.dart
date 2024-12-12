@@ -30,6 +30,7 @@ class _SecretsWithShakingAnimationState
   late Animation<Offset> _animation;
   late AnimationController _animationController;
   late StreamSubscription<bool> _verifySubscription;
+  bool errored = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _SecretsWithShakingAnimationState
       if (!valid) {
         // shake animation when invalid
         _animationController.forward();
+        errored = true;
       }
     });
 
@@ -55,6 +57,11 @@ class _SecretsWithShakingAnimationState
         (status) {
           if (status == AnimationStatus.completed) {
             _animationController.reverse();
+            Future.delayed(const Duration(milliseconds: 200), () {
+              setState(() {
+                errored = false;
+              });
+            });
           }
         },
       );
@@ -75,6 +82,7 @@ class _SecretsWithShakingAnimationState
         input: widget.input,
         length: widget.length,
         config: widget.config,
+        errored: errored,
       ),
     );
   }
@@ -86,11 +94,13 @@ class Secrets extends StatefulWidget {
     SecretsConfig? config,
     required this.input,
     required this.length,
+    this.errored = false,
   }) : config = config ?? const SecretsConfig();
 
   final SecretsConfig config;
   final ValueListenable<String> input;
   final int length;
+  final bool errored;
 
   @override
   State<Secrets> createState() => _SecretsState();
@@ -112,12 +122,14 @@ class _SecretsState extends State<Secrets> with SingleTickerProviderStateMixin {
                 return Secret(
                   config: widget.config.secretConfig,
                   enabled: false,
+                  errored: widget.errored,
                 );
               }
 
               return Secret(
                 config: widget.config.secretConfig,
                 enabled: index < value.length,
+                errored: widget.errored,
               );
             },
             growable: false,
@@ -133,10 +145,28 @@ class Secret extends StatelessWidget {
     super.key,
     SecretConfig? config,
     this.enabled = false,
+    this.errored = false,
   }) : config = config ?? const SecretConfig();
 
   final SecretConfig config;
   final bool enabled;
+  final bool errored;
+
+  Color get _dotColor {
+    if (errored && config.erroredColor != null && enabled) {
+      return config.erroredColor!;
+    }
+
+    return enabled ? config.enabledColor : config.disabledColor;
+  }
+
+  Color get _borderColor {
+    if (errored && config.erroredBorderColor != null) {
+      return config.erroredBorderColor!;
+    }
+
+    return config.borderColor;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,10 +181,10 @@ class Secret extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: enabled ? config.enabledColor : config.disabledColor,
+        color: _dotColor,
         border: Border.all(
           width: config.borderSize,
-          color: config.borderColor,
+          color: _borderColor,
         ),
       ),
       width: config.size,

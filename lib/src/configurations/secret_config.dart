@@ -8,6 +8,8 @@ class SecretConfig {
     this.borderColor = Colors.white,
     this.enabledColor = Colors.white,
     this.disabledColor = Colors.transparent,
+    this.erroredBorderColor,
+    this.erroredColor,
     this.builder,
   });
 
@@ -20,11 +22,17 @@ class SecretConfig {
   /// Border color for the secret.
   final Color borderColor;
 
+  /// Border color for the errored secret.
+  final Color? erroredBorderColor;
+
   /// Color for the enabled secret.
   final Color enabledColor;
 
   /// Color for the disabled secret.
   final Color disabledColor;
+
+  /// Color for the errored secret.
+  final Color? erroredColor;
 
   final Widget Function(
     BuildContext context,
@@ -38,6 +46,8 @@ class SecretConfig {
     Color? borderColor,
     Color? enabledColor,
     Color? disabledColor,
+    Color? erroredBorderColor,
+    Color? erroredColor,
   }) {
     return SecretConfig(
       size: size ?? this.size,
@@ -45,6 +55,8 @@ class SecretConfig {
       borderColor: borderColor ?? this.borderColor,
       enabledColor: enabledColor ?? this.enabledColor,
       disabledColor: disabledColor ?? this.disabledColor,
+      erroredBorderColor: erroredBorderColor ?? this.erroredBorderColor,
+      erroredColor: erroredColor ?? this.erroredColor,
     );
   }
 }

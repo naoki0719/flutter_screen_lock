@@ -296,6 +296,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     child: const Text('Callback validation'),
                   ),
+                  ElevatedButton(
+                    onPressed: () => screenLock(
+                      context: context,
+                      correctString: '1234',
+                      secretsConfig: const SecretsConfig(
+                        secretConfig: SecretConfig(
+                          erroredBorderColor: Colors.red,
+                          erroredColor: Colors.red,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                        'Change the secret color when an error occurs'),
+                  ),
                 ],
               ),
             ),
