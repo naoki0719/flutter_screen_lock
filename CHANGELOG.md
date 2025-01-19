@@ -1,5 +1,9 @@
 # Changelog
 
+## [9.2.1] - 2025-01-19
+
+- Fixed to scroll to avoid overflow when specifying Footer.
+
 ## [9.2.0] - 2024-12-12
 
 - Fix version to Flutter 3.27.x

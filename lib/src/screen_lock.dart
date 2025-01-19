@@ -368,26 +368,56 @@ class _ScreenLockState extends State<ScreenLock> {
 
     Widget buildContent() {
       return OrientationBuilder(
-        builder: (context, orientation) => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Flex(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              direction: orientations[orientation]!,
+        builder: (context, orientation) {
+          if (widget.footer == null) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Flex(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  direction: orientations[orientation]!,
                   children: [
-                    buildHeadingText(),
-                    buildSecrets(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        buildHeadingText(),
+                        buildSecrets(),
+                      ],
+                    ),
+                    buildKeyPad(),
                   ],
                 ),
-                buildKeyPad(),
               ],
+            );
+          }
+
+          return Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flex(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    direction: orientations[orientation]!,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buildHeadingText(),
+                          buildSecrets(),
+                        ],
+                      ),
+                      buildKeyPad(),
+                    ],
+                  ),
+                  widget.footer!,
+                ],
+              ),
             ),
-            if (widget.footer != null) widget.footer!,
-          ],
-        ),
+          );
+        },
       );
     }
 

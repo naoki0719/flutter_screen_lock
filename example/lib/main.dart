@@ -89,12 +89,37 @@ class _MyHomePageState extends State<MyHomePage> {
                         inputController: controller,
                         onConfirmed: (matchedText) =>
                             Navigator.of(context).pop(),
-                        footer: TextButton(
-                          onPressed: () {
-                            // Release the confirmation state and return to the initial input state.
-                            controller.unsetConfirmed();
-                          },
-                          child: const Text('Reset input'),
+                        footer: Column(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                // Release the confirmation state and return to the initial input state.
+                                controller.unsetConfirmed();
+                              },
+                              child: const Text('Reset input'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Release the confirmation state and return to the initial input state.
+                                controller.unsetConfirmed();
+                              },
+                              child: const Text('Reset input'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Release the confirmation state and return to the initial input state.
+                                controller.unsetConfirmed();
+                              },
+                              child: const Text('Reset input'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Release the confirmation state and return to the initial input state.
+                                controller.unsetConfirmed();
+                              },
+                              child: const Text('Reset input'),
+                            ),
+                          ],
                         ),
                       );
                     },
