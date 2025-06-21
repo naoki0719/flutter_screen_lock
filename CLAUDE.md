@@ -48,6 +48,18 @@ fvm flutter test test/input_state_test.dart
 fvm flutter test test/input_state_test.dart --name "test name"
 ```
 
+### Code Quality and Formatting
+```bash
+# Install dependencies (required before linting/formatting)
+fvm flutter pub get
+
+# Run static analysis (linter)
+fvm flutter analyze
+
+# Format code with dart format
+fvm dart format .
+```
+
 ### Package Publishing Preparation
 ```bash
 # Package quality check
