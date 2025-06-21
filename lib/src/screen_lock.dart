@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:flutter_screen_lock/src/layout/key_pad.dart';
 
@@ -180,9 +181,13 @@ class _ScreenLockState extends State<ScreenLock> {
   bool inputDelayed = false;
   bool enabled = true;
 
+  /// Focus node for keyboard input.
+  late FocusNode _focusNode;
+
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
     inputController.initialize(
       correctString: widget.correctString,
       digits: widget.digits,
@@ -224,6 +229,7 @@ class _ScreenLockState extends State<ScreenLock> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     inputController.dispose();
     super.dispose();
   }
@@ -273,6 +279,80 @@ class _ScreenLockState extends State<ScreenLock> {
 
     retries++;
   }
+
+  /// Handle number key input (0-9).
+  bool _handleNumberKey(LogicalKeyboardKey key) {
+    final numberKeys = {
+      LogicalKeyboardKey.digit0: '0',
+      LogicalKeyboardKey.digit1: '1',
+      LogicalKeyboardKey.digit2: '2',
+      LogicalKeyboardKey.digit3: '3',
+      LogicalKeyboardKey.digit4: '4',
+      LogicalKeyboardKey.digit5: '5',
+      LogicalKeyboardKey.digit6: '6',
+      LogicalKeyboardKey.digit7: '7',
+      LogicalKeyboardKey.digit8: '8',
+      LogicalKeyboardKey.digit9: '9',
+      // Numpad keys
+      LogicalKeyboardKey.numpad0: '0',
+      LogicalKeyboardKey.numpad1: '1',
+      LogicalKeyboardKey.numpad2: '2',
+      LogicalKeyboardKey.numpad3: '3',
+      LogicalKeyboardKey.numpad4: '4',
+      LogicalKeyboardKey.numpad5: '5',
+      LogicalKeyboardKey.numpad6: '6',
+      LogicalKeyboardKey.numpad7: '7',
+      LogicalKeyboardKey.numpad8: '8',
+      LogicalKeyboardKey.numpad9: '9',
+    };
+
+    final digit = numberKeys[key];
+    if (digit != null && enabled && !inputDelayed) {
+      inputController.addKeyboardInput(digit);
+      return true; // Consume the event
+    }
+    return false;
+  }
+
+  /// Handle special keys (Backspace, Enter, Escape).
+  bool _handleSpecialKeys(LogicalKeyboardKey key) {
+    if (!enabled || inputDelayed) return false;
+
+    switch (key) {
+      case LogicalKeyboardKey.backspace:
+        inputController.removeKeyboardInput();
+        return true;
+
+      case LogicalKeyboardKey.enter:
+      case LogicalKeyboardKey.numpadEnter:
+        inputController.confirmKeyboardInput();
+        return true;
+
+      case LogicalKeyboardKey.escape:
+        widget.onCancelled?.call();
+        return true;
+
+      default:
+        return false;
+    }
+  }
+
+  /// Keyboard event handler for Focus widget.
+  KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
+    // Only handle key down events
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+
+    final key = event.logicalKey;
+
+    // Handle number keys
+    if (_handleNumberKey(key)) return KeyEventResult.handled;
+
+    // Handle special keys
+    if (_handleSpecialKeys(key)) return KeyEventResult.handled;
+
+    return KeyEventResult.ignored; // Let other handlers process the event
+  }
+
 
   Widget buildDelayChild(Duration duration) {
     if (widget.delayBuilder != null) {
@@ -436,7 +516,12 @@ class _ScreenLockState extends State<ScreenLock> {
       data: (widget.config ?? ScreenLockConfig.defaultConfig).toThemeData(),
       child: Scaffold(
         body: SafeArea(
-          child: buildContentWithBlur(useBlur: widget.useBlur),
+          child: Focus(
+            focusNode: _focusNode,
+            autofocus: true,
+            onKeyEvent: _onKeyEvent,
+            child: buildContentWithBlur(useBlur: widget.useBlur),
+          ),
         ),
       ),
     );

@@ -1,5 +1,14 @@
 # Changelog
 
+## [9.2.2] - 2025-01-21
+
+- **Added keyboard input support for devices with physical keyboards.**
+  - Support for number keys (0-9) and numpad input
+  - Backspace key for character deletion
+  - Enter key for input confirmation
+  - Escape key for cancellation
+  - Enhanced user experience on desktop and keyboard-equipped tablet devices
+
 ## [9.2.1] - 2025-01-19
 
 - Fixed to scroll to avoid overflow when specifying Footer.

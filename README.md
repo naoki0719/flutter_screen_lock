@@ -21,6 +21,11 @@ You can also use biometric authentication as an option.
 - Unlocked callback
 - You can specify a mismatch event.
 - Limit the maximum number of retries
+- **Keyboard input support for devices with physical keyboards**
+  - Number keys (0-9) and numpad input
+  - Backspace key for deletion
+  - Enter key for confirmation
+  - Escape key for cancellation
 
 ## Usage
 

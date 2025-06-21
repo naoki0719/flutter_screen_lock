@@ -58,6 +58,28 @@ class InputController {
     }
   }
 
+  /// Add input from keyboard (alias for addCharacter for keyboard input).
+  void addKeyboardInput(String digit) {
+    addCharacter(digit);
+  }
+
+  /// Remove input from keyboard (alias for removeCharacter for keyboard input).
+  void removeKeyboardInput() {
+    removeCharacter();
+  }
+
+  /// Confirm current input (for Enter key).
+  void confirmKeyboardInput() {
+    if (_currentInputs.length == _digits) {
+      if (_correctString == null && _firstInput.isEmpty) {
+        setConfirmed();
+        clear();
+      } else {
+        _verify();
+      }
+    }
+  }
+
   /// Erase all current input.
   void clear() {
     if (_currentInputs.isNotEmpty) {
