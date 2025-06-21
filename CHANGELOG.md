@@ -1,6 +1,6 @@
 # Changelog
 
-## [9.2.2] - 2025-01-21
+## [9.2.2+2] - 2025-01-21
 
 - **Added keyboard input support for devices with physical keyboards.**
   - Support for number keys (0-9) and numpad input
