@@ -38,7 +38,17 @@ class KeyPadButtonConfig {
     );
     if (buttonStyle != null) {
       return buttonStyle!.copyWith(
-        textStyle: composed.textStyle,
+        textStyle: WidgetStateProperty.resolveWith((Set<WidgetState> states) {
+          final TextStyle? composedTextStyle =
+              composed.textStyle?.resolve(states);
+          final TextStyle? buttonTextStyle =
+              buttonStyle?.textStyle?.resolve(states);
+
+          // If buttonTextStyle is null, and composedTextStyle is not null, use composedTextStyle.
+          // If buttonTextStyle is not null, merge it with composedTextStyle.
+          // If both are null, the result will be null.
+          return buttonTextStyle?.merge(composedTextStyle) ?? composedTextStyle;
+        }),
         foregroundColor: composed.foregroundColor,
         backgroundColor: composed.backgroundColor,
       );
